@@ -24,7 +24,9 @@ for sp in species:
   drows=''.join(f"<tr><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td><td>{r['date_checked']}</td></tr>" for r in a)
   tips=[f"The lowest posted price we found was ${a[0]['p']:.2f}/bf ({a[0]['thickness']}{'' if a[0]['surfacing']=='not stated' else ', '+a[0]['surfacing']}) at {a[0]['dealer']} in {a[0]['city']}, {a[0]['state']}; the highest was ${a[-1]['p']:.2f}/bf."]
   ro=[r['p'] for r in a if cls(r)=='Rough'];su=[r['p'] for r in a if cls(r)=='Surfaced']
-  if ro and su: tips.append(f"Rough-sawn median ${S.median(ro):.2f} vs surfaced median ${S.median(su):.2f} in our data (mixed dealers and grades) — rough is typically cheaper if you can mill it yourself.")
+  if ro and su:
+    if S.median(ro)<S.median(su): tips.append(f"Rough-sawn median ${S.median(ro):.2f} vs surfaced median ${S.median(su):.2f} in our data (mixed dealers and grades) — rough is cheaper per bf if you can mill it yourself.")
+    else: tips.append(f"Rough-sawn median ${S.median(ro):.2f} vs surfaced median ${S.median(su):.2f} in our data — rough was not cheaper here because dealers, grades and regions differ; compare like with like.")
   elif ro: tips.append(f"Rough-sawn listings median ${S.median(ro):.2f}/bf; rough needs jointing and planing before use.")
   th4=[r['p'] for r in a if r['thickness']=='4/4'];th8=[r['p'] for r in a if r['thickness']=='8/4']
   if th4 and th8: tips.append(f"8/4 median ${S.median(th8):.2f} vs 4/4 median ${S.median(th4):.2f} per bf — thicker stock costs {'more' if S.median(th8)>S.median(th4) else 'about the same or less'} per board foot here.")
