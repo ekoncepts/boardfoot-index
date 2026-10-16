@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ekoncepts.github.io/boardfoot-index/sitemap.xml
