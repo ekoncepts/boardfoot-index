@@ -16,26 +16,26 @@
 
 ## Post 1 - r/woodworking (flair: Discussion, if offered)
 
-**Title:** I logged 316 posted hardwood prices from 14 dealers in 11 states. 4/4 walnut ranged from $6.99 to $19.20/bf. What are you paying?
+**Title:** I logged 379 posted hardwood prices from 18 dealers in 15 states. 4/4 walnut ranged from $6.99 to $19.20/bf. What are you paying?
 
 **Body:**
-I got tired of not knowing whether a price was fair, so I wrote down every per-board-foot price I could find on 14 dealers' public price sheets (FL, GA, IN, MA, MI, NC, OH, PA, TX, VA and WA), checked this week. 316 prices, 11 species. Medians, mixing thicknesses and grades:
+I got tired of not knowing whether a price was fair, so I wrote down every per-board-foot price I could find on 18 dealers' public price sheets (AZ, CA, CO, FL, GA, IN, MA, MI, NC, OH, OR, PA, TX, VA and WA), checked this week. 379 prices, 11 species. Medians, mixing thicknesses and grades:
 
-- Poplar $3.80
-- Red Oak $5.03
-- Hickory $5.95
-- Cherry $6.00
-- Ash $6.17
+- Poplar $4.20
+- Red Oak $5.50
+- Hickory $5.99
+- Ash $6.25
 - Soft Maple $6.38
-- Hard Maple $6.50
+- Cherry $6.50
+- Hard Maple $7.25
 - White Oak $10.00
 - Sapele $10.10
 - Walnut $13.00
 - Mahogany $13.91
 
 Stuff that stood out:
-- 4/4 walnut went from $6.99 (FL) to $19.20 (OH, rough, kiln dried, Face & Better, 7'-8'). Median across 11 dealers was $11.80. Grade and length explain part of it, but that's still a big spread.
-- Cheapest 4/4 I found: poplar $3.00 (VA); red oak $3.50 (VA); hickory $3.50 (VA); cherry $4.25 (MI).
+- 4/4 walnut went from $6.99 (FL) to $19.20 (OH, rough, kiln dried, Face & Better, 7'-8'). Median across 17 dealers was $11.80. Grade and length explain part of it, but that's still a big spread.
+- Cheapest 4/4 I found: poplar $3.00 (VA); red oak $3.49 (CA); hickory $3.50 (VA); cherry $4.25 (MI).
 
 Still a small sample, so take it with a grain of salt. What are you paying per bf where you are? Species, thickness, rough or surfaced and a rough location (state is fine) would be great. I'll add them to my spreadsheet and post an update.
 
@@ -43,13 +43,13 @@ Still a small sample, so take it with a grain of salt. What are you paying per b
 
 ## Post 2 - r/BeginnerWoodWorking (flair: Question / Discussion, whichever fits)
 
-**Title:** Beginner reference: what hardwood actually costs per board foot right now (316 real dealer prices)
+**Title:** Beginner reference: what hardwood actually costs per board foot right now (379 real dealer prices)
 
 **Body:**
-When I started out I had no idea if $14/bf for walnut was normal or a rip-off, so here's a quick reference from 14 dealers' posted price sheets across 11 states, checked this week (medians):
+When I started out I had no idea if $14/bf for walnut was normal or a rip-off, so here's a quick reference from 18 dealers' posted price sheets across 15 states, checked this week (medians):
 
-- Cheapest: poplar (~$3.80) and red oak (~$5.03). Great for practice and shop projects.
-- Mid: hickory, cherry, ash, soft maple, hard maple ($5.95-$6.50)
+- Cheapest: poplar (~$4.20) and red oak (~$5.50). Great for practice and shop projects.
+- Mid: hickory, ash, soft maple, cherry, hard maple ($5.99-$7.25)
 - Pricey: white oak (~$10.00), sapele (~$10.10), walnut (~$13.00), mahogany (~$13.91)
 
 Beginner tips from the data:
