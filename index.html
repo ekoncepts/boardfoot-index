@@ -3,7 +3,7 @@
 <meta name="description" content="Real hardwood lumber prices per board foot by species and state, from dealer price sheets and woodworker reports.">
 <style>body{font-family:system-ui,sans-serif;max-width:960px;margin:auto;padding:1rem;color:#2b2118}h1{color:#7a4a1e}
 select,input,button{padding:.4rem;margin:.2rem}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #ddd;padding:.35rem;text-align:left;font-size:.9rem}
-th{background:#f3ebe1;cursor:pointer}.box{background:#faf6f0;border:1px solid #e5d8c7;padding:1rem;margin:1rem 0;border-radius:8px}.stat{font-weight:bold}</style></head><body>
+th{background:#f3ebe1;cursor:pointer}.box{background:#faf6f0;border:1px solid #e5d8c7;padding:1rem;margin:1rem 0;border-radius:8px}.stat{font-weight:bold}.bf-btn{background:#7a4a1e;color:#fff;border:0;border-radius:4px;cursor:pointer}.formkit-alert:empty{display:none}.formkit-alert-success{color:#2e6b2e;list-style:none}</style></head><body>
 <h1>BoardFoot Index</h1><p>What hardwood actually costs per board foot, by species and state. Prices are from public dealer price sheets; always confirm with the dealer.</p>
 <div><label>Species <select id="sp"><option value="">All</option></select></label>
 <label>State <select id="st"><option value="">All</option></select></label>
@@ -15,8 +15,11 @@ th{background:#f3ebe1;cursor:pointer}.box{background:#faf6f0;border:1px solid #e
 <input name="website" style="display:none" tabindex="-1" autocomplete="off"> <button>Submit</button><p id="rpmsg"></p></form></div>
 <script>const REPORT_ENDPOINT='https://script.google.com/macros/s/AKfycbwewbbD2-OkYEBD1fD4BDhhtKPJxEp6F6JLif1TWj8s2gtv-9mWMuce1DWvt5bZb27c/exec';
 rp.onsubmit=e=>{e.preventDefault();rpmsg.textContent='Sending…';fetch(REPORT_ENDPOINT,{method:'POST',body:new URLSearchParams(new FormData(rp))}).then(r=>r.json()).then(j=>{rpmsg.textContent=j.ok?'Thanks! Your report is pending review.':'Please check the fields.';if(j.ok)rp.reset()}).catch(()=>rpmsg.textContent='Could not send – try again later.')}</script>
-<div class="box"><h2>Monthly Lumber Price Report</h2><p><em>Placeholder – newsletter provider not connected.</em></p>
-<form onsubmit="event.preventDefault();this.querySelector('p').textContent='Demo only – not subscribed.'"><input type="email" placeholder="you@example.com" required> <button>Subscribe</button><p></p></form></div>
+<div class="box"><h2>Get the monthly Lumber Price Report</h2><p>Real hardwood prices by species and region, once a month. Free, unsubscribe anytime.</p>
+<form action="https://app.kit.com/forms/10055349/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="10055349" data-uid="158bbdf2d4" data-format="inline" data-version="5">
+<ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+<div data-element="fields" class="seva-fields formkit-fields"><input class="formkit-input" name="email_address" type="email" aria-label="Email address" placeholder="you@example.com" required> <button data-element="submit" class="formkit-submit bf-btn"><span>Subscribe</span></button></div></form></div>
+<script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
 <script>
 function parse(t){const L=t.trim().split('\n'),h=L[0].split(',');return L.slice(1).map(l=>{const c=[];let q=0,v='';for(const ch of l){if(ch=='"')q=!q;else if(ch==','&&!q){c.push(v);v=''}else v+=ch}c.push(v);return Object.fromEntries(h.map((k,i)=>[k,c[i]]))})}
 fetch('seed.csv').then(r=>r.text()).then(t=>{const d=parse(t);
