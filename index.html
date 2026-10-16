@@ -27,7 +27,7 @@ const fill=(id,k)=>[...new Set(d.map(r=>r[k]))].sort().forEach(v=>document.getEl
 fill('sp','species');fill('st','state');fill('th','thickness');
 const p=new URLSearchParams(location.search);if(p.get('species'))sp.value=p.get('species');if(p.get('state'))st.value=p.get('state');
 function draw(){const f=d.filter(r=>(!sp.value||r.species==sp.value)&&(!st.value||r.state==st.value)&&(!th.value||r.thickness==th.value)).sort((a,b)=>a.price_per_bf-b.price_per_bf);
-rows.innerHTML=f.map(r=>`<tr><td>${r.species}</td><td>${r.thickness}</td><td>${r.surfacing}</td><td>$${(+r.price_per_bf).toFixed(2)}</td><td><a href="${r.source_url}" rel="nofollow">${r.dealer}</a></td><td>${r.city}, ${r.state}</td><td>${r.date_checked}</td></tr>`).join('');
-const ps=f.map(r=>+r.price_per_bf);summary.textContent=ps.length?`${ps.length} prices · low $${Math.min(...ps).toFixed(2)} · median $${ps.sort((a,b)=>a-b)[ps.length>>1].toFixed(2)} · high $${Math.max(...ps).toFixed(2)}`:'No prices yet – report one below!'}
+rows.innerHTML=f.map(r=>`<tr><td>${r.species}</td><td>${r.thickness}</td><td>${r.surfacing}</td><td>$${(+r.price_per_bf).toFixed(2)}</td><td>${/^https?:/.test(r.source_url)?`<a href="${r.source_url}" rel="nofollow">${r.dealer}</a>`:`${r.dealer} <em>(customer-reported)</em>`}</td><td>${r.city}, ${r.state}</td><td>${r.date_checked}</td></tr>`).join('');
+const cu=f.filter(r=>!/^https?:/.test(r.source_url)).length;const ps=f.filter(r=>/^https?:/.test(r.source_url)).map(r=>+r.price_per_bf);summary.textContent=ps.length?`${ps.length} dealer prices${cu?` (+${cu} customer-reported small pieces, not in stats)`:''} · low $${Math.min(...ps).toFixed(2)} · median $${ps.sort((a,b)=>a-b)[ps.length>>1].toFixed(2)} · high $${Math.max(...ps).toFixed(2)}`:'No prices yet – report one below!'}
 [sp,st,th].forEach(e=>e.onchange=draw);draw()});
 </script></body></html>

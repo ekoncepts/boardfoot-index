@@ -2,6 +2,9 @@ import csv,re,os,statistics as S,html
 BASE='https://ekoncepts.github.io/boardfoot-index/'
 rows=list(csv.DictReader(open('seed.csv')))
 for r in rows:r['p']=float(r['price_per_bf'])
+def is_cust(r):return not r['source_url'].startswith('http')
+cust_all=[r for r in rows if is_cust(r)]
+rows=[r for r in rows if not is_cust(r)]   # medians, ranges, tips and tables use dealer-posted prices only
 idx=open('index.html').read()
 style=re.search(r'<style>.*?</style>',idx,re.S).group(0)
 report=re.search(r'<div class="box"><h2>Report a price</h2>.*?</script>',idx,re.S).group(0)
@@ -22,6 +25,11 @@ for sp in species:
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
   drows=''.join(f"<tr><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td><td>{r['date_checked']}</td></tr>" for r in a)
+  ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
+  cust=''
+  if ca:
+    crow=''.join(f"<tr><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td>{e(r['dealer'])}</td><td>{e(r['city'])}, {r['state']}</td><td>customer-reported</td></tr>" for r in ca)
+    cust=f'<h2>Customer-reported small-piece prices</h2><p>These came from a real order at {e(ca[0]["dealer"])}: small S4S (surfaced, unfinished) pieces sold per piece, converted to $/bf using <em>nominal</em> size (nominal thickness × nominal width × length ÷ 12). Real boards are slightly smaller than nominal, so these run higher per bf than dealer-posted board-foot prices. They are <b>not</b> included in the medians, ranges or tips above.</p><table><thead><tr><th>Thick</th><th>Notes</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Source</th></tr></thead><tbody>{crow}</tbody></table>'
   tips=[f"The lowest posted price we found was ${a[0]['p']:.2f}/bf ({a[0]['thickness']}{'' if a[0]['surfacing']=='not stated' else ', '+a[0]['surfacing']}) at {a[0]['dealer']} in {a[0]['city']}, {a[0]['state']}; the highest was ${a[-1]['p']:.2f}/bf."]
   ro=[r['p'] for r in a if cls(r)=='Rough'];su=[r['p'] for r in a if cls(r)=='Surfaced']
   if ro and su:
@@ -42,7 +50,7 @@ for sp in species:
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 <h2>All {sp.lower()} prices</h2><table><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
-<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
+{cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
 {report}
 {kit}
 <h2>Other species</h2><p>{others}</p></body></html>'''

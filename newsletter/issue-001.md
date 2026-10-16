@@ -1,44 +1,44 @@
-Subject: Lumber Price Report #1 – what walnut really costs (Oct 2026)
+Subject: Lumber Price Report #1 - walnut ranges from $6.99 to $19.20 a board foot
 
 Hey there,
 
 Welcome to the very first Lumber Price Report from BoardFoot Index. Each month I pull real, publicly posted hardwood prices so you can tell a fair deal from a rip-off before you load the truck.
 
-This month: 67 prices across 11 species from 3 dealers in Washington, Michigan and Texas, all checked Oct 16, 2026.
+This month: 316 prices across 11 species from 14 dealers in 11 states (FL, GA, IN, MA, MI, NC, OH, PA, TX, VA and WA), all checked 2026-10-16.
 
 ## Median price per board foot
 
 | Species | Median $/BF | Range | Prices |
 |---|---|---|---|
-| Poplar | $4.00 | $3.65–$5.00 | 3 |
-| Red Oak | $6.58 | $3.75–$7.95 | 8 |
-| Soft Maple | $7.00 | $4.75–$7.60 | 6 |
-| Cherry | $7.30 | $4.25–$8.50 | 7 |
-| Ash | $7.62 | $4.50–$8.00 | 6 |
-| Hickory | $8.00 | $4.00–$9.50 | 5 |
-| Hard Maple | $8.57 | $5.50–$9.00 | 8 |
-| White Oak | $10.35 | $7.50–$14.00 | 8 |
-| Sapele | $10.65 | $10.50–$15.00 | 5 |
-| Walnut | $11.50 | $9.75–$14.00 | 7 |
-| Mahogany | $14.80 | $14.75–$15.00 | 4 |
+| Poplar | $3.80 | $3.00-$7.14 | 32 |
+| Red Oak | $5.03 | $3.50-$8.32 | 32 |
+| Hickory | $5.95 | $3.50-$12.85 | 27 |
+| Cherry | $6.00 | $4.25-$11.50 | 35 |
+| Ash | $6.17 | $3.95-$9.25 | 30 |
+| Soft Maple | $6.38 | $4.75-$9.00 | 24 |
+| Hard Maple | $6.50 | $4.75-$12.00 | 37 |
+| White Oak | $10.00 | $7.25-$19.38 | 33 |
+| Sapele | $10.10 | $7.50-$15.00 | 16 |
+| Walnut | $13.00 | $6.99-$29.21 | 38 |
+| Mahogany | $13.91 | $7.50-$18.40 | 12 |
 
-Mixed thicknesses and surfacing – rough lumber is cheaper than surfaced, so compare like with like.
+Mixed thicknesses, grades and surfacing, so compare like with like.
 
-## Cheapest finds
+## Cheapest 4/4 finds
 
-- 4/4 Poplar, $3.65/BF – Hickory & Oak Lumber, Decatur, MI (rough, kiln-dried)
-- 4/4 Red Oak, $3.75/BF – Hickory & Oak Lumber, Decatur, MI (rough)
-- 4/4 Hickory, $4.00/BF – Hickory & Oak Lumber, Decatur, MI (rough)
-- 4/4 Cherry, $4.25/BF – Hickory & Oak Lumber, Decatur, MI (rough)
+- 4/4 Poplar, $3.00/BF - Cygnus Lumber, Virginia Beach, VA
+- 4/4 Red Oak, $3.50/BF - Cygnus Lumber, Virginia Beach, VA
+- 4/4 Hickory, $3.50/BF - Cygnus Lumber, Virginia Beach, VA
+- 4/4 Cherry, $4.25/BF - Hickory & Oak Lumber, Decatur, MI, rough, kiln dried, Sel&Btr
 
-**Walnut check:** 4/4 walnut ran $9.75 rough in Michigan vs $11.80 surfaced (S2S) in Washington. If you own a planer, buying rough can save about $2/BF.
+**Walnut check:** 4/4 walnut ran from $6.99 (Odd Wood Lumber, FL) to $19.20 (Baird Brothers Sawmill, OH, rough, kiln dried, Face & Better, 7'-8') across 11 dealers, with a median of $11.80. Grade and board length explain some of that gap, so ask what grade you're getting before you compare.
 
 ## Help build the index
 
 Paid for lumber lately? It takes 30 seconds to share it, and every report makes the numbers better for everyone in your area:
-👉 https://ekoncepts.github.io/boardfoot-index/
+https://ekoncepts.github.io/boardfoot-index/
 
-Prices change – always call the dealer before you drive.
+Prices change, so always call the dealer before you drive.
 
 See you next month,
 Harry
