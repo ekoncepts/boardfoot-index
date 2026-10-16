@@ -10,9 +10,11 @@ th{background:#f3ebe1;cursor:pointer}.box{background:#faf6f0;border:1px solid #e
 <label>Thickness <select id="th"><option value="">All</option></select></label></div>
 <p id="summary" class="stat"></p>
 <table><thead><tr><th>Species</th><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody id="rows"></tbody></table>
-<div class="box"><h2>Report a price</h2><p><em>Placeholder – not connected yet. Will post to a Google Form / Supabase table.</em></p>
-<form onsubmit="event.preventDefault();this.querySelector('p').textContent='Thanks! (demo only – nothing was sent)'">
-<input placeholder="Species" required> <input placeholder="Thickness e.g. 4/4"> <input placeholder="$ per BF" type="number" step="0.01" required> <input placeholder="Dealer"> <input placeholder="City, State" required> <button>Submit</button><p></p></form></div>
+<div class="box"><h2>Report a price</h2><p>Paid for lumber recently? Share it. Reports are reviewed before they appear.</p>
+<form id="rp"><input name="species" placeholder="Species" required> <input name="thickness" placeholder="Thickness e.g. 4/4"> <input name="surfacing" placeholder="Rough / S2S / S4S"> <input name="price_per_bf" placeholder="$ per BF" type="number" step="0.01" min="0.5" max="199" required> <input name="dealer" placeholder="Dealer"> <input name="city" placeholder="City"> <input name="state" placeholder="State (e.g. OH)" maxlength="2" required> <input name="source_url" placeholder="Link (optional)">
+<input name="website" style="display:none" tabindex="-1" autocomplete="off"> <button>Submit</button><p id="rpmsg"></p></form></div>
+<script>const REPORT_ENDPOINT='https://script.google.com/macros/s/AKfycbwewbbD2-OkYEBD1fD4BDhhtKPJxEp6F6JLif1TWj8s2gtv-9mWMuce1DWvt5bZb27c/exec';
+rp.onsubmit=e=>{e.preventDefault();rpmsg.textContent='Sending…';fetch(REPORT_ENDPOINT,{method:'POST',body:new URLSearchParams(new FormData(rp))}).then(r=>r.json()).then(j=>{rpmsg.textContent=j.ok?'Thanks! Your report is pending review.':'Please check the fields.';if(j.ok)rp.reset()}).catch(()=>rpmsg.textContent='Could not send – try again later.')}</script>
 <div class="box"><h2>Monthly Lumber Price Report</h2><p><em>Placeholder – newsletter provider not connected.</em></p>
 <form onsubmit="event.preventDefault();this.querySelector('p').textContent='Demo only – not subscribed.'"><input type="email" placeholder="you@example.com" required> <button>Subscribe</button><p></p></form></div>
 <script>
