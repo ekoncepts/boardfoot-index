@@ -5,6 +5,21 @@ for r in rows:r['p']=float(r['price_per_bf'])
 def is_cust(r):return not r['source_url'].startswith('http')
 cust_all=[r for r in rows if is_cust(r)]
 rows=[r for r in rows if not is_cust(r)]   # medians, ranges, tips and tables use dealer-posted prices only
+dealers={}
+for _r in csv.DictReader(open('dealers.csv')): dealers[_r['dealer']]=_r
+for _d in {r['dealer'] for r in rows}:
+  if _d not in dealers: print('WARNING: no dealers.csv entry for',_d)
+def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
+def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
+def ship_td(dn):return f'<td title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
+def ship_info_table(dnames):
+  trs=''
+  for dn in sorted(set(dnames)):
+    d=dealers.get(dn)
+    if not d: continue
+    trs+=f'<tr><td>{html.escape(dn)}</td><td>{html.escape(d["city"])}, {d["state"]}</td><td>{html.escape(d["ships"])}</td><td>{html.escape(d["shipping_note"])}</td><td><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})</td></tr>'
+  return '<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>What the dealer\'s site says</th><th>Where we found it</th></tr></thead><tbody>'+trs+'</tbody></table>'
+SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the date shown; &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer does not ship. Always confirm with the dealer.</small></p>'
 idx=open('index.html').read()
 style=re.search(r'<style>.*?</style>',idx,re.S).group(0)
 report=re.search(r'<div class="box"><h2>Report a price</h2>.*?</script>',idx,re.S).group(0)
@@ -37,7 +52,7 @@ for sp in species:
   thk=sorted({r['thickness'] for r in a},key=lambda t:(t=='not stated',float(t.split('/')[0])/4 if '/' in t else 0))
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
-  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td><td>{r['date_checked']}</td></tr>" for r in a)
+  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'])}<td>{r['date_checked']}</td></tr>" for r in a)
   ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
   cust=''
   if ca:
@@ -62,7 +77,8 @@ for sp in species:
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
-<h2>All {sp.lower()} prices</h2><p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h2>All {sp.lower()} prices</h2><p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
 {cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
 {report}
@@ -88,35 +104,36 @@ species_links=lambda pre:' · '.join(f'<a href="{pre}{slug(s)}-price-per-board-f
 # ---- per-state pages ----
 for st in pub_states:
   nm=STATE_NAMES[st]; a=[r for r in rows if r['state']==st]
-  sps=sorted({r['species'] for r in a}); dealers=sorted({(r['dealer'],r['city']) for r in a})
+  sps=sorted({r['species'] for r in a}); dealers_list=sorted({(r['dealer'],r['city']) for r in a})
   srows=''
   for sp in sps:
     ps=[r['p'] for r in a if r['species']==sp]; m,rg,n=stat(ps)
     srows+=f'<tr><td><a href="../{slug(sp)}-price-per-board-foot/">{sp}</a></td><td>{m}</td><td>{rg}</td><td>{n}</td></tr>'
   drows=''
-  for dn,ct in dealers:
+  for dn,ct in dealers_list:
     da=[r for r in a if r['dealer']==dn and r['city']==ct]
     main=collections.Counter(r['source_url'] for r in da).most_common(1)[0][0]
     spl=[]
     for sp in sorted({r['species'] for r in da}):
       u=collections.Counter(r['source_url'] for r in da if r['species']==sp).most_common(1)[0][0]
       spl.append(f'<a href="{e(u)}" rel="nofollow noopener">{sp}</a>')
-    drows+=f'<tr><td><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td>{e(ct)}, {st}</td><td>{len(da)}</td><td>{", ".join(spl)}</td><td>{max(r["date_checked"] for r in da)}</td></tr>'
+    drows+=f'<tr><td><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td>{e(ct)}, {st}</td>{ship_td(dn)}<td>{len(da)}</td><td>{", ".join(spl)}</td><td>{max(r["date_checked"] for r in da)}</td></tr>'
   allp=[r['p'] for r in a]; med,rng,n=stat(allp)
   meds={sp:S.median([r['p'] for r in a if r['species']==sp]) for sp in sps}
   lo=min(a,key=lambda r:r['p']); hi=max(a,key=lambda r:r['p'])
   cheap=min(meds,key=meds.get); dear=max(meds,key=meds.get)
   others=state_links('../',st)
   title=f"Hardwood Lumber Prices in {nm} (2026): Dealer Price per Board Foot | BoardFoot Index"
-  desc=f"Real posted hardwood prices in {nm}: {n} dealer prices across {len(sps)} species from {len(dealers)} dealer{'s' if len(dealers)!=1 else ''}, ranging {rng} per board foot. Medians by species, sources and dates."
+  desc=f"Real posted hardwood prices in {nm}: {n} dealer prices across {len(sps)} species from {len(dealers_list)} dealer{'s' if len(dealers_list)!=1 else ''}, ranging {rng} per board foot. Medians by species, sources and dates."
   body=f"""<h1>Hardwood lumber prices in {nm}</h1>
-<p>We found {n} publicly posted hardwood prices from {len(dealers)} {nm} dealer{'s' if len(dealers)!=1 else ''}, covering {len(sps)} species. Across all species and thicknesses the median is <b>{med}</b> per board foot, ranging {rng}. Every figure below comes from a dealer's own price list or product page, checked in October 2026 — nothing is estimated.</p>
+<p>We found {n} publicly posted hardwood prices from {len(dealers_list)} {nm} dealer{'s' if len(dealers_list)!=1 else ''}, covering {len(sps)} species. Across all species and thicknesses the median is <b>{med}</b> per board foot, ranging {rng}. Every figure below comes from a dealer's own price list or product page, checked in October 2026 — nothing is estimated.</p>
 <p>In this data, {cheap} has the lowest species median in {nm} ({meds[cheap] and f'${meds[cheap]:.2f}'}/bf) and {dear} the highest (${meds[dear]:.2f}/bf). The single lowest posted price is ${lo['p']:.2f}/bf ({lo['species']} {lo['thickness']}, {e(lo['dealer'])}); the highest is ${hi['p']:.2f}/bf ({hi['species']} {hi['thickness']}, {e(hi['dealer'])}).</p>
 <h2>Median and range by species in {nm}</h2>
 <table><thead><tr><th>Species</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 <p><small>Each row mixes thicknesses, grades and rough vs surfaced stock from that state's dealers, so use the <a href="../">searchable table</a> or the species pages for like-for-like comparisons.</small></p>
 <h2>{nm} dealers with posted prices</h2>
-<table><thead><tr><th>Dealer</th><th>Location</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h3>Do {nm} dealers ship?</h3>{ship_info_table([d for d,_ in dealers_list])}{SHIPNOTE}
 <p>Prices change without notice and may differ by grade, width, length and quantity — call the dealer before you drive. Paid something different? Report it below.</p>
 <h2>Estimate a project</h2><p>Use the <a href="../board-foot-calculator/">board foot calculator</a> to convert board dimensions to board feet and a rough cost.</p>
 <h2>Other states</h2><p>{others}</p>
@@ -165,5 +182,8 @@ open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset x
 open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n')
 nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tool:</b> <a href="board-foot-calculator/">Board foot calculator</a></p><!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
+pd=sorted({r['dealer'] for r in rows}); 
+blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd)+SHIPNOTE+'<!--/DEALERS-->'
+idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
 open('index.html','w').write(idx)
 print(len(urls))
