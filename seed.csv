@@ -1,0 +1,68 @@
+species,thickness,surfacing,price_per_bf,dealer,city,state,source_url,date_checked
+Walnut,4/4,S2S,11.80,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/walnut-lumber/,2026-10-16
+Walnut,8/4,not stated,13.30,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/walnut-lumber/,2026-10-16
+Cherry,4/4,not stated,7.25,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/cherry-lumber/,2026-10-16
+Cherry,5/4,not stated,7.30,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/cherry-lumber/,2026-10-16
+Cherry,6/4,not stated,7.40,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/cherry-lumber/,2026-10-16
+Cherry,8/4,not stated,7.60,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/cherry-lumber/,2026-10-16
+Hard Maple,4/4,not stated,8.80,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hard-maple-lumber/,2026-10-16
+Hard Maple,5/4,not stated,8.65,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hard-maple-lumber/,2026-10-16
+Hard Maple,6/4,not stated,8.85,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hard-maple-lumber/,2026-10-16
+Hard Maple,8/4,not stated,9.00,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hard-maple-lumber/,2026-10-16
+White Oak,4/4,not stated,9.25,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/white-oak-lumber/,2026-10-16
+White Oak,5/4,not stated,10.20,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/white-oak-lumber/,2026-10-16
+White Oak,6/4,not stated,10.50,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/white-oak-lumber/,2026-10-16
+White Oak,8/4,not stated,12.85,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/white-oak-lumber/,2026-10-16
+Red Oak,4/4,not stated,7.20,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/red-oak-lumber/,2026-10-16
+Red Oak,5/4,not stated,7.45,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/red-oak-lumber/,2026-10-16
+Red Oak,6/4,not stated,7.70,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/red-oak-lumber/,2026-10-16
+Red Oak,8/4,not stated,7.95,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/red-oak-lumber/,2026-10-16
+Ash,4/4,not stated,7.25,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/ash-lumber/,2026-10-16
+Ash,5/4,not stated,7.50,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/ash-lumber/,2026-10-16
+Ash,6/4,not stated,7.75,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/ash-lumber/,2026-10-16
+Ash,8/4,not stated,7.85,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/ash-lumber/,2026-10-16
+Hickory,4/4,not stated,8.00,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hickory-lumber/,2026-10-16
+Hickory,5/4,not stated,8.75,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hickory-lumber/,2026-10-16
+Hickory,8/4,not stated,9.50,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/hickory-lumber/,2026-10-16
+Soft Maple,4/4,not stated,6.80,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/soft-maple-lumber/,2026-10-16
+Soft Maple,5/4,not stated,7.35,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/soft-maple-lumber/,2026-10-16
+Soft Maple,6/4,not stated,7.20,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/soft-maple-lumber/,2026-10-16
+Soft Maple,8/4,not stated,7.60,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/soft-maple-lumber/,2026-10-16
+Sapele,4/4,not stated,10.50,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/sapele-lumber/,2026-10-16
+Sapele,5/4,not stated,10.50,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/sapele-lumber/,2026-10-16
+Sapele,6/4,not stated,10.80,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/sapele-lumber/,2026-10-16
+Sapele,8/4,not stated,10.65,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/sapele-lumber/,2026-10-16
+Mahogany,4/4,not stated,14.75,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/mahogany-lumber/,2026-10-16
+Mahogany,6/4,not stated,14.85,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/mahogany-lumber/,2026-10-16
+Mahogany,8/4,not stated,14.75,Wood Vendors (100-249 BF tier),Vancouver,WA,https://woodvendors.com/mahogany-lumber/,2026-10-16
+Ash,4/4,"rough (KD, Sel&Btr)",4.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Cherry,4/4,"rough (KD, Sel&Btr)",4.25,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Cherry,8/4,"rough (KD, Sel&Btr)",5.25,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Hickory,4/4,"rough (KD, Sel&Btr)",4.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Hickory,8/4,"rough (KD, Sel&Btr)",6.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Hard Maple,4/4,"rough (KD, Sel&Btr)",5.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Hard Maple,6/4,"rough (KD, Sel&Btr)",6.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Hard Maple,8/4,"rough (KD, Sel&Btr)",7.25,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Soft Maple,4/4,"rough (KD, Sel&Btr)",4.75,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Soft Maple,8/4,"rough (KD, Sel&Btr)",5.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Red Oak,4/4,"rough (KD, Sel&Btr)",3.75,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Red Oak,5/4,"rough (KD, Sel&Btr)",4.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Red Oak,6/4,"rough (KD, Sel&Btr)",4.75,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Red Oak,8/4,"rough (KD, Sel&Btr)",5.95,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+White Oak,4/4,"rough (KD, Sel&Btr)",7.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+White Oak,6/4,"rough (KD, Sel&Btr)",8.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+White Oak,8/4,"rough (KD, Sel&Btr)",12.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Poplar,4/4,"rough (KD, Sel&Btr)",3.65,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Poplar,6/4,"rough (KD, Sel&Btr)",4.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Poplar,8/4,"rough (KD, Sel&Btr)",5.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Walnut,4/4,"rough (KD, Sel&Btr)",9.75,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Walnut,5/4,"rough (KD, Sel&Btr)",10.00,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Walnut,6/4,"rough (KD, Sel&Btr)",10.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Walnut,8/4,"rough (KD, Sel&Btr)",11.50,Hickory & Oak Lumber,Decatur,MI,https://hickoryandoak.com/prices.php,2026-10-16
+Walnut,not stated,S2S/S3S (FAS),14.00,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+Hard Maple,not stated,S2S/S3S (FAS),8.50,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+Cherry,not stated,S2S/S3S (FAS),8.50,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+White Oak,not stated,S2S/S3S (FAS),14.00,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+Ash,not stated,S2S/S3S (FAS),8.00,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+Mahogany,not stated,S2S/S3S (FAS),15.00,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
+Sapele,not stated,S2S/S3S (FAS),15.00,The Wood Shed,Arlington,TX,https://img1.wsimg.com/blobby/go/85b7b81b-7200-43f8-9f91-b351a10519eb/Wood_Shed_Lumber_Price_List_FINAL.pdf,2026-10-16
