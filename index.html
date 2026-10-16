@@ -7,7 +7,8 @@ th{background:#f3ebe1;cursor:pointer}.box{background:#faf6f0;border:1px solid #e
 <h1>BoardFoot Index</h1><p>What hardwood actually costs per board foot, by species and state. Prices are from public dealer price sheets; always confirm with the dealer.</p>
 <div><label>Species <select id="sp"><option value="">All</option></select></label>
 <label>State <select id="st"><option value="">All</option></select></label>
-<label>Thickness <select id="th"><option value="">All</option></select></label></div>
+<label>Thickness <select id="th"><option value="">All</option></select></label>
+<label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></div>
 <!--SPECIES--><p><b>Prices by species:</b> <a href="ash-price-per-board-foot/">Ash</a> · <a href="cherry-price-per-board-foot/">Cherry</a> · <a href="hard-maple-price-per-board-foot/">Hard Maple</a> · <a href="hickory-price-per-board-foot/">Hickory</a> · <a href="mahogany-price-per-board-foot/">Mahogany</a> · <a href="poplar-price-per-board-foot/">Poplar</a> · <a href="red-oak-price-per-board-foot/">Red Oak</a> · <a href="sapele-price-per-board-foot/">Sapele</a> · <a href="soft-maple-price-per-board-foot/">Soft Maple</a> · <a href="walnut-price-per-board-foot/">Walnut</a> · <a href="white-oak-price-per-board-foot/">White Oak</a></p><!--/SPECIES--><p id="summary" class="stat"></p>
 <table><thead><tr><th>Species</th><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody id="rows"></tbody></table>
 <div class="box"><h2>Report a price</h2><p>Paid for lumber recently? Share it. Reports are reviewed before they appear.</p>
@@ -26,8 +27,10 @@ fetch('seed.csv').then(r=>r.text()).then(t=>{const d=parse(t);
 const fill=(id,k)=>[...new Set(d.map(r=>r[k]))].sort().forEach(v=>document.getElementById(id).add(new Option(v,v)));
 fill('sp','species');fill('st','state');fill('th','thickness');
 const p=new URLSearchParams(location.search);if(p.get('species'))sp.value=p.get('species');if(p.get('state'))st.value=p.get('state');
-function draw(){const f=d.filter(r=>(!sp.value||r.species==sp.value)&&(!st.value||r.state==st.value)&&(!th.value||r.thickness==th.value)).sort((a,b)=>a.price_per_bf-b.price_per_bf);
+const A=(x,y)=>String(x).localeCompare(String(y),'en',{sensitivity:'base'}),P=(a,b)=>a.price_per_bf-b.price_per_bf;
+const cmp={price:(a,b)=>P(a,b)||A(a.dealer,b.dealer),dealer:(a,b)=>A(a.dealer,b.dealer)||P(a,b),state:(a,b)=>A(a.state,b.state)||A(a.dealer,b.dealer)||P(a,b)};
+function draw(){const f=d.filter(r=>(!sp.value||r.species==sp.value)&&(!st.value||r.state==st.value)&&(!th.value||r.thickness==th.value)).sort(cmp[sortby.value]);
 rows.innerHTML=f.map(r=>`<tr><td>${r.species}</td><td>${r.thickness}</td><td>${r.surfacing}</td><td>$${(+r.price_per_bf).toFixed(2)}</td><td>${/^https?:/.test(r.source_url)?`<a href="${r.source_url}" rel="nofollow">${r.dealer}</a>`:`${r.dealer} <em>(customer-reported)</em>`}</td><td>${r.city}, ${r.state}</td><td>${r.date_checked}</td></tr>`).join('');
 const cu=f.filter(r=>!/^https?:/.test(r.source_url)).length;const ps=f.filter(r=>/^https?:/.test(r.source_url)).map(r=>+r.price_per_bf);summary.textContent=ps.length?`${ps.length} dealer prices${cu?` (+${cu} customer-reported small pieces, not in stats)`:''} · low $${Math.min(...ps).toFixed(2)} · median $${ps.sort((a,b)=>a-b)[ps.length>>1].toFixed(2)} · high $${Math.max(...ps).toFixed(2)}`:'No prices yet – report one below!'}
-[sp,st,th].forEach(e=>e.onchange=draw);draw()});
+[sp,st,th,sortby].forEach(e=>e.onchange=draw);draw()});
 </script></body></html>

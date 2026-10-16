@@ -14,6 +14,10 @@ def slug(s):return s.lower().replace(' ','-')
 def cls(r):
   s=r['surfacing'].lower()
   return 'Rough' if s.startswith('rough') else 'Surfaced' if s.startswith(('s2s','s4s','surfaced')) else 'Not stated'
+SORTJS='''(function(){var A=function(x,y){return x.localeCompare(y,'en',{sensitivity:'base'})},tb=document.querySelector('#alltbl tbody'),sel=document.getElementById('sortby');
+var P=function(a,b){return +a.dataset.p-+b.dataset.p};
+var cmp={price:function(a,b){return P(a,b)||A(a.dataset.d,b.dataset.d)},dealer:function(a,b){return A(a.dataset.d,b.dataset.d)||P(a,b)},state:function(a,b){return A(a.dataset.s,b.dataset.s)||A(a.dataset.d,b.dataset.d)||P(a,b)}};
+sel.onchange=function(){[].slice.call(tb.rows).sort(cmp[sel.value]).forEach(function(r){tb.appendChild(r)})};sel.onchange()})();'''
 species=sorted({r['species'] for r in rows})
 def stat(ps):return f"${S.median(ps):.2f}",f"${min(ps):.2f}–${max(ps):.2f}",len(ps)
 urls=[BASE]
@@ -24,7 +28,7 @@ for sp in species:
   thk=sorted({r['thickness'] for r in a},key=lambda t:(t=='not stated',float(t.split('/')[0])/4 if '/' in t else 0))
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
-  drows=''.join(f"<tr><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td><td>{r['date_checked']}</td></tr>" for r in a)
+  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td><td>{r['date_checked']}</td></tr>" for r in a)
   ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
   cust=''
   if ca:
@@ -49,7 +53,8 @@ for sp in species:
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
-<h2>All {sp.lower()} prices</h2><table><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h2>All {sp.lower()} prices</h2><p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<script>{SORTJS}</script>
 {cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
 {report}
 {kit}
