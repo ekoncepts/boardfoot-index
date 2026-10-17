@@ -31,6 +31,15 @@ def contact_html():
   return '<mark>[CONTACT EMAIL PLACEHOLDER &mdash; Harry to supply before publishing]</mark>'
 idx=open('index.html').read()
 style=re.search(r'<style>.*?</style>',idx,re.S).group(0)
+# ---- logo / favicon / social image ----
+def head_extra(pre):
+  return (f'<!--LOGOHEAD--><link rel="icon" href="{pre}assets/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="{pre}assets/favicon-32.png">'
+          f'<link rel="apple-touch-icon" href="{pre}assets/apple-touch-icon.png"><meta name="theme-color" content="#fdf6ea">'
+          f'<meta property="og:image" content="{BASE}assets/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+          f'<meta property="og:site_name" content="BoardFoot Index"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}assets/og-image.png"><!--/LOGOHEAD-->')
+def logo_html(pre):
+  return f'<a href="{pre or "./"}" class="sitelogo" style="display:inline-block;line-height:0"><img src="{pre}assets/logo.png" alt="BoardFoot Index" width="198" height="40" style="height:40px;width:auto;max-width:100%"></a>'
+HX=head_extra('../')
 report=re.search(r'<div class="box"><h2>Report a price</h2>.*?</script>',idx,re.S).group(0)
 kit=re.search(r'<div class="box"><h2>Get the monthly.*?ck\.5\.js" async></script>',idx,re.S).group(0)
 e=html.escape
@@ -81,8 +90,8 @@ for sp in species:
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
   desc=f"{sp} lumber costs a median {med}/bf across {n} posted dealer prices ({rng}) in {', '.join(states)}. See prices by thickness, rough vs surfaced, and sources."
   out=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}</head><body>
-<p><a href="../">← BoardFoot Index</a></p><h1>{sp} price per board foot</h1>
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}{HX}</head><body>
+<p>{logo_html("../")}</p><h1>{sp} price per board foot</h1>
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
@@ -101,8 +110,8 @@ for sp in species:
 
 def shell(title,desc,path,body,depth_prefix='../'):
   return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}</head><body>
-<p><a href="{depth_prefix}">← BoardFoot Index</a></p>{body}
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}{HX}</head><body>
+<p>{logo_html(depth_prefix)}</p>{body}
 {report}
 {kit}
 {footer(depth_prefix)}
@@ -191,8 +200,8 @@ write('board-foot-calculator',shell(ctitle,cdesc,'board-foot-calculator/',cbody)
 # ---- info pages ----
 def info_page(title,desc,path,body):
   return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}</head><body>
-<p><a href="../">← BoardFoot Index</a></p>{body}
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}{HX}</head><body>
+<p>{logo_html("../")}</p>{body}
 {footer('../')}
 </body></html>"""
 CE=contact_html()
@@ -264,5 +273,7 @@ pd=sorted({r['dealer'] for r in rows});
 blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd)+SHIPNOTE+'<!--/DEALERS-->'
 idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
 idx=re.sub(r'<!--FOOTER-->.*?<!--/FOOTER-->','',idx,flags=re.S).replace('</body>','<!--FOOTER-->'+footer('')+'<!--/FOOTER--></body>')
+idx=re.sub(r'<!--LOGOHEAD-->.*?<!--/LOGOHEAD-->','',idx,flags=re.S).replace('</head>',head_extra('')+'</head>',1)
+idx=re.sub(r'<!--LOGO-->.*?<!--/LOGO-->','',idx,flags=re.S).replace('<h1>BoardFoot Index</h1>','<!--LOGO-->'+'<p>'+logo_html('')+'</p><!--/LOGO-->'+'<h1>BoardFoot Index</h1>',1)
 open('index.html','w').write(idx)
 print(len(urls))
