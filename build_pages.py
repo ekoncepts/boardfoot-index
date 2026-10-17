@@ -22,7 +22,7 @@ def buy_link():
   return f'<a href="{html.escape(AFF["url"])}" rel="sponsored noopener">Buy at Knotty (affiliate link)</a>' if AFF else ''
 def aff_note(pre):
   if not AFF: return ''
-  return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
+  return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you. Knotty ships from Canada (Hamilton, Ontario), so US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
 def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
 def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
 def ship_td(dn):return f'<td title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
@@ -99,7 +99,7 @@ for sp in species:
   th4=[r['p'] for r in a if r['thickness']=='4/4'];th8=[r['p'] for r in a if r['thickness']=='8/4']
   if th4 and th8: tips.append(f"8/4 median ${S.median(th8):.2f} vs 4/4 median ${S.median(th4):.2f} per bf — thicker stock costs {'more' if S.median(th8)>S.median(th4) else 'about the same or less'} per board foot here.")
   if any('100-249' in r['dealer'] for r in a): tips.append("Wood Vendors prices shown are its 100–249 bf tier; that dealer lists lower per-bf prices for larger orders.")
-  if any(is_aff(r['dealer']) for r in a): tips.append("The Knotty Lumber Co. is in Ontario, Canada. Its prices here are as shown on its US storefront in US dollars (no conversion by us), and orders shipped to the US may be charged import duties or tariffs that are not in the price.")
+  if any(is_aff(r['dealer']) for r in a): tips.append("The Knotty Lumber Co. ships from Hamilton, Ontario, Canada. Its prices here are as shown on its US storefront in US dollars (no conversion by us), and US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices.")
   tips.append(f"Only {n} prices from {len(states)} state(s) so far — always call the dealer to confirm, and report what you pay to improve this page.")
   others=' · '.join(f'<a href="../{slug(o)}-price-per-board-foot/">{o}</a>' for o in species if o!=sp)
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
@@ -271,7 +271,7 @@ disc_body=f"""<h1>Affiliate Disclosure</h1>
 <h2>What commissions never change</h2>
 <p>Affiliate commissions never affect the prices we list, the medians and ranges we calculate, which dealers appear, or the order in which they are sorted. Prices are copied from public dealer pages, and the sort options (price, dealer name, state) are the same for everyone. A dealer cannot pay to change its listed price or its position.</p>
 <h2>Current affiliate partners</h2>
-<ul><li><b>The Knotty Lumber Co.</b> (Hamilton, Ontario). We earn a 10% commission on qualifying orders placed through links labeled &ldquo;Buy at Knotty (affiliate link)&rdquo;. Knotty's prices are listed and counted exactly like every other dealer's, so the commission does not affect prices, medians, ranges or sort order. The commission is paid by Knotty and does not raise what you pay. Knotty ships from Canada, so orders to the US may be charged import duties or tariffs by the carrier; see its shipping policy.</li></ul>
+<ul><li><b>The Knotty Lumber Co.</b> (Hamilton, Ontario). We earn a 10% commission on qualifying orders placed through links labeled &ldquo;Buy at Knotty (affiliate link)&rdquo;. Knotty's prices are listed and counted exactly like every other dealer's, so the commission does not affect prices, medians, ranges or sort order. The commission is paid by Knotty and does not raise what you pay. Knotty ships from Canada, so US buyers may owe import duties, tariffs or brokerage fees, which are not included in the listed prices; see its shipping policy.</li></ul>
 <p>Rows and dealer names for an affiliate partner are marked &ldquo;Affiliate partner.&rdquo;</p>
 <h2>Sponsored listings</h2>
 <p>If a dealer pays for a featured spot or other promotion, it will be clearly labeled <b>&ldquo;Sponsored.&rdquo;</b> Sponsored placements will be kept separate from the price tables and will not alter them.</p>
