@@ -20,6 +20,15 @@ def ship_info_table(dnames):
     trs+=f'<tr><td>{html.escape(dn)}</td><td>{html.escape(d["city"])}, {d["state"]}</td><td>{html.escape(d["ships"])}</td><td>{html.escape(d["shipping_note"])}</td><td><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})</td></tr>'
   return '<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>What the dealer\'s site says</th><th>Where we found it</th></tr></thead><tbody>'+trs+'</tbody></table>'
 SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the date shown; &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer does not ship. Always confirm with the dealer.</small></p>'
+# ---- site footer + info pages (About / Privacy / Affiliate disclosure) ----
+CONTACT_EMAIL='boardfootindex@gmail.com'
+UPDATED='October 16, 2026'
+def footer(pre):
+  return f'<footer id="sitefooter" style="margin-top:2rem;padding-top:1rem;border-top:1px solid #e5d8c7;font-size:.85rem"><a href="{pre}about/">About</a> · <a href="{pre}privacy/">Privacy</a> · <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a></footer>'
+def contact_html():
+  if CONTACT_EMAIL: return f'<a href="mailto:{html.escape(CONTACT_EMAIL)}">{html.escape(CONTACT_EMAIL)}</a>'
+  print('WARNING: CONTACT_EMAIL is not set; Privacy/About pages show a placeholder')
+  return '<mark>[CONTACT EMAIL PLACEHOLDER &mdash; Harry to supply before publishing]</mark>'
 idx=open('index.html').read()
 style=re.search(r'<style>.*?</style>',idx,re.S).group(0)
 report=re.search(r'<div class="box"><h2>Report a price</h2>.*?</script>',idx,re.S).group(0)
@@ -85,7 +94,7 @@ for sp in species:
 {kit}
 <h2>Other species</h2><p>{others}</p>
 <h2>{sp} prices by state</h2><p>{state_links('../')}</p>
-<p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>.</p></body></html>'''
+<p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>.</p>{footer('../')}</body></html>'''
   os.makedirs(f'{slug(sp)}-price-per-board-foot',exist_ok=True)
   open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(out)
   urls.append(f'{BASE}{slug(sp)}-price-per-board-foot/')
@@ -96,6 +105,7 @@ def shell(title,desc,path,body,depth_prefix='../'):
 <p><a href="{depth_prefix}">← BoardFoot Index</a></p>{body}
 {report}
 {kit}
+{footer(depth_prefix)}
 </body></html>"""
 def write(path,content):
   os.makedirs(path,exist_ok=True);open(path+'/index.html','w').write(content);urls.append(BASE+path+'/')
@@ -178,6 +188,74 @@ ctitle="Board Foot Calculator (Free) – Lumber Board Feet & Cost Estimate | Boa
 cdesc="Free board foot calculator: enter thickness (inches or quarters like 4/4), width, length and quantity to get board feet, plus an optional cost estimate from real dealer-posted prices."
 write('board-foot-calculator',shell(ctitle,cdesc,'board-foot-calculator/',cbody))
 
+# ---- info pages ----
+def info_page(title,desc,path,body):
+  return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}</head><body>
+<p><a href="../">← BoardFoot Index</a></p>{body}
+{footer('../')}
+</body></html>"""
+CE=contact_html()
+about_body=f"""<h1>About BoardFoot Index</h1>
+<p>BoardFoot Index is a free price tracker for hardwood lumber. It shows what dealers charge per board foot, by species and by state, so woodworkers can see what a fair price looks like before they buy.</p>
+<h2>Who runs it</h2>
+<p>BoardFoot Index is run by Harry, a woodworking hobbyist. It is a small independent project, not a lumber dealer or a company that sells wood.</p>
+<h2>Where the prices come from</h2>
+<ul>
+<li><b>Dealer-posted prices.</b> Most prices come from the public price lists and product pages of lumber dealers. Every one of these prices links back to the page it came from, with the date we checked it.</li>
+<li><b>Customer-reported prices.</b> Woodworkers can report what they paid. Reports are reviewed before they appear, and they are labeled &ldquo;customer-reported.&rdquo; They are <b>excluded</b> from the medians, ranges and buying tips, which use dealer-posted prices only.</li>
+<li><b>Shipping information.</b> The &ldquo;Ships?&rdquo; column only reflects what each dealer's own site says. &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer won't ship.</li>
+</ul>
+<h2>Prices change: confirm with the dealer</h2>
+<p>Lumber prices change without notice and can differ by grade, width, length, quantity and location. A price here is a snapshot from the date shown, not a quote. Please check with the dealer before you buy or drive anywhere. If you spot a wrong or out-of-date price, use the report form on the <a href="../">home page</a> or contact us.</p>
+<h2>Neutrality</h2>
+<p>Some links on this site may earn a commission, and dealers may one day pay for a featured spot. That money will never change a price, a median, a range or the order in which dealers are sorted. Paid placements will be labeled &ldquo;Sponsored.&rdquo; See the <a href="../affiliate-disclosure/">affiliate disclosure</a> for details.</p>
+<h2>Contact</h2>
+<p>Questions, corrections, or removal requests: {CE}. See also the <a href="../privacy/">privacy policy</a>.</p>"""
+priv_body=f"""<h1>Privacy Policy</h1>
+<p><small>Last updated {UPDATED}.</small></p>
+<p>This page explains what BoardFoot Index collects and who handles it. We keep it simple because the site does very little.</p>
+<h2>How the site is hosted</h2>
+<p>BoardFoot Index is a static website hosted on GitHub Pages. We do not run our own web server or database. GitHub, as the host, may log technical information about visits (such as IP address and browser) under its own <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="nofollow noopener">privacy statement</a>. We do not have access to that data as site analytics.</p>
+<h2>Analytics and cookies</h2>
+<p>We do not currently use analytics or advertising trackers, and we do not set our own cookies. If that changes, we will update this page first. The newsletter signup form loads a script from Kit (see below), which may set its own cookies or similar technology.</p>
+<h2>Price reports</h2>
+<p>If you use the &ldquo;Report a price&rdquo; form, the details you type (species, thickness, surfacing, price per board foot, dealer, city, state and an optional link) are sent to a Google Apps Script run by the site owner and saved in a private Google Sheet, along with the date and time you sent it. The form does not ask for your name or email address, so please do not put personal details in the fields. Reports are reviewed before any appear on the site, and a published report shows the price, dealer and location, not who sent it. Google processes this data under its own <a href="https://policies.google.com/privacy" rel="nofollow noopener">privacy policy</a>.</p>
+<h2>Newsletter</h2>
+<p>If you subscribe to the Lumber Price Report, the email address you enter is collected and stored by Kit (formerly ConvertKit), our email service provider, under <a href="https://kit.com/privacy" rel="nofollow noopener">Kit's privacy policy</a>. We use it only to send the newsletter. Every email has an unsubscribe link, and you can unsubscribe at any time.</p>
+<h2>What we do not do</h2>
+<ul><li>We do not sell your data or share it for advertising.</li><li>We do not use your email address for anything except the newsletter you signed up for.</li></ul>
+<h2>Links to other sites</h2>
+<p>Prices link to dealer websites we do not control. Some links may be affiliate links (see the <a href="../affiliate-disclosure/">affiliate disclosure</a>). Each dealer's site has its own privacy practices.</p>
+<h2>Requesting access or removal</h2>
+<ul>
+<li><b>Newsletter:</b> use the unsubscribe link in any email to be removed from the list. To have your address deleted completely, contact us.</li>
+<li><b>Price reports:</b> because the form does not collect your identity, we may not be able to tell which report is yours. Tell us the details of the report (species, price, dealer, approximate date) and we will delete it or remove it from the site.</li>
+<li><b>Anything else:</b> contact us and we will respond and act on reasonable requests.</li>
+</ul>
+<p>Contact: {CE}</p>
+<h2>Changes</h2>
+<p>If we change this policy, we will update the date at the top of this page.</p>"""
+disc_body=f"""<h1>Affiliate Disclosure</h1>
+<p><small>Last updated {UPDATED}.</small></p>
+<p>Plain version: <b>some links on BoardFoot Index may be affiliate links.</b> If you click one and buy something, the site may earn a small commission at no extra cost to you.</p>
+<h2>What this means</h2>
+<ul>
+<li>We may join affiliate programs with lumber dealers, tool sellers and retailers. Where a link is an affiliate link, we aim to say so near the link or on the page.</li>
+<li>Commissions help pay for running the site. They do not make anything cost more for you.</li>
+</ul>
+<h2>What commissions never change</h2>
+<p>Affiliate commissions never affect the prices we list, the medians and ranges we calculate, which dealers appear, or the order in which they are sorted. Prices are copied from public dealer pages, and the sort options (price, dealer name, state) are the same for everyone. A dealer cannot pay to change its listed price or its position.</p>
+<h2>Sponsored listings</h2>
+<p>If a dealer pays for a featured spot or other promotion, it will be clearly labeled <b>&ldquo;Sponsored.&rdquo;</b> Sponsored placements will be kept separate from the price tables and will not alter them.</p>
+<h2>Amazon</h2>
+<p>If we join the Amazon Associates program, we will add the required statement here: &ldquo;As an Amazon Associate we earn from qualifying purchases.&rdquo;</p>
+<h2>Questions</h2>
+<p>See the <a href="../about/">About page</a> and <a href="../privacy/">privacy policy</a>, or contact us: {CE}</p>"""
+write('about',info_page('About BoardFoot Index | Who runs it and where the prices come from','BoardFoot Index is a free hardwood lumber price tracker run by Harry, a woodworking hobbyist. Learn where prices come from and how we stay neutral.','about/',about_body))
+write('privacy',info_page('Privacy Policy | BoardFoot Index','What BoardFoot Index collects: price reports and newsletter signups, who handles them, and how to ask for removal.','privacy/',priv_body))
+write('affiliate-disclosure',info_page('Affiliate Disclosure | BoardFoot Index','Some links on BoardFoot Index may be affiliate links. Commissions never change prices, medians or sort order, and paid placements are labeled Sponsored.','affiliate-disclosure/',disc_body))
+
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>2026-10-16</lastmod></url>\n' for u in urls)+'</urlset>\n')
 open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n')
 nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tool:</b> <a href="board-foot-calculator/">Board foot calculator</a></p><!--/SPECIES-->'
@@ -185,5 +263,6 @@ idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id
 pd=sorted({r['dealer'] for r in rows}); 
 blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd)+SHIPNOTE+'<!--/DEALERS-->'
 idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
+idx=re.sub(r'<!--FOOTER-->.*?<!--/FOOTER-->','',idx,flags=re.S).replace('</body>','<!--FOOTER-->'+footer('')+'<!--/FOOTER--></body>')
 open('index.html','w').write(idx)
 print(len(urls))
