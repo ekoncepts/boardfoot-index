@@ -9,20 +9,34 @@ dealers={}
 for _r in csv.DictReader(open('dealers.csv')): dealers[_r['dealer']]=_r
 for _d in {r['dealer'] for r in rows}:
   if _d not in dealers: print('WARNING: no dealers.csv entry for',_d)
+# ---- affiliate partner (The Knotty Lumber Co.). The tracking URL lives in monetization/affiliate.json (gitignored), never in seed/dealers data ----
+import json
+AFF=None
+for _p in ('monetization/affiliate.json','/workspace/boardfoot/monetization/affiliate.json'):
+  if os.path.exists(_p): AFF=json.load(open(_p)).get('knotty'); break
+if not AFF: print('WARNING: monetization/affiliate.json not found; affiliate Buy links omitted')
+def is_aff(dn):return dealers.get(dn,{}).get('affiliate','').strip().lower()=='yes'
+BADGE_STYLE='font-size:.75rem;background:#fff3d6;border:1px solid #e5d8c7;border-radius:3px;padding:0 .35em;white-space:nowrap;text-decoration:none'
+def aff_badge(pre):return f' <a href="{pre}affiliate-disclosure/" title="Affiliate partner: we earn a commission on orders placed through our Knotty link. It never changes prices, medians or sort order." style="{BADGE_STYLE}">Affiliate partner</a>'
+def buy_link():
+  return f'<a href="{html.escape(AFF["url"])}" rel="sponsored noopener">Buy at Knotty (affiliate link)</a>' if AFF else ''
+def aff_note(pre):
+  if not AFF: return ''
+  return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
 def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
 def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
 def ship_td(dn):return f'<td title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
-def ship_info_table(dnames):
+def ship_info_table(dnames,pre='../'):
   trs=''
   for dn in sorted(set(dnames)):
     d=dealers.get(dn)
     if not d: continue
-    trs+=f'<tr><td>{html.escape(dn)}</td><td>{html.escape(d["city"])}, {d["state"]}</td><td>{html.escape(d["ships"])}</td><td>{html.escape(d["shipping_note"])}</td><td><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})</td></tr>'
+    trs+=f'<tr><td>{html.escape(dn)}</td><td>{html.escape(d["city"])}, {d["state"]}</td><td>{html.escape(d["ships"])}</td><td>{html.escape(d["shipping_note"])}</td><td><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})'+((' &middot; '+buy_link()+' <small>(<a href="'+pre+'affiliate-disclosure/">disclosure</a>)</small>') if is_aff(dn) and AFF else '')+'</td></tr>'
   return '<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>What the dealer\'s site says</th><th>Where we found it</th></tr></thead><tbody>'+trs+'</tbody></table>'
 SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the date shown; &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer does not ship. Always confirm with the dealer.</small></p>'
 # ---- site footer + info pages (About / Privacy / Affiliate disclosure) ----
 CONTACT_EMAIL='boardfootindex@gmail.com'
-UPDATED='October 16, 2026'
+UPDATED='October 17, 2026'
 def footer(pre):
   return f'<footer id="sitefooter" style="margin-top:2rem;padding-top:1rem;border-top:1px solid #e5d8c7;font-size:.85rem"><a href="{pre}about/">About</a> · <a href="{pre}privacy/">Privacy</a> · <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a></footer>'
 def contact_html():
@@ -56,8 +70,8 @@ import collections
 STATE_NAMES={'AL':'Alabama','AZ':'Arizona','AR':'Arkansas','CA':'California','CO':'Colorado','CT':'Connecticut','DE':'Delaware','FL':'Florida','GA':'Georgia','ID':'Idaho','IL':'Illinois','IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana','ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota','MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada','NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York','NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma','OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina','SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont','VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'}
 MIN_STATE=5
 state_counts=collections.Counter(r['state'] for r in rows)
-pub_states=sorted([s for s,c in state_counts.items() if c>=MIN_STATE],key=lambda s:STATE_NAMES[s])
-skipped_states=sorted([(s,c) for s,c in state_counts.items() if c<MIN_STATE])
+pub_states=sorted([s for s,c in state_counts.items() if c>=MIN_STATE and s in STATE_NAMES],key=lambda s:STATE_NAMES[s])
+skipped_states=sorted([(s,c) for s,c in state_counts.items() if c<MIN_STATE or s not in STATE_NAMES])
 def sslug(s):return STATE_NAMES[s].lower().replace(' ','-')+'-hardwood-lumber-prices'
 state_links=lambda pre,ex=None:' · '.join(f'<a href="{pre}{sslug(s)}/">{STATE_NAMES[s]}</a>' for s in pub_states if s!=ex)
 species=sorted({r['species'] for r in rows})
@@ -70,7 +84,7 @@ for sp in species:
   thk=sorted({r['thickness'] for r in a},key=lambda t:(t=='not stated',float(t.split('/')[0])/4 if '/' in t else 0))
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
-  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a></td><td>{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'])}<td>{r['date_checked']}</td></tr>" for r in a)
+  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a>{aff_badge('../') if is_aff(r['dealer']) else ''}</td><td>{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'])}<td>{r['date_checked']}</td></tr>" for r in a)
   ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
   cust=''
   if ca:
@@ -85,6 +99,7 @@ for sp in species:
   th4=[r['p'] for r in a if r['thickness']=='4/4'];th8=[r['p'] for r in a if r['thickness']=='8/4']
   if th4 and th8: tips.append(f"8/4 median ${S.median(th8):.2f} vs 4/4 median ${S.median(th4):.2f} per bf — thicker stock costs {'more' if S.median(th8)>S.median(th4) else 'about the same or less'} per board foot here.")
   if any('100-249' in r['dealer'] for r in a): tips.append("Wood Vendors prices shown are its 100–249 bf tier; that dealer lists lower per-bf prices for larger orders.")
+  if any(is_aff(r['dealer']) for r in a): tips.append("The Knotty Lumber Co. is in Ontario, Canada. Its prices here are as shown on its US storefront in US dollars (no conversion by us), and orders shipped to the US may be charged import duties or tariffs that are not in the price.")
   tips.append(f"Only {n} prices from {len(states)} state(s) so far — always call the dealer to confirm, and report what you pay to improve this page.")
   others=' · '.join(f'<a href="../{slug(o)}-price-per-board-foot/">{o}</a>' for o in species if o!=sp)
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
@@ -95,7 +110,7 @@ for sp in species:
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
-<h2>All {sp.lower()} prices</h2><p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
 {cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
@@ -235,7 +250,7 @@ priv_body=f"""<h1>Privacy Policy</h1>
 <h2>What we do not do</h2>
 <ul><li>We do not sell your data or share it for advertising.</li><li>We do not use your email address for anything except the newsletter you signed up for.</li></ul>
 <h2>Links to other sites</h2>
-<p>Prices link to dealer websites we do not control. Some links may be affiliate links (see the <a href="../affiliate-disclosure/">affiliate disclosure</a>). Each dealer's site has its own privacy practices.</p>
+<p>Prices link to dealer websites we do not control. Some links may be affiliate links (see the <a href="../affiliate-disclosure/">affiliate disclosure</a>). Each dealer's site has its own privacy practices. If you click an affiliate link, the dealer and its affiliate-tracking service may set cookies on their own site so that a purchase can be credited to us; we do not receive your personal information from them.</p>
 <h2>Requesting access or removal</h2>
 <ul>
 <li><b>Newsletter:</b> use the unsubscribe link in any email to be removed from the list. To have your address deleted completely, contact us.</li>
@@ -255,6 +270,9 @@ disc_body=f"""<h1>Affiliate Disclosure</h1>
 </ul>
 <h2>What commissions never change</h2>
 <p>Affiliate commissions never affect the prices we list, the medians and ranges we calculate, which dealers appear, or the order in which they are sorted. Prices are copied from public dealer pages, and the sort options (price, dealer name, state) are the same for everyone. A dealer cannot pay to change its listed price or its position.</p>
+<h2>Current affiliate partners</h2>
+<ul><li><b>The Knotty Lumber Co.</b> (Hamilton, Ontario). We earn a 10% commission on qualifying orders placed through links labeled &ldquo;Buy at Knotty (affiliate link)&rdquo;. Knotty's prices are listed and counted exactly like every other dealer's, so the commission does not affect prices, medians, ranges or sort order. The commission is paid by Knotty and does not raise what you pay. Knotty ships from Canada, so orders to the US may be charged import duties or tariffs by the carrier; see its shipping policy.</li></ul>
+<p>Rows and dealer names for an affiliate partner are marked &ldquo;Affiliate partner.&rdquo;</p>
 <h2>Sponsored listings</h2>
 <p>If a dealer pays for a featured spot or other promotion, it will be clearly labeled <b>&ldquo;Sponsored.&rdquo;</b> Sponsored placements will be kept separate from the price tables and will not alter them.</p>
 <h2>Amazon</h2>
@@ -270,7 +288,7 @@ open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.x
 nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tool:</b> <a href="board-foot-calculator/">Board foot calculator</a></p><!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
 pd=sorted({r['dealer'] for r in rows}); 
-blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd)+SHIPNOTE+'<!--/DEALERS-->'
+blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd,'')+SHIPNOTE+'<!--/DEALERS-->'
 idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
 idx=re.sub(r'<!--FOOTER-->.*?<!--/FOOTER-->','',idx,flags=re.S).replace('</body>','<!--FOOTER-->'+footer('')+'<!--/FOOTER--></body>')
 idx=re.sub(r'<!--LOGOHEAD-->.*?<!--/LOGOHEAD-->','',idx,flags=re.S).replace('</head>',head_extra('')+'</head>',1)
