@@ -25,14 +25,18 @@ def aff_note(pre):
   return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you. Knotty ships from Canada (Hamilton, Ontario), so US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
 def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
 def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
-def ship_td(dn):return f'<td title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
+def ship_td(dn,attrs=''):return f'<td{attrs} title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
+# ---- mobile layout: wide tables become stacked cards (class "cards", via CSS in index.html <style>) or scroll in a .tw wrapper ----
+def L(label):return f' data-label="{html.escape(label)}"'
+def wrap_tables(s):
+  return re.sub(r'<table(?![^>]*class="cards)([^>]*)>(.*?)</table>',lambda m:'<div class="tw"><table'+m.group(1)+'>'+m.group(2)+'</table></div>',s,flags=re.S)
 def ship_info_table(dnames,pre='../'):
   trs=''
   for dn in sorted(set(dnames)):
     d=dealers.get(dn)
     if not d: continue
-    trs+=f'<tr><td>{html.escape(dn)}</td><td>{html.escape(d["city"])}, {d["state"]}</td><td>{html.escape(d["ships"])}</td><td>{html.escape(d["shipping_note"])}</td><td><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})'+((' &middot; '+buy_link()+' <small>(<a href="'+pre+'affiliate-disclosure/">disclosure</a>)</small>') if is_aff(dn) and AFF else '')+'</td></tr>'
-  return '<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>What the dealer\'s site says</th><th>Where we found it</th></tr></thead><tbody>'+trs+'</tbody></table>'
+    trs+=f'<tr><td{L("Dealer")}>{html.escape(dn)}</td><td{L("Location")}>{html.escape(d["city"])}, {d["state"]}</td><td{L("Ships?")}>{html.escape(d["ships"])}</td><td{L("What the dealer\'s site says")}>{html.escape(d["shipping_note"])}</td><td{L("Where we found it")}><a href="{html.escape(d["shipping_source_url"])}" rel="nofollow noopener">source</a> ({d["date_checked"]})'+((' &middot; '+buy_link()+' <small>(<a href="'+pre+'affiliate-disclosure/">disclosure</a>)</small>') if is_aff(dn) and AFF else '')+'</td></tr>'
+  return '<table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>What the dealer\'s site says</th><th>Where we found it</th></tr></thead><tbody>'+trs+'</tbody></table>'
 SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the date shown; &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer does not ship. Always confirm with the dealer.</small></p>'
 # ---- site footer + info pages (About / Privacy / Affiliate disclosure) ----
 CONTACT_EMAIL='boardfootindex@gmail.com'
@@ -84,12 +88,12 @@ for sp in species:
   thk=sorted({r['thickness'] for r in a},key=lambda t:(t=='not stated',float(t.split('/')[0])/4 if '/' in t else 0))
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
-  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a>{aff_badge('../') if is_aff(r['dealer']) else ''}</td><td>{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'])}<td>{r['date_checked']}</td></tr>" for r in a)
+  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td class=\"c-th\">{e(r['thickness'])}</td><td class=\"c-su\">{e(r['surfacing'])}</td><td class=\"c-pr\">${r['p']:.2f}</td><td class=\"c-de\"><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a>{aff_badge('../') if is_aff(r['dealer']) else ''}</td><td class=\"c-lo\">{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'],' class=\"c-sh\"')}<td class=\"c-ck\">{r['date_checked']}</td></tr>" for r in a)
   ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
   cust=''
   if ca:
-    crow=''.join(f"<tr><td>{e(r['thickness'])}</td><td>{e(r['surfacing'])}</td><td>${r['p']:.2f}</td><td>{e(r['dealer'])}</td><td>{e(r['city'])}, {r['state']}</td><td>customer-reported</td></tr>" for r in ca)
-    cust=f'<h2>Customer-reported small-piece prices</h2><p>These came from a real order at {e(ca[0]["dealer"])}: small S4S (surfaced, unfinished) pieces sold per piece, converted to $/bf using <em>nominal</em> size (nominal thickness × nominal width × length ÷ 12). Real boards are slightly smaller than nominal, so these run higher per bf than dealer-posted board-foot prices. They are <b>not</b> included in the medians, ranges or tips above.</p><table><thead><tr><th>Thick</th><th>Notes</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Source</th></tr></thead><tbody>{crow}</tbody></table>'
+    crow=''.join(f"<tr><td{L('Thick')}>{e(r['thickness'])}</td><td{L('Notes')}>{e(r['surfacing'])}</td><td{L('$/BF')}>${r['p']:.2f}</td><td{L('Dealer')}>{e(r['dealer'])}</td><td{L('Location')}>{e(r['city'])}, {r['state']}</td><td{L('Source')}>customer-reported</td></tr>" for r in ca)
+    cust=f'<h2>Customer-reported small-piece prices</h2><p>These came from a real order at {e(ca[0]["dealer"])}: small S4S (surfaced, unfinished) pieces sold per piece, converted to $/bf using <em>nominal</em> size (nominal thickness × nominal width × length ÷ 12). Real boards are slightly smaller than nominal, so these run higher per bf than dealer-posted board-foot prices. They are <b>not</b> included in the medians, ranges or tips above.</p><table class="cards lab"><thead><tr><th>Thick</th><th>Notes</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Source</th></tr></thead><tbody>{crow}</tbody></table>'
   tips=[f"The lowest posted price we found was ${a[0]['p']:.2f}/bf ({a[0]['thickness']}{'' if a[0]['surfacing']=='not stated' else ', '+a[0]['surfacing']}) at {a[0]['dealer']} in {a[0]['city']}, {a[0]['state']}; the highest was ${a[-1]['p']:.2f}/bf."]
   ro=[r['p'] for r in a if cls(r)=='Rough'];su=[r['p'] for r in a if cls(r)=='Surfaced']
   if ro and su:
@@ -110,7 +114,7 @@ for sp in species:
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
-<h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl" class="cards"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
 {cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
@@ -120,7 +124,7 @@ for sp in species:
 <h2>{sp} prices by state</h2><p>{state_links('../')}</p>
 <p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>.</p>{footer('../')}</body></html>'''
   os.makedirs(f'{slug(sp)}-price-per-board-foot',exist_ok=True)
-  open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(out)
+  open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(wrap_tables(out))
   urls.append(f'{BASE}{slug(sp)}-price-per-board-foot/')
 
 def shell(title,desc,path,body,depth_prefix='../'):
@@ -132,6 +136,7 @@ def shell(title,desc,path,body,depth_prefix='../'):
 {footer(depth_prefix)}
 </body></html>"""
 def write(path,content):
+  content=wrap_tables(content)
   os.makedirs(path,exist_ok=True);open(path+'/index.html','w').write(content);urls.append(BASE+path+'/')
 species_links=lambda pre:' · '.join(f'<a href="{pre}{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)
 
@@ -151,7 +156,7 @@ for st in pub_states:
     for sp in sorted({r['species'] for r in da}):
       u=collections.Counter(r['source_url'] for r in da if r['species']==sp).most_common(1)[0][0]
       spl.append(f'<a href="{e(u)}" rel="nofollow noopener">{sp}</a>')
-    drows+=f'<tr><td><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td>{e(ct)}, {st}</td>{ship_td(dn)}<td>{len(da)}</td><td>{", ".join(spl)}</td><td>{max(r["date_checked"] for r in da)}</td></tr>'
+    drows+=f'<tr><td{L("Dealer")}><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td{L("Location")}>{e(ct)}, {st}</td>{ship_td(dn,L("Ships?"))}<td{L("Prices")}>{len(da)}</td><td{L("Species (links go to the source)")}>{", ".join(spl)}</td><td{L("Checked")}>{max(r["date_checked"] for r in da)}</td></tr>'
   allp=[r['p'] for r in a]; med,rng,n=stat(allp)
   meds={sp:S.median([r['p'] for r in a if r['species']==sp]) for sp in sps}
   lo=min(a,key=lambda r:r['p']); hi=max(a,key=lambda r:r['p'])
@@ -166,7 +171,7 @@ for st in pub_states:
 <table><thead><tr><th>Species</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 <p><small>Each row mixes thicknesses, grades and rough vs surfaced stock from that state's dealers, so use the <a href="../">searchable table</a> or the species pages for like-for-like comparisons.</small></p>
 <h2>{nm} dealers with posted prices</h2>
-<table><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do {nm} dealers ship?</h3>{ship_info_table([d for d,_ in dealers_list])}{SHIPNOTE}
 <p>Prices change without notice and may differ by grade, width, length and quantity — call the dealer before you drive. Paid something different? Report it below.</p>
 <h2>Estimate a project</h2><p>Use the <a href="../board-foot-calculator/">board foot calculator</a> to convert board dimensions to board feet and a rough cost.</p>
