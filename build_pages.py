@@ -79,7 +79,17 @@ skipped_states=sorted([(s,c) for s,c in state_counts.items() if c<MIN_STATE or s
 def sslug(s):return STATE_NAMES[s].lower().replace(' ','-')+'-hardwood-lumber-prices'
 state_links=lambda pre,ex=None:' · '.join(f'<a href="{pre}{sslug(s)}/">{STATE_NAMES[s]}</a>' for s in pub_states if s!=ex)
 species=sorted({r['species'] for r in rows})
-def stat(ps):return f"${S.median(ps):.2f}",f"${min(ps):.2f}–${max(ps):.2f}",len(ps)
+# ---- shared number formatting: every page (and the calculator) rounds medians/prices through fmt2, so they always agree ----
+def fmt2(x):return f"{x:.2f}"
+def money(x):return '$'+fmt2(x)
+# ---- place counting: US states and Canadian provinces are counted separately ("15 states plus Ontario") ----
+PROV_NAMES={'AB':'Alberta','BC':'British Columbia','MB':'Manitoba','NB':'New Brunswick','NL':'Newfoundland and Labrador','NS':'Nova Scotia','ON':'Ontario','PE':'Prince Edward Island','QC':'Quebec','SK':'Saskatchewan'}
+def places_text(codes):
+  codes=set(codes); us=[c for c in codes if c not in PROV_NAMES]; ca=sorted(PROV_NAMES[c] for c in codes if c in PROV_NAMES)
+  parts=[f"{len(us)} state{'' if len(us)==1 else 's'}"] if us else []
+  if ca: parts.append((' and '.join(ca) if len(ca)<=2 else f"{len(ca)} Canadian provinces"))
+  return ' plus '.join(parts)
+def stat(ps):return money(S.median(ps)),f"{money(min(ps))}–{money(max(ps))}",len(ps)
 urls=[BASE]
 for sp in species:
   a=sorted([r for r in rows if r['species']==sp],key=lambda r:r['p'])
@@ -104,7 +114,7 @@ for sp in species:
   if th4 and th8: tips.append(f"8/4 median ${S.median(th8):.2f} vs 4/4 median ${S.median(th4):.2f} per bf — thicker stock costs {'more' if S.median(th8)>S.median(th4) else 'about the same or less'} per board foot here.")
   if any('100-249' in r['dealer'] for r in a): tips.append("Wood Vendors prices shown are its 100–249 bf tier; that dealer lists lower per-bf prices for larger orders.")
   if any(is_aff(r['dealer']) for r in a): tips.append("The Knotty Lumber Co. ships from Hamilton, Ontario, Canada. Its prices here are as shown on its US storefront in US dollars (no conversion by us), and US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices.")
-  tips.append(f"Only {n} prices from {len(states)} state(s) so far — always call the dealer to confirm, and report what you pay to improve this page.")
+  tips.append(f"Only {n} prices from {places_text(states)} so far — always call the dealer to confirm, and report what you pay to improve this page.")
   others=' · '.join(f'<a href="../{slug(o)}-price-per-board-foot/">{o}</a>' for o in species if o!=sp)
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
   desc=f"{sp} lumber costs a median {med}/bf across {n} posted dealer prices ({rng}) in {', '.join(states)}. See prices by thickness, rough vs surfaced, and sources."
@@ -166,7 +176,7 @@ for st in pub_states:
   desc=f"Real posted hardwood prices in {nm}: {n} dealer prices across {len(sps)} species from {len(dealers_list)} dealer{'s' if len(dealers_list)!=1 else ''}, ranging {rng} per board foot. Medians by species, sources and dates."
   body=f"""<h1>Hardwood lumber prices in {nm}</h1>
 <p>We found {n} publicly posted hardwood prices from {len(dealers_list)} {nm} dealer{'s' if len(dealers_list)!=1 else ''}, covering {len(sps)} species. Across all species and thicknesses the median is <b>{med}</b> per board foot, ranging {rng}. Every figure below comes from a dealer's own price list or product page, checked in October 2026 — nothing is estimated.</p>
-<p>In this data, {cheap} has the lowest species median in {nm} ({meds[cheap] and f'${meds[cheap]:.2f}'}/bf) and {dear} the highest (${meds[dear]:.2f}/bf). The single lowest posted price is ${lo['p']:.2f}/bf ({lo['species']} {lo['thickness']}, {e(lo['dealer'])}); the highest is ${hi['p']:.2f}/bf ({hi['species']} {hi['thickness']}, {e(hi['dealer'])}).</p>
+<p>In this data, {cheap} has the lowest species median in {nm} ({money(meds[cheap])}/bf) and {dear} the highest ({money(meds[dear])}/bf). The single lowest posted price is ${lo['p']:.2f}/bf ({lo['species']} {lo['thickness']}, {e(lo['dealer'])}); the highest is ${hi['p']:.2f}/bf ({hi['species']} {hi['thickness']}, {e(hi['dealer'])}).</p>
 <h2>Median and range by species in {nm}</h2>
 <table><thead><tr><th>Species</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 <p><small>Each row mixes thicknesses, grades and rough vs surfaced stock from that state's dealers, so use the <a href="../">searchable table</a> or the species pages for like-for-like comparisons.</small></p>
@@ -180,7 +190,11 @@ for st in pub_states:
   write(sslug(st),shell(title,desc,sslug(st)+'/',body))
 
 # ---- calculator ----
-opts=''.join(f'<option value="{S.median([r["p"] for r in rows if r["species"]==sp])!r}" data-n="{sum(1 for r in rows if r["species"]==sp)}" data-s="{len({r["state"] for r in rows if r["species"]==sp})}" data-lo="{min(r["p"] for r in rows if r["species"]==sp)!r}" data-hi="{max(r["p"] for r in rows if r["species"]==sp)!r}">{sp}</option>' for sp in species)
+def calc_opt(sp):
+  ps=[r['p'] for r in rows if r['species']==sp]
+  # value/lo/hi are the exact strings the species pages show (same stat()/fmt2 rounding), so the calculator can never disagree with them
+  return f'<option value="{fmt2(S.median(ps))}" data-n="{len(ps)}" data-places="{e(places_text(r["state"] for r in rows if r["species"]==sp))}" data-lo="{fmt2(min(ps))}" data-hi="{fmt2(max(ps))}">{sp}</option>'
+opts=''.join(calc_opt(sp) for sp in species)
 CALCJS=r"""(function(){
 function num(s){s=String(s).trim();if(!s)return NaN;var m;
  if(m=s.match(/^(\d+(?:\.\d+)?)\s+(\d+)\/(\d+)$/))return +m[1]+ +m[2]/ +m[3];
@@ -193,8 +207,8 @@ function calc(){var t=num($('t').value),w=num($('w').value),l=num($('l').value),
  var lf=$('lu').value=='in'?l/12:l;var per=t*w*lf/12,tot=per*q;
  out.innerHTML='<b>'+per.toFixed(2)+' board feet</b> per piece &middot; <b>'+tot.toFixed(2)+' board feet</b> total ('+q+' piece'+(q==1?'':'s')+')';
  var o=$('sp').options[$('sp').selectedIndex];
- if(o.value){var m=+o.value,n=o.dataset.n;
-  est.innerHTML='<b>Estimated cost: about $'+(tot*m).toFixed(2)+'</b> ('+tot.toFixed(2)+' bf &times; $'+m.toFixed(2)+'/bf median). <em>This is only an estimate</em> based on the median of '+n+' dealer-posted '+o.text.toLowerCase()+' prices from '+o.dataset.s+' state'+(o.dataset.s==1?'':'s')+' (range $'+(+o.dataset.lo).toFixed(2)+'&ndash;$'+(+o.dataset.hi).toFixed(2)+'/bf). Real prices depend on thickness, grade, rough vs surfaced, width, length and quantity &mdash; <b>call the dealer</b> for a quote.'}}
+ if(o.value){var m=+o.value,n=o.dataset.n;/* o.value is the species-page median already rounded to cents */
+  est.innerHTML='<b>Estimated cost: about $'+(tot*m).toFixed(2)+'</b> ('+tot.toFixed(2)+' bf &times; $'+o.value+'/bf median). <em>This is only an estimate</em> based on the median of '+n+' dealer-posted '+o.text.toLowerCase()+' prices from '+o.dataset.places+' (range $'+o.dataset.lo+'&ndash;$'+o.dataset.hi+'/bf). Real prices depend on thickness, grade, rough vs surfaced, width, length and quantity &mdash; <b>call the dealer</b> for a quote.'}}
 ['t','w','l','q','lu','sp'].forEach(function(i){$(i).oninput=calc;$(i).onchange=calc});calc()})();"""
 cbody=f"""<h1>Board foot calculator</h1>
 <p>Work out how many board feet a board (or a stack of them) contains, and optionally get a rough cost from real dealer-posted prices.</p>
