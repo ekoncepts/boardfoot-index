@@ -41,6 +41,14 @@ SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the
 # ---- site footer + info pages (About / Privacy / Affiliate disclosure) ----
 CONTACT_EMAIL='boardfootindex@gmail.com'
 UPDATED='October 17, 2026'
+PRIVACY_UPDATED='October 20, 2026'
+# ---- analytics (GoatCounter: cookieless, aggregate counts only) ----
+ANALYTICS_SNIPPET='<script data-goatcounter="https://boardfootindex.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
+def add_analytics(page):
+  # insert exactly one copy just before the closing </body>
+  page=page.replace(ANALYTICS_SNIPPET,'')
+  i=page.rfind('</body>');assert i>=0
+  return page[:i]+ANALYTICS_SNIPPET+'\n'+page[i:]
 def footer(pre):
   return f'<footer id="sitefooter" style="margin-top:2rem;padding-top:1rem;border-top:1px solid #e5d8c7;font-size:.85rem"><a href="{pre}about/">About</a> · <a href="{pre}privacy/">Privacy</a> · <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a></footer>'
 def contact_html():
@@ -48,6 +56,7 @@ def contact_html():
   print('WARNING: CONTACT_EMAIL is not set; Privacy/About pages show a placeholder')
   return '<mark>[CONTACT EMAIL PLACEHOLDER &mdash; Harry to supply before publishing]</mark>'
 idx=open('index.html').read()
+idx=re.sub(r'<!--ANALYTICS-->.*?<!--/ANALYTICS-->\n?','',idx,flags=re.S).replace(ANALYTICS_SNIPPET,'')
 style=re.search(r'<style>.*?</style>',idx,re.S).group(0)
 # ---- logo / favicon / social image ----
 def head_extra(pre):
@@ -134,7 +143,7 @@ for sp in species:
 <h2>{sp} prices by state</h2><p>{state_links('../')}</p>
 <p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>.</p>{footer('../')}</body></html>'''
   os.makedirs(f'{slug(sp)}-price-per-board-foot',exist_ok=True)
-  open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(wrap_tables(out))
+  open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(add_analytics(wrap_tables(out)))
   urls.append(f'{BASE}{slug(sp)}-price-per-board-foot/')
 
 def shell(title,desc,path,body,depth_prefix='../'):
@@ -146,7 +155,7 @@ def shell(title,desc,path,body,depth_prefix='../'):
 {footer(depth_prefix)}
 </body></html>"""
 def write(path,content):
-  content=wrap_tables(content)
+  content=add_analytics(wrap_tables(content))
   os.makedirs(path,exist_ok=True);open(path+'/index.html','w').write(content);urls.append(BASE+path+'/')
 species_links=lambda pre:' · '.join(f'<a href="{pre}{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)
 
@@ -256,12 +265,14 @@ about_body=f"""<h1>About BoardFoot Index</h1>
 <h2>Contact</h2>
 <p>Questions, corrections, or removal requests: {CE}. See also the <a href="../privacy/">privacy policy</a>.</p>"""
 priv_body=f"""<h1>Privacy Policy</h1>
-<p><small>Last updated {UPDATED}.</small></p>
+<p><small>Last updated {PRIVACY_UPDATED}.</small></p>
 <p>This page explains what BoardFoot Index collects and who handles it. We keep it simple because the site does very little.</p>
 <h2>How the site is hosted</h2>
 <p>BoardFoot Index is a static website hosted on GitHub Pages. We do not run our own web server or database. GitHub, as the host, may log technical information about visits (such as IP address and browser) under its own <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="nofollow noopener">privacy statement</a>. We do not have access to that data as site analytics.</p>
 <h2>Analytics and cookies</h2>
-<p>We do not currently use analytics or advertising trackers, and we do not set our own cookies. If that changes, we will update this page first. The newsletter signup form loads a script from Kit (see below), which may set its own cookies or similar technology.</p>
+<p>We do not use advertising trackers, and we do not set our own cookies. The newsletter signup form loads a script from Kit (see below), which may set its own cookies or similar technology.</p>
+<h3 id="visit-counts">Visit counts (GoatCounter)</h3>
+<p>We use GoatCounter to count visits to this site anonymously. It uses no cookies, does not track you across other websites, and collects no personal information. Only aggregate counts, such as page views and which sites people came from, are kept. You can read <a href="https://www.goatcounter.com/help/privacy" rel="nofollow noopener">GoatCounter's privacy policy</a>.</p>
 <h2>Price reports</h2>
 <p>If you use the &ldquo;Report a price&rdquo; form, the details you type (species, thickness, surfacing, price per board foot, dealer, city, state and an optional link) are sent to a Google Apps Script run by the site owner and saved in a private Google Sheet, along with the date and time you sent it. The form does not ask for your name or email address, so please do not put personal details in the fields. Reports are reviewed before any appear on the site, and a published report shows the price, dealer and location, not who sent it. Google processes this data under its own <a href="https://policies.google.com/privacy" rel="nofollow noopener">privacy policy</a>.</p>
 <h2>Newsletter</h2>
@@ -312,5 +323,7 @@ idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
 idx=re.sub(r'<!--FOOTER-->.*?<!--/FOOTER-->','',idx,flags=re.S).replace('</body>','<!--FOOTER-->'+footer('')+'<!--/FOOTER--></body>')
 idx=re.sub(r'<!--LOGOHEAD-->.*?<!--/LOGOHEAD-->','',idx,flags=re.S).replace('</head>',head_extra('')+'</head>',1)
 idx=re.sub(r'<!--LOGO-->.*?<!--/LOGO-->','',idx,flags=re.S).replace('<h1>BoardFoot Index</h1>','<!--LOGO-->'+'<p>'+logo_html('')+'</p><!--/LOGO-->'+'<h1>BoardFoot Index</h1>',1)
+assert idx.count('</body>')==1,'index.html: expected one </body>'
+idx=idx.replace('</body>','<!--ANALYTICS-->'+ANALYTICS_SNIPPET+'<!--/ANALYTICS--></body>')
 open('index.html','w').write(idx)
 print(len(urls))
