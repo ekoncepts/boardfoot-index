@@ -141,7 +141,7 @@ for sp in species:
 {kit}
 <h2>Other species</h2><p>{others}</p>
 <h2>{sp} prices by state</h2><p>{state_links('../')}</p>
-<p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>.</p>{footer('../')}</body></html>'''
+<p>Need to know how many board feet a project takes? Try the <a href="../board-foot-calculator/">free board foot calculator</a>. Looking for {sp.lower()} in a certain thickness? <a href="../find-wood/?species={sp.replace(' ','+')}">Find which dealers carry it</a>.</p>{footer('../')}</body></html>'''
   os.makedirs(f'{slug(sp)}-price-per-board-foot',exist_ok=True)
   open(f'{slug(sp)}-price-per-board-foot/index.html','w').write(add_analytics(wrap_tables(out)))
   urls.append(f'{BASE}{slug(sp)}-price-per-board-foot/')
@@ -193,7 +193,7 @@ for st in pub_states:
 <table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do {nm} dealers ship?</h3>{ship_info_table([d for d,_ in dealers_list])}{SHIPNOTE}
 <p>Prices change without notice and may differ by grade, width, length and quantity — call the dealer before you drive. Paid something different? Report it below.</p>
-<h2>Estimate a project</h2><p>Use the <a href="../board-foot-calculator/">board foot calculator</a> to convert board dimensions to board feet and a rough cost.</p>
+<h2>Estimate a project</h2><p>Use the <a href="../board-foot-calculator/">board foot calculator</a> to convert board dimensions to board feet and a rough cost, or <a href="../find-wood/?state={st}">find which dealers carry a species near you</a>.</p>
 <h2>Other states</h2><p>{others}</p>
 <h2>Prices by species</h2><p>{species_links('../')}</p>"""
   write(sslug(st),shell(title,desc,sslug(st)+'/',body))
@@ -239,6 +239,114 @@ cbody=f"""<h1>Board foot calculator</h1>
 ctitle="Board Foot Calculator (Free) – Lumber Board Feet & Cost Estimate | BoardFoot Index"
 cdesc="Free board foot calculator: enter thickness (inches or quarters like 4/4), width, length and quantity to get board feet, plus an optional cost estimate from real dealer-posted prices."
 write('board-foot-calculator',shell(ctitle,cdesc,'board-foot-calculator/',cbody))
+
+# ---- "Find this wood" page: species + thickness + location -> matching dealers (dealer-posted rows only) ----
+def tq(t):return float(t.split('/')[0])/4 if '/' in t else None   # quarter sizes -> inches
+def ships_far(lbl):l=lbl.lower();return l.startswith('yes') and 'local delivery only' not in l
+FW_THK=['4/4','5/4','6/4','8/4','10/4','12/4','16/4']
+for _t in {r['thickness'] for r in rows if '/' in r['thickness']}:
+  if _t not in FW_THK: FW_THK.append(_t)
+FW_THK.sort(key=tq)
+fw_dn=sorted({r['dealer'] for r in rows})
+fw_dealers=[{'n':dn,'c':dealers.get(dn,{}).get('city',''),'s':dealers.get(dn,{}).get('state',''),'sh':ship_label(dn),'sn':ship_note(dn),'far':ships_far(ship_label(dn)),'aff':bool(is_aff(dn) and AFF)} for dn in fw_dn]
+fw_off=[]
+_g=collections.defaultdict(list)
+for r in rows:_g[(r['species'],r['thickness'],r['dealer'])].append(r)
+for (sp,th,dn),rs in sorted(_g.items()):
+  ps=[r['p'] for r in rs]
+  fw_off.append({'sp':sp,'th':th,'d':fw_dn.index(dn),'p':fmt2(S.median(ps)),'n':len(ps),'lo':fmt2(min(ps)),'hi':fmt2(max(ps)),
+    'su':'; '.join(sorted({r['surfacing'] for r in rs})),'u':collections.Counter(r['source_url'] for r in rs).most_common(1)[0][0],'dt':max(r['date_checked'] for r in rs)})
+FW_JSON=json.dumps({'dealers':fw_dealers,'offers':fw_off},separators=(',',':')).replace('</','<\\/')
+fw_places=''.join(f'<option value="{c}">{n}</option>' for c,n in sorted(STATE_NAMES.items(),key=lambda x:x[1]))
+fw_prov=''.join(f'<option value="{c}">{n}</option>' for c,n in sorted(PROV_NAMES.items(),key=lambda x:x[1]))
+fw_sp=''.join(f'<option value="{e(s)}">{e(s)}</option>' for s in species)
+fw_th=''.join(f'<option value="{t}"{" selected" if t=="4/4" else ""}>{t} ({fmt2(tq(t)).rstrip("0").rstrip(".")}&Prime;)</option>' for t in FW_THK)
+FW_AFF_TPL=(f'<template id="fw-aff">{aff_badge("../")} &middot; {buy_link()} <small>(<a href="../affiliate-disclosure/">disclosure</a>)</small></template>') if AFF else ''
+FWCSS='''<style>#fw-form label{display:inline-block;margin:.15rem .4rem .15rem 0}#fw-form fieldset{border:1px solid #e5d8c7;border-radius:6px;margin:.6rem 0;padding:.4rem .7rem}#fw-form legend{font-size:.85rem;color:#5b4a3a;padding:0 .3rem}
+.fw-grp{margin-top:1.4rem}.fw-grp h3{margin-bottom:.2rem}.fw-grp p.sub{margin:.1rem 0 .5rem;font-size:.85rem;color:#5b4a3a}.fw-note{background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem}.fw-thk{font-size:.8rem;color:#7a4a1e;font-weight:600}td.c-es{white-space:nowrap}
+@media (max-width:640px){#fw-form label{display:block}#fw-form select,#fw-form input[type=text]{max-width:100%}.cards td.c-es{order:6;margin-left:auto;font-weight:600}.cards td.c-es::before{content:"Est. ";font-weight:400}.cards td.c-lo{order:5;flex:0 1 auto}.cards td.c-de{order:4}.cards td.c-su{order:7}.cards td.c-sh{order:8;flex:1 0 100%}.cards td.c-ck{order:9}}</style>'''
+FWJS=r"""(function(){
+var D=JSON.parse(document.getElementById('fw-data').textContent);
+function num(s){s=String(s).trim();if(!s)return NaN;var m;
+ if(m=s.match(/^(\d+(?:\.\d+)?)\s+(\d+)\/(\d+)$/))return +m[1]+ +m[2]/ +m[3];
+ if(m=s.match(/^(\d+)\/(\d+)$/))return +m[1]/ +m[2];
+ if(/^\d*\.?\d+$/.test(s))return +s;return NaN}
+function tq(t){var m=/^(\d+)\/4$/.exec(t);return m?+m[1]/4:NaN}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var $=function(i){return document.getElementById(i)},aff=$('fw-aff'),ids=['fw-sp','fw-th','fw-st','fw-ship','fw-w','fw-l','fw-lu','fw-q','fw-bf'];
+var NM={};[].forEach.call($('fw-st').options,function(o){if(o.value)NM[o.value]=o.text});
+function grp(d,st){return st&&d.s===st?0:d.far?1:2}
+function bfFor(stockT){/* board feet for one dealer: calculator math (thickness x width x length(ft) / 12 x qty) using the stock thickness you'd buy */
+ var w=num($('fw-w').value),l=num($('fw-l').value),q=num($('fw-q').value||'1'),bf=num($('fw-bf').value),want=tq($('fw-th').value);
+ if(w>0&&l>0&&q>0){var lf=$('fw-lu').value=='in'?l/12:l;return stockT*w*lf/12*q}
+ if(bf>0)return bf*stockT/want;return NaN}
+function row(o,st,showT){var d=D.dealers[o.d],bf=bfFor(tq(o.th)),pr='$'+o.p;
+ var multi=o.n>1?' <small>(median of '+o.n+': $'+o.lo+'&ndash;$'+o.hi+')</small>':'';
+ var loc=esc(d.c)+', '+d.s+(st&&d.s===st?' <small>(your '+(D.prov[st]?'province':'state')+')</small>':'');
+ var link='<a href="'+esc(o.u)+'" rel="nofollow noopener">'+esc(d.n)+'</a>'+(d.aff&&aff?aff.innerHTML:'');
+ var est=bf>0?'$'+(bf*+o.p).toFixed(2)+' <small>('+bf.toFixed(2)+' bf)</small>':'&mdash;';
+ return '<tr><td class="c-th">'+o.th+(showT?' <span class="fw-thk">thicker</span>':'')+'</td><td class="c-pr">'+pr+multi+'</td><td class="c-de">'+link+'</td><td class="c-lo">'+loc+'</td><td class="c-sh" title="'+esc(d.sn)+'">'+esc(d.sh)+'</td><td class="c-su">'+esc(o.su)+'</td><td class="c-es">'+est+'</td><td class="c-ck">'+o.dt+'</td></tr>'}
+function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
+var GH=[['In your state','Closest option: you can likely pick up. Call ahead to confirm stock.'],['Dealers that ship','Their site says they ship (area in the Ships? column). Get a shipping quote; freight can add a lot on small orders.'],['Other dealers','Pickup only, local delivery only, or no shipping policy found. Worth a call if you are nearby.']];
+function groups(list,st,showT){var out='',only=$('fw-ship').checked;
+ for(var g=0;g<3;g++){if(only&&g==2)continue;var L=list.filter(function(o){return grp(D.dealers[o.d],st)==g});if(!L.length)continue;
+  L.sort(function(a,b){return +a.p-+b.p||tq(a.th)-tq(b.th)||D.dealers[a.d].n.localeCompare(D.dealers[b.d].n)});
+  out+='<div class="fw-grp"><h3>'+GH[g][0]+' ('+L.length+')</h3><p class="sub">'+GH[g][1]+'</p>'+table(L,st,showT)+'</div>'}
+ return out}
+function run(){var sp=$('fw-sp').value,th=$('fw-th').value,st=$('fw-st').value,only=$('fw-ship').checked,res=$('fw-res'),sum=$('fw-sum'),want=tq(th);
+ var qs=new URLSearchParams();if(sp)qs.set('species',sp);if(th)qs.set('thickness',th);if(st)qs.set('state',st);if(only)qs.set('ships','1');
+ try{history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs:''))}catch(e){}
+ var need=sp+' '+th+(st?' near '+(NM[st]||st):'');
+ $('fw-ask').href='mailto:"""+CONTACT_EMAIL+r"""?subject='+encodeURIComponent("Can't find: "+need)+'&body='+encodeURIComponent('Species: '+sp+'\nThickness: '+th+'\nSize / board feet needed: \nWhere I am: '+(st?NM[st]:'')+'\nAnything else (grade, rough or surfaced, quantity): \n');
+ if(!sp){sum.innerHTML='Pick a species to see dealers.';res.innerHTML='';return}
+ var w=num($('fw-w').value),l=num($('fw-l').value),q=num($('fw-q').value||'1'),bf=num($('fw-bf').value),dims='';
+ if(w>0&&l>0&&q>0){var lf=$('fw-lu').value=='in'?l/12:l;dims=' Your cut: <b>'+(want*w*lf/12*q).toFixed(2)+' board feet</b> at '+th+' ('+q+' piece'+(q==1?'':'s')+'). Est. cost = board feet &times; that dealer\'s $/bf.'}
+ else if(bf>0)dims=' You need <b>'+bf.toFixed(2)+' board feet</b> at '+th+'. Est. cost = board feet &times; that dealer\'s $/bf.';
+ var all=D.offers.filter(function(o){return o.sp===sp}),keep=function(o){return !only||grp(D.dealers[o.d],st)<2};
+ var ex=all.filter(function(o){return o.th===th}).filter(keep);
+ /* thicker fallback: per dealer, the thinnest stock that is still thicker than requested */
+ var best={};all.forEach(function(o){var t=tq(o.th);if(t>want&&keep(o)&&!ex.some(function(x){return x.d===o.d})&&(!best[o.d]||t<tq(best[o.d].th)))best[o.d]=o});
+ var thick=Object.keys(best).map(function(k){return best[k]});
+ var ns=all.filter(function(o){return o.th==='not stated'}).filter(keep);
+ var h='';
+ if(ex.length){h+=groups(ex,st,false);
+  sum.innerHTML='<b>'+ex.length+' dealer'+(ex.length==1?'':'s')+'</b> list '+esc(sp.toLowerCase())+' at '+th+'.'+dims}
+ else{var thinner=all.filter(function(o){return tq(o.th)<want}).filter(keep),tn={};thinner.forEach(function(o){tn[o.th]=1});
+  sum.innerHTML='No dealer in our data lists '+esc(sp.toLowerCase())+' at exactly '+th+(only?' (among dealers in your area or that ship)':'')+'.'+(thick.length?' <b>'+thick.length+' dealer'+(thick.length==1?'':'s')+'</b> carry it thicker.':'')+dims;
+  if(thick.length)h+='<p class="fw-note"><b>Thicker stock, can be resawn or cut to size.</b> These dealers list '+esc(sp.toLowerCase())+' thicker than '+th+'. Many yards will cut to size; otherwise plan to resaw or plane it down. You pay for the thicker board feet, and the estimate uses the thicker stock.</p>'+groups(thick,st,true);
+  else h+='<p class="fw-note">No thicker '+esc(sp.toLowerCase())+' in our data either.'+(Object.keys(tn).length?' Thinner stock ('+Object.keys(tn).sort(function(a,b){return tq(a)-tq(b)}).join(', ')+') is listed, and two boards can be glued up to thickness.':'')+' Try another thickness, or tell us what you need (link below).</p>'}
+ if(ns.length)h+='<div class="fw-grp"><h3>Thickness not stated ('+ns.length+')</h3><p class="sub">These dealers post a '+esc(sp.toLowerCase())+' price without a thickness. Ask what they have.</p>'+table(ns.sort(function(a,b){return +a.p-+b.p}),st,false)+'</div>';
+ res.innerHTML=h}
+ids.forEach(function(i){$(i).oninput=run;$(i).onchange=run});
+var P=new URLSearchParams(location.search),setv=function(id,v){if(v==null)return;var s=$(id);[].forEach.call(s.options,function(o){if(o.value.toLowerCase()===String(v).toLowerCase())s.value=o.value})};
+setv('fw-sp',P.get('species'));setv('fw-th',P.get('thickness'));setv('fw-st',(P.get('state')||'').toUpperCase());if(P.get('ships')==='1')$('fw-ship').checked=true;
+run()})();"""
+fbody=f"""{FWCSS}<h1>Find this wood</h1>
+<p>Tell us what you're looking for and where you are. We'll list the dealers in our data that post a price for it, closest options first, with their price per board foot and a link to the dealer.</p>
+<form id="fw-form" class="box" onsubmit="return false">
+<label>Species <select id="fw-sp"><option value="">Choose a species</option>{fw_sp}</select></label>
+<label>Thickness <select id="fw-th">{fw_th}</select></label>
+<label>Where are you? <select id="fw-st"><option value="">Anywhere</option><optgroup label="US states">{fw_places}</optgroup><optgroup label="Canada">{fw_prov}</optgroup></select></label>
+<label><input type="checkbox" id="fw-ship"> Only dealers in my state or that ship</label>
+<fieldset><legend>Optional: how much do you need?</legend>
+<label>Width (in) <input type="text" id="fw-w" size="5" inputmode="decimal" placeholder="6"></label>
+<label>Length <input type="text" id="fw-l" size="5" inputmode="decimal" placeholder="8"></label> <select id="fw-lu" aria-label="Length unit"><option value="ft">feet</option><option value="in">inches</option></select>
+<label>Pieces <input type="text" id="fw-q" size="3" inputmode="numeric" placeholder="1"></label>
+<label>or board feet <input type="text" id="fw-bf" size="5" inputmode="decimal" placeholder="e.g. 20"></label>
+</fieldset>
+<p id="fw-sum" class="stat" aria-live="polite"></p>
+</form>
+<p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
+<div id="fw-res" aria-live="polite"></div>
+<p class="box"><b>Can't find it?</b> <a id="fw-ask" href="mailto:{CONTACT_EMAIL}">Tell us what you need</a> (species, size, where you are) and we'll look for dealers to add. Already bought some? Use the price report form below.</p>
+<h2>How the results are sorted</h2>
+<p>Dealers in your state come first, then dealers whose site says they ship, then everyone else (pickup only, local delivery only, or no shipping policy found). Within each group the cheapest price per board foot is first. When a dealer posts more than one price for the same species and thickness (different grades or surfacing), we show the median of those prices and the range. If you enter a size, the estimated cost uses the same math as the <a href="../board-foot-calculator/">board foot calculator</a>: thickness &times; width &times; length (ft) &divide; 12 &times; pieces, times that dealer's price.</p>
+<p>Species pages: {species_links('../')}</p><p>State pages: {state_links('../')}</p>
+{FW_AFF_TPL}<script type="application/json" id="fw-data">{FW_JSON}</script>
+<script>{FWJS}</script>"""
+FW_JSON=FW_JSON  # noqa
+fbody=fbody.replace('"offers":','"prov":'+json.dumps({k:1 for k in PROV_NAMES})+',"offers":',1)
+write('find-wood',shell("Find This Wood: Which Dealers Carry It, Near You | BoardFoot Index","Pick a hardwood species, thickness and your state to see which dealers post a price for it, nearest first, with price per board foot, shipping info and an estimated cost.",'find-wood/',fbody))
 
 # ---- info pages ----
 def info_page(title,desc,path,body):
@@ -315,7 +423,7 @@ write('affiliate-disclosure',info_page('Affiliate Disclosure | BoardFoot Index',
 
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>2026-10-16</lastmod></url>\n' for u in urls)+'</urlset>\n')
 open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n')
-nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tool:</b> <a href="board-foot-calculator/">Board foot calculator</a></p><!--/SPECIES-->'
+nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p><!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
 pd=sorted({r['dealer'] for r in rows}); 
 blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd,'')+SHIPNOTE+'<!--/DEALERS-->'
