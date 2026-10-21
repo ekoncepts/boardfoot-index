@@ -123,6 +123,8 @@ for sp in species:
   if th4 and th8: tips.append(f"8/4 median ${S.median(th8):.2f} vs 4/4 median ${S.median(th4):.2f} per bf — thicker stock costs {'more' if S.median(th8)>S.median(th4) else 'about the same or less'} per board foot here.")
   if any('100-249' in r['dealer'] for r in a): tips.append("Wood Vendors prices shown are its 100–249 bf tier; that dealer lists lower per-bf prices for larger orders.")
   if any(is_aff(r['dealer']) for r in a): tips.append("The Knotty Lumber Co. ships from Hamilton, Ontario, Canada. Its prices here are as shown on its US storefront in US dollars (no conversion by us), and US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices.")
+  _cad=sorted({r['dealer'] for r in a if 'converted to USD at' in r['surfacing']})
+  if _cad: tips.append(f"{' and '.join(_cad)} post{'s' if len(_cad)==1 else ''} prices in Canadian dollars. We converted them to US dollars at the Bank of Canada rate for October 21, 2026 (1.4057 CAD per USD); the original CAD price is in the Surfacing column, and the US-dollar figure moves with the exchange rate.")
   tips.append(f"Only {n} prices from {places_text(states)} so far — always call the dealer to confirm, and report what you pay to improve this page.")
   others=' · '.join(f'<a href="../{slug(o)}-price-per-board-foot/">{o}</a>' for o in species if o!=sp)
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
