@@ -49,8 +49,27 @@ def add_analytics(page):
   page=page.replace(ANALYTICS_SNIPPET,'')
   i=page.rfind('</body>');assert i>=0
   return page[:i]+ANALYTICS_SNIPPET+'\n'+page[i:]
+# ---- back to top: footer link on every page + small floating button that shows after ~600px of scrolling (no libraries; '#top' scrolls to the top even without an id) ----
+TOP_CSS=('<style>.totop{color:#7a4a1e;text-decoration:none;font-weight:600}.totop:hover{text-decoration:underline}'
+  '#totop-float{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:50;width:42px;height:42px;border-radius:50%;'
+  'background:#7a4a1e;color:#fff;border:2px solid #fdf6ea;box-shadow:0 2px 8px rgba(43,33,24,.3);font-size:1.25rem;line-height:1;padding:0;margin:0;cursor:pointer;'
+  'opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s}'
+  '#totop-float.on{opacity:.88;visibility:visible;transform:none}#totop-float:hover,#totop-float:focus-visible{opacity:1}'
+  '#totop-float:focus-visible,.totop:focus-visible{outline:2px solid #2b2118;outline-offset:2px}'
+  '@media (max-width:640px){#totop-float{width:40px;height:40px}}@media print{#totop-float{display:none}}</style>')
+TOP_JS=('<script>(function(){var b=document.getElementById("totop-float"),f=document.getElementById("sitefooter");if(!b)return;'
+  'var rm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;'
+  'function up(e){if(e)e.preventDefault();window.scrollTo({top:0,behavior:rm?"auto":"smooth"});var h=document.querySelector("h1");if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true});}}'
+  'b.addEventListener("click",up);document.querySelectorAll("a.totop").forEach(function(a){a.addEventListener("click",up)});'
+  'var ly=0,sm=window.matchMedia?matchMedia("(max-width:640px)"):null,upw=false;'
+  'function chk(){var y=window.scrollY||document.documentElement.scrollTop,fv=f&&f.getBoundingClientRect().top<window.innerHeight;'
+  'if(Math.abs(y-ly)>6){upw=y<ly;ly=y}'
+  # phones: only show while scrolling back up, so it never sits on top of price cards while reading
+  'b.classList.toggle("on",y>600&&!fv&&(!(sm&&sm.matches)||upw))}'
+  'window.addEventListener("scroll",chk,{passive:true});window.addEventListener("resize",chk);chk()})();</script>')
 def footer(pre):
-  return f'<footer id="sitefooter" style="margin-top:2rem;padding-top:1rem;border-top:1px solid #e5d8c7;font-size:.85rem"><a href="{pre}about/">About</a> · <a href="{pre}privacy/">Privacy</a> · <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a></footer>'
+  return (f'<footer id="sitefooter" style="margin-top:2rem;padding-top:1rem;border-top:1px solid #e5d8c7;font-size:.85rem"><p style="margin:0 0 .6rem"><a href="#top" class="totop" aria-label="Back to top of page">&uarr; Back to top</a></p><a href="{pre}about/">About</a> · <a href="{pre}privacy/">Privacy</a> · <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a></footer>'
+          f'{TOP_CSS}<button type="button" id="totop-float" aria-label="Back to top" title="Back to top"><span aria-hidden="true">&uarr;</span></button>{TOP_JS}')
 def contact_html():
   if CONTACT_EMAIL: return f'<a href="mailto:{html.escape(CONTACT_EMAIL)}">{html.escape(CONTACT_EMAIL)}</a>'
   print('WARNING: CONTACT_EMAIL is not set; Privacy/About pages show a placeholder')
