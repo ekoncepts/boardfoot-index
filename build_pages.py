@@ -69,6 +69,16 @@ def logo_html(pre):
 HX=head_extra('../')
 report=re.search(r'<div class="box"><h2>Report a price</h2>.*?</script>',idx,re.S).group(0)
 kit=re.search(r'<div class="box"><h2>Get the monthly.*?ck\.5\.js" async></script>',idx,re.S).group(0)
+# ---- extra newsletter signup boxes: same Kit form (action / data-sv-form / data-uid copied from the home-page form), ids/classes for GoatCounter click events ----
+KIT_FORM_OPEN=re.search(r'<form action="https://app\.kit\.com/forms/\d+/subscriptions"[^>]*>',kit).group(0)
+assert 'data-sv-form="10055349"' in KIT_FORM_OPEN and 'data-uid="158bbdf2d4"' in KIT_FORM_OPEN
+NL_PITCH='Real prices, new dealers, price drops. Free, unsubscribe anytime.'
+def kit_box(place,lead,pitch=NL_PITCH,attrs=''):
+  """Compact signup box. place -> id="nl-<place>" and GoatCounter click event "nl-<place>" on Subscribe. ck.5.js (loaded once by the page's bottom Kit box) binds every [data-sv-form] form present at load."""
+  return (f'<div class="nl" id="nl-{place}"{attrs}><p class="nl-t"><b>{lead}</b> <span class="nl-p">{pitch}</span></p>'
+          f'{KIT_FORM_OPEN}<ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>'
+          f'<div data-element="fields" class="seva-fields formkit-fields nl-f"><input class="formkit-input" name="email_address" type="email" aria-label="Email address" placeholder="you@example.com" required> '
+          f'<button data-element="submit" class="formkit-submit bf-btn" data-goatcounter-click="nl-{place}" data-goatcounter-title="Newsletter signup: {place}"><span>Subscribe</span></button></div></form></div>')
 e=html.escape
 def slug(s):return s.lower().replace(' ','-')
 def cls(r):
@@ -135,6 +145,7 @@ for sp in species:
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
+{kit_box('species','Watching '+sp.lower()+' prices? Get the monthly Lumber Price Report.')}
 <h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl" class="cards"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
@@ -191,6 +202,7 @@ for st in pub_states:
 <h2>Median and range by species in {nm}</h2>
 <table><thead><tr><th>Species</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 <p><small>Each row mixes thicknesses, grades and rough vs surfaced stock from that state's dealers, so use the <a href="../">searchable table</a> or the species pages for like-for-like comparisons.</small></p>
+{kit_box('state','Buying lumber in '+nm+'? Get the monthly Lumber Price Report.')}
 <h2>{nm} dealers with posted prices</h2>
 <table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do {nm} dealers ship?</h3>{ship_info_table([d for d,_ in dealers_list])}{SHIPNOTE}
@@ -300,7 +312,8 @@ function run(){var sp=$('fw-sp').value,th=$('fw-th').value,st=$('fw-st').value,o
  try{history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs:''))}catch(e){}
  var need=sp+' '+th+(st?' near '+(NM[st]||st):'');
  $('fw-ask').href='mailto:"""+CONTACT_EMAIL+r"""?subject='+encodeURIComponent("Can't find: "+need)+'&body='+encodeURIComponent('Species: '+sp+'\nThickness: '+th+'\nSize / board feet needed: \nWhere I am: '+(st?NM[st]:'')+'\nAnything else (grade, rough or surfaced, quantity): \n');
- if(!sp){sum.innerHTML='Pick a species to see dealers.';res.innerHTML='';return}
+ var nl=$('nl-findwood'),nlb=nl.querySelector('button'),nlt=nl.querySelector('.nl-t');
+ if(!sp){sum.innerHTML='Pick a species to see dealers.';res.innerHTML='';nl.hidden=true;return}
  var w=num($('fw-w').value),l=num($('fw-l').value),q=num($('fw-q').value||'1'),bf=num($('fw-bf').value),dims='';
  if(w>0&&l>0&&q>0){var lf=$('fw-lu').value=='in'?l/12:l;dims=' Your cut: <b>'+(want*w*lf/12*q).toFixed(2)+' board feet</b> at '+th+' ('+q+' piece'+(q==1?'':'s')+'). Est. cost = board feet &times; that dealer\'s $/bf.'}
  else if(bf>0)dims=' You need <b>'+bf.toFixed(2)+' board feet</b> at '+th+'. Est. cost = board feet &times; that dealer\'s $/bf.';
@@ -318,7 +331,10 @@ function run(){var sp=$('fw-sp').value,th=$('fw-th').value,st=$('fw-st').value,o
   if(thick.length)h+='<p class="fw-note"><b>Thicker stock, can be resawn or cut to size.</b> These dealers list '+esc(sp.toLowerCase())+' thicker than '+th+'. Many yards will cut to size; otherwise plan to resaw or plane it down. You pay for the thicker board feet, and the estimate uses the thicker stock.</p>'+groups(thick,st,true);
   else h+='<p class="fw-note">No thicker '+esc(sp.toLowerCase())+' in our data either.'+(Object.keys(tn).length?' Thinner stock ('+Object.keys(tn).sort(function(a,b){return tq(a)-tq(b)}).join(', ')+') is listed, and two boards can be glued up to thickness.':'')+' Try another thickness, or tell us what you need (link below).</p>'}
  if(ns.length)h+='<div class="fw-grp"><h3>Thickness not stated ('+ns.length+')</h3><p class="sub">These dealers post a '+esc(sp.toLowerCase())+' price without a thickness. Ask what they have.</p>'+table(ns.sort(function(a,b){return +a.p-+b.p}),st,false)+'</div>';
- res.innerHTML=h}
+ res.innerHTML=h;
+ var empty=!ex.length&&!thick.length&&!ns.length;/* signup box: shown under results, and in the empty "no results" state with its own wording + GoatCounter event name */
+ nlt.innerHTML=empty?'<b>We add new dealers every week.</b> <span class="nl-p">Get the free monthly Lumber Price Report to hear when someone posts '+esc(sp.toLowerCase())+' at '+th+', plus price drops. Unsubscribe anytime.</span>':'<b>Get the monthly Lumber Price Report.</b> <span class="nl-p">Real prices, new dealers, price drops. Free, unsubscribe anytime.</span>';
+ nlb.setAttribute('data-goatcounter-click',empty?'nl-findwood-empty':'nl-findwood');nl.hidden=false}
 ids.forEach(function(i){$(i).oninput=run;$(i).onchange=run});
 var P=new URLSearchParams(location.search),setv=function(id,v){if(v==null)return;var s=$(id);[].forEach.call(s.options,function(o){if(o.value.toLowerCase()===String(v).toLowerCase())s.value=o.value})};
 setv('fw-sp',P.get('species'));setv('fw-th',P.get('thickness'));setv('fw-st',(P.get('state')||'').toUpperCase());if(P.get('ships')==='1')$('fw-ship').checked=true;
@@ -340,6 +356,7 @@ fbody=f"""{FWCSS}<h1>Find this wood</h1>
 </form>
 <p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
 <div id="fw-res" aria-live="polite"></div>
+{kit_box('findwood','Get the monthly Lumber Price Report.',attrs=' hidden')}
 <p class="box"><b>Can't find it?</b> <a id="fw-ask" href="mailto:{CONTACT_EMAIL}">Tell us what you need</a> (species, size, where you are) and we'll look for dealers to add. Already bought some? Use the price report form below.</p>
 <h2>How the results are sorted</h2>
 <p>Dealers in your state come first, then dealers whose site says they ship, then everyone else (pickup only, local delivery only, or no shipping policy found). Within each group the cheapest price per board foot is first. When a dealer posts more than one price for the same species and thickness (different grades or surfacing), we show the median of those prices and the range. If you enter a size, the estimated cost uses the same math as the <a href="../board-foot-calculator/">board foot calculator</a>: thickness &times; width &times; length (ft) &divide; 12 &times; pieces, times that dealer's price.</p>
@@ -432,6 +449,10 @@ blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd,'')+SHIPN
 idx=re.sub(r'<!--DEALERS-->.*?<!--/DEALERS-->',lambda m:blk,idx,flags=re.S)
 idx=re.sub(r'<!--FOOTER-->.*?<!--/FOOTER-->','',idx,flags=re.S).replace('</body>','<!--FOOTER-->'+footer('')+'<!--/FOOTER--></body>')
 idx=re.sub(r'<!--LOGOHEAD-->.*?<!--/LOGOHEAD-->','',idx,flags=re.S).replace('</head>',head_extra('')+'</head>',1)
+INTRO='always confirm with the dealer.</p>'
+idx=re.sub(r'\n*<!--NLTOP-->.*?<!--/NLTOP-->\n?','',idx,flags=re.S)
+assert idx.count(INTRO)>=1
+idx=idx.replace(INTRO,INTRO+'\n<!--NLTOP-->'+kit_box('home-top','Free monthly Lumber Price Report:','real prices, new dealers, price drops. Unsubscribe anytime.')+'<!--/NLTOP-->\n',1)
 idx=re.sub(r'<!--LOGO-->.*?<!--/LOGO-->','',idx,flags=re.S).replace('<h1>BoardFoot Index</h1>','<!--LOGO-->'+'<p>'+logo_html('')+'</p><!--/LOGO-->'+'<h1>BoardFoot Index</h1>',1)
 assert idx.count('</body>')==1,'index.html: expected one </body>'
 idx=idx.replace('</body>','<!--ANALYTICS-->'+ANALYTICS_SNIPPET+'<!--/ANALYTICS--></body>')
