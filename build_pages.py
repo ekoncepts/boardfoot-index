@@ -39,7 +39,7 @@ def code_note(sp):
 def row_buy(sp,th):
   if not AFF: return ''
   d=knotty_deep(sp,th)
-  lbl='Buy a 5-pack at Knotty' if d else 'Buy at Knotty'
+  lbl='Buy a 5-pack at Knotty' if (d and '5-pack' in d) else 'Buy at Knotty'
   return f'<br><a href="{html.escape(knotty_url(sp,th))}" rel="sponsored noopener">{lbl} (affiliate link)</a> {code_note(sp)}'
 def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
 def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
@@ -329,7 +329,7 @@ function tq(t){var m=/^(\d+)\/4$/.exec(t);return m?+m[1]/4:NaN}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var $=function(i){return document.getElementById(i)},aff=$('fw-aff'),ids=['fw-sp','fw-th','fw-st','fw-ship','fw-w','fw-l','fw-lu','fw-q','fw-bf'];
 var NM={};[].forEach.call($('fw-st').options,function(o){if(o.value)NM[o.value]=o.text});
-function affHTML(o){var h=aff.innerHTML,c=$(o.ns?'fw-code-sale':'fw-code');if(o.b)h=h.replace(/href="[^"]*"([^>]*rel="sponsored)/,function(m,r){return 'href="'+esc(o.b)+'"'+r}).replace('Buy at Knotty (affiliate link)','Buy a 5-pack at Knotty (affiliate link)');return h+(c?' '+c.innerHTML:'')}
+function affHTML(o){var h=aff.innerHTML,c=$(o.ns?'fw-code-sale':'fw-code');if(o.b)h=h.replace(/href="[^"]*"([^>]*rel="sponsored)/,function(m,r){return 'href="'+esc(o.b)+'"'+r}).replace('Buy at Knotty (affiliate link)',/5-pack/.test(o.b)?'Buy a 5-pack at Knotty (affiliate link)':'Buy at Knotty (affiliate link)');return h+(c?' '+c.innerHTML:'')}
 function grp(d,st){return st&&d.s===st?0:d.far?1:2}
 function bfFor(stockT){/* board feet for one dealer: calculator math (thickness x width x length(ft) / 12 x qty) using the stock thickness you'd buy */
  var w=num($('fw-w').value),l=num($('fw-l').value),q=num($('fw-q').value||'1'),bf=num($('fw-bf').value),want=tq($('fw-th').value);
