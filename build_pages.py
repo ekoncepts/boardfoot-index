@@ -22,7 +22,25 @@ def buy_link():
   return f'<a href="{html.escape(AFF["url"])}" rel="sponsored noopener">Buy at Knotty (affiliate link)</a>' if AFF else ''
 def aff_note(pre):
   if not AFF: return ''
-  return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you. Knotty ships from Canada (Hamilton, Ontario), so US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
+  return f'<p style="background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem"><b>Affiliate partner:</b> The Knotty Lumber Co. is an affiliate partner. If you order through {buy_link()}, we earn a {html.escape(AFF["commission"])} commission at no extra cost to you.{(' Readers get 10% off non-sale items with code <b>'+html.escape(AFF['code'])+'</b> (we earn the same commission on orders that use it). The &ldquo;Buy a 5-pack&rdquo; link in each Knotty row goes to Knotty&rsquo;s free-shipping 5-pack of that species and thickness, which is priced differently from the by-size boards listed here; the price shown is always the dealer&rsquo;s posted price, before any discount.') if AFF.get('code') else ''} Knotty ships from Canada (Hamilton, Ontario), so US buyers may owe import duties, tariffs or brokerage fees that are not included in the listed prices. That never changes prices, medians, ranges or sort order. <a href="{pre}affiliate-disclosure/">Affiliate disclosure</a>.</p>'
+# ---- per-row Knotty deep links (species+thickness -> discount deep link to Knotty's 5-pack; code BOARDFOOT10). Map lives in gitignored affiliate.json; falls back to the generic link ----
+def _dl_key(sp):return {'White Oak':'White Oak (flat sawn)'}.get(sp,sp)   # Knotty's by-size white oak rows are flat sawn (product images); QS / ambrosia "soft maple" deep links are not mapped
+def knotty_deep(sp,th):
+  if not AFF: return None
+  if th in (AFF.get('deep_links_broken',{}).get(sp,{}) or {}): return None
+  return (AFF.get('deep_links',{}).get(_dl_key(sp),{}) or {}).get(th)
+def knotty_url(sp,th):return knotty_deep(sp,th) or (AFF['url'] if AFF else None)
+def knotty_on_sale(sp):return bool(AFF) and sp in AFF.get('on_sale',[])
+CODE_STYLE='font-size:.75rem;color:#5b4a3a;white-space:nowrap'
+def code_note(sp):
+  if not AFF or not AFF.get('code'): return ''
+  c=html.escape(AFF['code'])
+  return f'<small style="{CODE_STYLE}">On sale now, so code {c} doesn&rsquo;t apply</small>' if knotty_on_sale(sp) else f'<small style="{CODE_STYLE}">Code {c}: 10% off non-sale items</small>'
+def row_buy(sp,th):
+  if not AFF: return ''
+  d=knotty_deep(sp,th)
+  lbl='Buy a 5-pack at Knotty' if d else 'Buy at Knotty'
+  return f'<br><a href="{html.escape(knotty_url(sp,th))}" rel="sponsored noopener">{lbl} (affiliate link)</a> {code_note(sp)}'
 def ship_label(dn):return dealers.get(dn,{}).get('ships','Not stated')
 def ship_note(dn):return dealers.get(dn,{}).get('shipping_note','No shipping information recorded')
 def ship_td(dn,attrs=''):return f'<td{attrs} title="{html.escape(ship_note(dn))}">{html.escape(ship_label(dn))}</td>'
@@ -40,7 +58,7 @@ def ship_info_table(dnames,pre='../'):
 SHIPNOTE='<p><small>Shipping details come from each dealer\'s own site as of the date shown; &ldquo;Not stated&rdquo; means we found no shipping policy, not that the dealer does not ship. Always confirm with the dealer.</small></p>'
 # ---- site footer + info pages (About / Privacy / Affiliate disclosure) ----
 CONTACT_EMAIL='boardfootindex@gmail.com'
-UPDATED='October 17, 2026'
+UPDATED='October 22, 2026'
 PRIVACY_UPDATED='October 20, 2026'
 # ---- analytics (GoatCounter: cookieless, aggregate counts only) ----
 ANALYTICS_SNIPPET='<script data-goatcounter="https://boardfootindex.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
@@ -136,7 +154,7 @@ for sp in species:
   thk=sorted({r['thickness'] for r in a},key=lambda t:(t=='not stated',float(t.split('/')[0])/4 if '/' in t else 0))
   trows=''.join(f"<tr><td>{t}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if r['thickness']==t])))}</td></tr>" for t in thk)
   srows=''.join(f"<tr><td>{c}</td><td>{'</td><td>'.join(map(str,stat([r['p'] for r in a if cls(r)==c])))}</td></tr>" for c in ['Rough','Surfaced','Not stated'] if any(cls(r)==c for r in a))
-  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td class=\"c-th\">{e(r['thickness'])}</td><td class=\"c-su\">{e(r['surfacing'])}</td><td class=\"c-pr\">${r['p']:.2f}</td><td class=\"c-de\"><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a>{aff_badge('../') if is_aff(r['dealer']) else ''}</td><td class=\"c-lo\">{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'],' class=\"c-sh\"')}<td class=\"c-ck\">{r['date_checked']}</td></tr>" for r in a)
+  drows=''.join(f"<tr data-p=\"{r['p']}\" data-d=\"{e(r['dealer'])}\" data-s=\"{r['state']}\"><td class=\"c-th\">{e(r['thickness'])}</td><td class=\"c-su\">{e(r['surfacing'])}</td><td class=\"c-pr\">${r['p']:.2f}</td><td class=\"c-de\"><a href=\"{e(r['source_url'])}\" rel=\"nofollow noopener\">{e(r['dealer'])}</a>{(aff_badge('../')+row_buy(r['species'],r['thickness'])) if is_aff(r['dealer']) else ''}</td><td class=\"c-lo\">{e(r['city'])}, {r['state']}</td>{ship_td(r['dealer'],' class=\"c-sh\"')}<td class=\"c-ck\">{r['date_checked']}</td></tr>" for r in a)
   ca=sorted([r for r in cust_all if r['species']==sp],key=lambda r:(r['thickness'],r['p']))
   cust=''
   if ca:
@@ -289,12 +307,15 @@ for (sp,th,dn),rs in sorted(_g.items()):
   ps=[r['p'] for r in rs]
   fw_off.append({'sp':sp,'th':th,'d':fw_dn.index(dn),'p':fmt2(S.median(ps)),'n':len(ps),'lo':fmt2(min(ps)),'hi':fmt2(max(ps)),
     'su':'; '.join(sorted({r['surfacing'] for r in rs})),'u':collections.Counter(r['source_url'] for r in rs).most_common(1)[0][0],'dt':max(r['date_checked'] for r in rs)})
+  if is_aff(dn) and AFF:
+    if knotty_deep(sp,th): fw_off[-1]['b']=knotty_deep(sp,th)   # discount deep link; rows without one use the generic link in the fw-aff template
+    if knotty_on_sale(sp): fw_off[-1]['ns']=1
 FW_JSON=json.dumps({'dealers':fw_dealers,'offers':fw_off},separators=(',',':')).replace('</','<\\/')
 fw_places=''.join(f'<option value="{c}">{n}</option>' for c,n in sorted(STATE_NAMES.items(),key=lambda x:x[1]))
 fw_prov=''.join(f'<option value="{c}">{n}</option>' for c,n in sorted(PROV_NAMES.items(),key=lambda x:x[1]))
 fw_sp=''.join(f'<option value="{e(s)}">{e(s)}</option>' for s in species)
 fw_th=''.join(f'<option value="{t}"{" selected" if t=="4/4" else ""}>{t} ({fmt2(tq(t)).rstrip("0").rstrip(".")}&Prime;)</option>' for t in FW_THK)
-FW_AFF_TPL=(f'<template id="fw-aff">{aff_badge("../")} &middot; {buy_link()} <small>(<a href="../affiliate-disclosure/">disclosure</a>)</small></template>') if AFF else ''
+FW_AFF_TPL=(f'<template id="fw-aff">{aff_badge("../")} &middot; {buy_link()} <small>(<a href="../affiliate-disclosure/">disclosure</a>)</small></template>'+(f'<template id="fw-code">{code_note("")}</template><template id="fw-code-sale">{code_note("Walnut") if knotty_on_sale("Walnut") else ""}</template>' if AFF.get('code') else '')) if AFF else ''
 FWCSS='''<style>#fw-form label{display:inline-block;margin:.15rem .4rem .15rem 0}#fw-form fieldset{border:1px solid #e5d8c7;border-radius:6px;margin:.6rem 0;padding:.4rem .7rem}#fw-form legend{font-size:.85rem;color:#5b4a3a;padding:0 .3rem}
 .fw-grp{margin-top:1.4rem}.fw-grp h3{margin-bottom:.2rem}.fw-grp p.sub{margin:.1rem 0 .5rem;font-size:.85rem;color:#5b4a3a}.fw-note{background:#fff3d6;border:1px solid #e5d8c7;border-radius:4px;padding:.5rem .75rem}.fw-thk{font-size:.8rem;color:#7a4a1e;font-weight:600}td.c-es{white-space:nowrap}
 @media (max-width:640px){#fw-form label{display:block}#fw-form select,#fw-form input[type=text]{max-width:100%}.cards td.c-es{order:6;margin-left:auto;font-weight:600}.cards td.c-es::before{content:"Est. ";font-weight:400}.cards td.c-lo{order:5;flex:0 1 auto}.cards td.c-de{order:4}.cards td.c-su{order:7}.cards td.c-sh{order:8;flex:1 0 100%}.cards td.c-ck{order:9}}</style>'''
@@ -308,6 +329,7 @@ function tq(t){var m=/^(\d+)\/4$/.exec(t);return m?+m[1]/4:NaN}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var $=function(i){return document.getElementById(i)},aff=$('fw-aff'),ids=['fw-sp','fw-th','fw-st','fw-ship','fw-w','fw-l','fw-lu','fw-q','fw-bf'];
 var NM={};[].forEach.call($('fw-st').options,function(o){if(o.value)NM[o.value]=o.text});
+function affHTML(o){var h=aff.innerHTML,c=$(o.ns?'fw-code-sale':'fw-code');if(o.b)h=h.replace(/href="[^"]*"([^>]*rel="sponsored)/,function(m,r){return 'href="'+esc(o.b)+'"'+r}).replace('Buy at Knotty (affiliate link)','Buy a 5-pack at Knotty (affiliate link)');return h+(c?' '+c.innerHTML:'')}
 function grp(d,st){return st&&d.s===st?0:d.far?1:2}
 function bfFor(stockT){/* board feet for one dealer: calculator math (thickness x width x length(ft) / 12 x qty) using the stock thickness you'd buy */
  var w=num($('fw-w').value),l=num($('fw-l').value),q=num($('fw-q').value||'1'),bf=num($('fw-bf').value),want=tq($('fw-th').value);
@@ -316,7 +338,7 @@ function bfFor(stockT){/* board feet for one dealer: calculator math (thickness 
 function row(o,st,showT){var d=D.dealers[o.d],bf=bfFor(tq(o.th)),pr='$'+o.p;
  var multi=o.n>1?' <small>(median of '+o.n+': $'+o.lo+'&ndash;$'+o.hi+')</small>':'';
  var loc=esc(d.c)+', '+d.s+(st&&d.s===st?' <small>(your '+(D.prov[st]?'province':'state')+')</small>':'');
- var link='<a href="'+esc(o.u)+'" rel="nofollow noopener">'+esc(d.n)+'</a>'+(d.aff&&aff?aff.innerHTML:'');
+ var link='<a href="'+esc(o.u)+'" rel="nofollow noopener">'+esc(d.n)+'</a>'+(d.aff&&aff?affHTML(o):'');
  var est=bf>0?'$'+(bf*+o.p).toFixed(2)+' <small>('+bf.toFixed(2)+' bf)</small>':'&mdash;';
  return '<tr><td class="c-th">'+o.th+(showT?' <span class="fw-thk">thicker</span>':'')+'</td><td class="c-pr">'+pr+multi+'</td><td class="c-de">'+link+'</td><td class="c-lo">'+loc+'</td><td class="c-sh" title="'+esc(d.sn)+'">'+esc(d.sh)+'</td><td class="c-su">'+esc(o.su)+'</td><td class="c-es">'+est+'</td><td class="c-ck">'+o.dt+'</td></tr>'}
 function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
@@ -447,7 +469,9 @@ disc_body=f"""<h1>Affiliate Disclosure</h1>
 <h2>What commissions never change</h2>
 <p>Affiliate commissions never affect the prices we list, the medians and ranges we calculate, which dealers appear, or the order in which they are sorted. Prices are copied from public dealer pages, and the sort options (price, dealer name, state) are the same for everyone. A dealer cannot pay to change its listed price or its position.</p>
 <h2>Current affiliate partners</h2>
-<ul><li><b>The Knotty Lumber Co.</b> (Hamilton, Ontario). We earn a 10% commission on qualifying orders placed through links labeled &ldquo;Buy at Knotty (affiliate link)&rdquo;. Knotty's prices are listed and counted exactly like every other dealer's, so the commission does not affect prices, medians, ranges or sort order. The commission is paid by Knotty and does not raise what you pay. Knotty ships from Canada, so US buyers may owe import duties, tariffs or brokerage fees, which are not included in the listed prices; see its shipping policy.</li></ul>
+<ul><li><b>The Knotty Lumber Co.</b> (Hamilton, Ontario). We earn a 10% commission on qualifying orders placed through links labeled &ldquo;Buy at Knotty (affiliate link)&rdquo; or &ldquo;Buy a 5-pack at Knotty (affiliate link)&rdquo;, and on orders that use our reader discount code. Because Knotty credits us for repeat orders from people who came through our links or code, we may also earn on later orders. Knotty's prices are listed and counted exactly like every other dealer's, so the commission does not affect prices, medians, ranges or sort order. The commission is paid by Knotty and does not raise what you pay. Knotty ships from Canada, so US buyers may owe import duties, tariffs or brokerage fees, which are not included in the listed prices; see its shipping policy.</li></ul>
+<h3>Reader discount code: BOARDFOOT10</h3>
+<p>Knotty gave us the code <b>BOARDFOOT10</b>: it takes 10% off non-sale items at checkout (it does not apply to items Knotty has on sale, such as its walnut 5-packs right now). Our &ldquo;Buy a 5-pack&rdquo; links apply it automatically; on other Knotty links, type it at checkout. We earn a commission on orders that use the code or our links. The prices on BoardFoot Index are always Knotty&rsquo;s posted prices before any discount, so the code never changes our prices, medians, ranges or sort order. The per-row &ldquo;Buy a 5-pack&rdquo; links go to Knotty&rsquo;s free-shipping 5-pack of that species and thickness, which is priced differently from the by-size boards we list.</p>
 <p>Rows and dealer names for an affiliate partner are marked &ldquo;Affiliate partner.&rdquo;</p>
 <h2>Sponsored listings</h2>
 <p>If a dealer pays for a featured spot or other promotion, it will be clearly labeled <b>&ldquo;Sponsored.&rdquo;</b> Sponsored placements will be kept separate from the price tables and will not alter them.</p>
