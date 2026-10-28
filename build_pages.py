@@ -101,6 +101,9 @@ def head_extra(pre):
           f'<link rel="apple-touch-icon" href="{pre}assets/apple-touch-icon.png"><meta name="theme-color" content="#fdf6ea">'
           f'<meta property="og:image" content="{BASE}assets/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
           f'<meta property="og:site_name" content="BoardFoot Index"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}assets/og-image.png"><!--/LOGOHEAD-->')
+def site_nav(pre):
+  return (f'<nav class="sitenav" aria-label="Site" style="font-size:.9rem;margin:-.4rem 0 .6rem"><a href="{pre or "./"}">Home</a> · <a href="{pre}find-wood/">Find this wood</a> · '
+          f'<a href="{pre}board-foot-calculator/">Board foot calculator</a> · <a href="{pre}dealers/">Dealer Directory</a></nav>')
 def logo_html(pre):
   return f'<a href="{pre or "./"}" class="sitelogo" style="display:inline-block;line-height:0"><img src="{pre}assets/logo.png" alt="BoardFoot Index" width="198" height="40" style="height:40px;width:auto;max-width:100%"></a>'
 HX=head_extra('../')
@@ -178,7 +181,7 @@ for sp in species:
   desc=f"{sp} lumber costs a median {med}/bf across {n} posted dealer prices ({rng}) in {', '.join(states)}. See prices by thickness, rough vs surfaced, and sources."
   out=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}{HX}</head><body>
-<p>{logo_html("../")}</p><h1>{sp} price per board foot</h1>
+<p>{logo_html("../")}</p>{site_nav("../")}<h1>{sp} price per board foot</h1>
 <p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
@@ -199,7 +202,7 @@ for sp in species:
 def shell(title,desc,path,body,depth_prefix='../'):
   return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}{HX}</head><body>
-<p>{logo_html(depth_prefix)}</p>{body}
+<p>{logo_html(depth_prefix)}</p>{site_nav(depth_prefix)}{body}
 {report}
 {kit}
 {footer(depth_prefix)}
@@ -412,7 +415,7 @@ write('find-wood',shell("Find This Wood: Which Dealers Carry It, Near You | Boar
 def info_page(title,desc,path,body):
   return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{path}">{style}{HX}</head><body>
-<p>{logo_html("../")}</p>{body}
+<p>{logo_html("../")}</p>{site_nav("../")}{body}
 {footer('../')}
 </body></html>"""
 CE=contact_html()
@@ -483,9 +486,64 @@ write('about',info_page('About BoardFoot Index | Who runs it and where the price
 write('privacy',info_page('Privacy Policy | BoardFoot Index','What BoardFoot Index collects: price reports and newsletter signups, who handles them, and how to ask for removal.','privacy/',priv_body))
 write('affiliate-disclosure',info_page('Affiliate Disclosure | BoardFoot Index','Some links on BoardFoot Index may be affiliate links. Commissions never change prices, medians or sort order, and paid placements are labeled Sponsored.','affiliate-disclosure/',disc_body))
 
+# ---- Dealer Directory (/dealers/): public contact info from dealers_contact.csv (built by build_dealers_contact.py) ----
+from urllib.parse import quote_plus
+DC=list(csv.DictReader(open('dealers_contact.csv')))
+_seen={r['dealer'] for r in rows}
+assert {d['dealer'] for d in DC}>=_seen, 'dealers_contact.csv missing: '+str(sorted(_seen-{d['dealer'] for d in DC}))
+def dname(d):return re.sub(r'\s*\((affiliate|FAS grade|[^)]*BF tier)\)$','',d)
+def place_name(st):return STATE_NAMES.get(st) or PROV_NAMES.get(st) or st
+def tel(n):
+  dg=re.sub(r'\D','',n); dg=dg[1:] if len(dg)==11 and dg[0]=='1' else dg
+  return f'<a href="tel:+1{dg}">{e(n)}</a>'
+pcount={}
+for r in rows:pcount[r['dealer']]=pcount.get(r['dealer'],0)+1
+DC.sort(key=lambda d:(place_name(d['state']),dname(d['dealer']).lower().removeprefix('the ')))
+def dcard(d):
+  nm=dname(d['dealer']); st=d['state']; pl=place_name(st)
+  line2=f"{e(d['city'])}, {st}"+(f" {e(d['zip'])}" if d['zip'] else '')
+  addr=(f"{e(d['street'])}<br>{line2}" if d['street'] else f"{line2}<br><small>Street address not published</small>")
+  q=nm+', '+(d['street']+', ' if d['street'] else '')+d['city']+', '+st+(' '+d['zip'] if d['zip'] else '')
+  ct=[]
+  if d['phone']:ct.append('Phone: '+tel(d['phone']))
+  if d['toll_free']:ct.append('Toll-free: '+tel(d['toll_free']))
+  if d['fax']:ct.append('Fax: '+e(d['fax']))
+  if d['email']:ct.append(f'Email: <a href="mailto:{e(d["email"])}">{e(d["email"])}</a>')
+  n=pcount.get(d['dealer'],0)
+  links=[f'<a href="https://www.google.com/maps/search/?api=1&amp;query={quote_plus(q)}" target="_blank" rel="noopener">Map</a>']
+  if st in pub_states:links.append(f'<a href="../{sslug(st)}/">{e(pl)} prices</a>')
+  links.append(f'<a href="../find-wood/?state={st}">Find wood near {e(d["city"])}</a>')
+  return (f'<div class="dcard" data-s="{st}"><h3><a href="{e(d["website"])}" rel="noopener">{e(nm)}</a>{aff_badge("../") if is_aff(d["dealer"]) else ""}</h3>'
+          f'<p class="d-loc">{e(d["city"])}, {e(pl)} · <b>{n} price{"s" if n!=1 else ""}</b> tracked</p>'
+          f'<p class="d-addr">{addr}</p>'
+          +(f'<p class="d-ct">{"<br>".join(ct)}</p>' if ct else '')
+          +(f'<p class="d-hr"><b>Hours:</b> {e(d["hours"])}</p>' if d['hours'] else '')
+          +(f'<p class="d-note">{e(d["note"])}</p>' if d['note'] else '')
+          +f'<p class="d-links">{" · ".join(links)}</p>'
+          f'<p class="d-src"><small>From the <a href="{e(d["contact_source_url"])}" rel="nofollow noopener">dealer&rsquo;s website</a>, checked {d["date_checked"]}.</small></p></div>')
+dsts=[]
+for d in DC:
+  if d['state'] not in dsts:dsts.append(d['state'])
+dopts=''.join(f'<option value="{st}">{e(place_name(st))} ({sum(1 for d in DC if d["state"]==st)})</option>' for st in dsts)
+DCSS='''<style>.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}.dcard{background:#faf6f0;border:1px solid #e5d8c7;border-radius:8px;padding:.8rem .9rem;font-size:.9rem;overflow-wrap:anywhere}.dcard[hidden]{display:none}.dcard h3{margin:0 0 .3rem;font-size:1.05rem}.dcard h3 a{color:#7a4a1e}.dcard p{margin:.35rem 0}.d-loc{color:#5b4a3a}.d-note{font-size:.82rem;color:#5b4a3a}.d-links a{font-weight:600}.d-src{color:#6b5a4a}#dfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}#dfilter select{margin:0}#dcount{font-weight:600}@media (max-width:900px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:600px){.dgrid{grid-template-columns:1fr}}</style>'''
+DJS='''(function(){var sel=document.getElementById('dstate'),cards=document.querySelectorAll('.dcard'),cnt=document.getElementById('dcount');
+function apply(){var v=sel.value,n=0;cards.forEach(function(c){var on=!v||c.getAttribute('data-s')===v;c.hidden=!on;if(on)n++;});
+cnt.textContent=n+(n===1?' dealer':' dealers')+(v?' in '+sel.options[sel.selectedIndex].text.replace(/ \\(\\d+\\)$/,''):'');
+var u=new URL(location.href);if(v)u.searchParams.set('state',v);else u.searchParams.delete('state');history.replaceState(null,'',u);}
+var q=new URLSearchParams(location.search).get('state');if(q&&sel.querySelector('option[value="'+q.toUpperCase()+'"]'))sel.value=q.toUpperCase();
+sel.addEventListener('change',apply);apply();})();'''
+dbody=f'''{DCSS}<h1>Dealer Directory</h1>
+<p>Every lumber dealer whose prices we track: {len(DC)} dealers in {len(dsts)} states and provinces, sorted by state. Addresses, phone numbers, emails and hours are copied only from each dealer&rsquo;s own website; anything a dealer doesn&rsquo;t publish is left out. Hours change, so call ahead before you drive.</p>
+<div class="box" id="dfilter"><label for="dstate"><b>State:</b></label> <select id="dstate"><option value="">All states and provinces</option>{dopts}</select> <span id="dcount" aria-live="polite">{len(DC)} dealers</span></div>
+<div class="dgrid">{"".join(dcard(d) for d in DC)}</div>
+<p>Looking for a species in a certain thickness? <a href="../find-wood/">Find which dealers carry it near you</a>. Spot a wrong address or phone number? Contact us: {contact_html()}.</p>
+<script>{DJS}</script>'''
+write('dealers',shell("Dealer Directory: Hardwood Lumber Dealers by State | BoardFoot Index",f"Addresses, phone numbers, hours and map links for the {len(DC)} hardwood lumber dealers BoardFoot Index tracks, by state, with how many prices we list for each.",'dealers/',dbody))
+HOME_DD=f'<p><b>Dealer Directory:</b> addresses, phone numbers, hours and map links for all {len(DC)} dealers we track, by state. <a href="dealers/">See all dealers</a></p>'
+
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>2026-10-16</lastmod></url>\n' for u in urls)+'</urlset>\n')
 open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n')
-nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p><!--/SPECIES-->'
+nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p>'+HOME_DD+'<!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
 pd=sorted({r['dealer'] for r in rows}); 
 blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd,'')+SHIPNOTE+'<!--/DEALERS-->'
