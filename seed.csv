@@ -284,7 +284,6 @@ Hard Maple,4/4,not stated,5.72,Odd Wood Lumber,Port Richey,FL,https://www.owlumb
 Ash,4/4,not stated,6.25,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
 Ash,8/4,not stated,7.28,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
 Cherry,4/4,not stated,4.90,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
-Hickory,4/4,not stated,6.00,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
 Sapele,4/4,not stated,8.68,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
 Sapele,6/4,not stated,7.82,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
 Sapele,8/4,not stated,7.92,Odd Wood Lumber,Port Richey,FL,https://www.owlumber.com/lumber,2026-10-16
@@ -526,7 +525,7 @@ Cherry,5/4,rough (Select & Better),4.57,Kettle Moraine Hardwoods,Hartford,WI,htt
 Cherry,6/4,rough (Select & Better),5.16,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
 Cherry,8/4,rough (Select & Better),5.60,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
 Cherry,12/4,rough (Select & Better),8.40,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
-Hard Maple,4/4,rough (Select & Better),2.85,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
+Hard Maple,4/4,"rough (Select & Better, mixed heartwood/sapwood)",2.85,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
 Hard Maple,5/4,rough (Select & Better),5.46,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
 Hard Maple,6/4,rough (Select & Better),6.83,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
 Hard Maple,8/4,rough (Select & Better),7.09,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
@@ -617,3 +616,267 @@ Hard Maple,10/4,"rough (Sap & Btr; white maple; 48 hour notice); posted CAD $10.
 White Oak,4/4,"rough (Flat Sliced); posted CAD $12.11/bf converted to USD at 1.4057 CAD/USD (Bank of Canada, 2026-10-21)",8.61,Peacock Lumber,Oshawa,ON,https://peacocklumber.ca/product/white-oak/,2026-10-21
 White Oak,6/4,"rough (Flat Sliced); posted CAD $14.83/bf converted to USD at 1.4057 CAD/USD (Bank of Canada, 2026-10-21)",10.55,Peacock Lumber,Oshawa,ON,https://peacocklumber.ca/product/white-oak/,2026-10-21
 White Oak,8/4,"rough (Flat Sliced); posted CAD $16.99/bf converted to USD at 1.4057 CAD/USD (Bank of Canada, 2026-10-21)",12.09,Peacock Lumber,Oshawa,ON,https://peacocklumber.ca/product/white-oak/,2026-10-21
+Ash,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",4.50,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Ash,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",4.60,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Ash,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",5.25,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Ash,12/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",6.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Cherry,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",4.90,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Cherry,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",5.10,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Cherry,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",5.75,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hickory,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; hickory-pecan)",3.10,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hickory,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; hickory-pecan)",3.40,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hickory,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; hickory-pecan)",5.05,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",5.75,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",5.80,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,6/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",5.90,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",5.95,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,12/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",6.50,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Mahogany,16/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; African mahogany)",7.10,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hard Maple,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; white)",5.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hard Maple,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; white)",5.50,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Hard Maple,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft; white)",6.20,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Soft Maple,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",4.85,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Soft Maple,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",5.40,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Soft Maple,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",6.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Soft Maple,12/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",5.25,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Red Oak,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",3.15,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Red Oak,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",3.40,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Red Oak,6/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",3.55,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Red Oak,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",3.95,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+White Oak,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",7.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+White Oak,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",7.20,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+White Oak,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",9.50,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Walnut,4/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",8.25,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Walnut,5/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",8.40,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Walnut,8/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",10.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Walnut,12/4,"KD, rough (Select; posted price is for 100 bd ft, add $0.10/bf under 100 bd ft)",13.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/premier-hardwoods/,2026-10-28
+Sapele,4/4,"KD, rough (grade not stated; S2S available for $0.40/bf extra)",5.75,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/exotic-hardwoods/,2026-10-28
+Sapele,8/4,"KD, rough (grade not stated; S2S available for $0.40/bf extra)",6.00,Steve Wall Lumber Co.,Mayodan,NC,https://walllumber.com/products/exotic-hardwoods/,2026-10-28
+Ash,4/4,rough (Select & Better; white ash),5.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,5/4,rough (Select & Better; white ash),5.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,6/4,rough (Select & Better; white ash),5.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,8/4,rough (Select & Better; white ash),6.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,10/4,rough (Select & Better; white ash),7.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,12/4,rough (Select & Better; white ash),7.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,16/4,rough (Select & Better; white ash),9.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,4/4,rough (Select & Better),6.70,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,5/4,rough (Select & Better),6.85,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,6/4,rough (Select & Better),7.10,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,8/4,rough (Select & Better),7.20,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,10/4,rough (Select & Better),9.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,12/4,rough (Select & Better),9.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Cherry,16/4,rough (Select & Better),11.60,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,4/4,rough (Select & Better),4.10,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,5/4,rough (Select & Better),5.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,6/4,rough (Select & Better),5.60,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,8/4,rough (Select & Better),5.95,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,10/4,rough (Select & Better),6.90,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Red Oak,12/4,rough (Select & Better),7.99,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hickory,4/4,rough (Select & Better),4.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hickory,5/4,rough (Select & Better),5.85,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hickory,8/4,rough (Select & Better),7.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,4/4,rough (Select & Better),7.10,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,5/4,rough (Select & Better),7.40,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,6/4,rough (Select & Better),7.85,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,8/4,rough (Select & Better),8.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,10/4,rough (Select & Better),9.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,12/4,rough (Select & Better),10.30,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Hard Maple,16/4,rough (Select & Better),12.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Soft Maple,4/4,rough (unselected for color),7.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Soft Maple,5/4,rough (unselected for color),7.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Soft Maple,6/4,rough (unselected for color),7.10,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Soft Maple,8/4,rough (unselected for color),8.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,4/4,rough (Select & Better; yellow poplar),4.10,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,5/4,rough (Select & Better; yellow poplar),4.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,6/4,rough (Select & Better; yellow poplar),4.40,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,8/4,rough (Select & Better; yellow poplar),4.60,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,10/4,rough (Select & Better; yellow poplar),5.15,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,12/4,rough (Select & Better; yellow poplar),5.35,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Poplar,16/4,rough (Select & Better; yellow poplar),7.70,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,4/4,rough (Select & Better; black walnut),13.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,5/4,rough (Select & Better; black walnut),13.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,6/4,rough (Select & Better; black walnut),14.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,8/4,rough (Select & Better; black walnut),15.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,10/4,rough (Select & Better; black walnut),15.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,12/4,rough (Select & Better; black walnut),16.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Walnut,16/4,rough (Select & Better; black walnut),16.90,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,4/4,rough (Select & Better),10.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,5/4,rough (Select & Better),12.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,6/4,rough (Select & Better),12.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,8/4,rough (Select & Better),13.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,10/4,rough (Select & Better),17.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+White Oak,12/4,rough (Select & Better),18.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/DOMESTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,4/4,rough (Common & Better; African mahogany),7.95,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,5/4,rough (Common & Better; African mahogany),8.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,6/4,rough (Common & Better; African mahogany),8.15,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,8/4,rough (Common & Better; African mahogany),8.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,10/4,rough (Common & Better; African mahogany),8.35,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Mahogany,12/4,rough (Common & Better; African mahogany),8.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,4/4,rough (Common & Better),7.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,5/4,rough (Common & Better),8.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,6/4,rough (Common & Better),8.25,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,8/4,rough (Common & Better),8.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,10/4,rough (Common & Better),8.75,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,12/4,rough (Common & Better),9.00,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Sapele,16/4,rough (Common & Better),9.50,Highland Hardwoods,Brentwood,NH,https://cdn.shopify.com/s/files/1/0699/6747/9022/files/EXOTIC_PRICE_PAGES_082726.pdf?v=1788441779,2026-10-28
+Ash,4/4,grade and surfacing not stated,6.80,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Ash,8/4,grade and surfacing not stated,6.80,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Cherry,4/4,grade and surfacing not stated,6.25,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Cherry,8/4,grade and surfacing not stated,7.25,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Mahogany,4/4,grade and surfacing not stated; mahogany type not stated,9.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Mahogany,8/4,grade and surfacing not stated; mahogany type not stated,10.90,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Hard Maple,4/4,grade and surfacing not stated,7.25,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Hard Maple,8/4,grade and surfacing not stated,7.75,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Soft Maple,4/4,grade and surfacing not stated,7.00,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Soft Maple,8/4,grade and surfacing not stated,8.00,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Poplar,4/4,grade and surfacing not stated,3.90,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Poplar,5/4,grade and surfacing not stated,4.00,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Poplar,8/4,grade and surfacing not stated,4.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Red Oak,4/4,grade and surfacing not stated,5.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Red Oak,5/4,grade and surfacing not stated,6.00,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Red Oak,8/4,grade and surfacing not stated,6.45,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Walnut,4/4,grade and surfacing not stated,14.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Walnut,8/4,grade and surfacing not stated,15.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+White Oak,4/4,grade and surfacing not stated,10.85,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+White Oak,8/4,grade and surfacing not stated,14.25,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Sapele,4/4,grade and surfacing not stated,10.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Sapele,8/4,grade and surfacing not stated,10.50,Intercity Lumber Co.,Tampa,FL,https://www.intercitylumber.com/hardwood-lumber.html,2026-10-28
+Ash,4/4,"S3S, random widths (grade not stated)",4.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Ash,8/4,"S3S, random widths (grade not stated)",6.49,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Walnut,4/4,"S3S, random widths (grade not stated)",10.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Walnut,8/4,"S3S, random widths (grade not stated)",13.75,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Cherry,4/4,"S3S, random widths (grade not stated)",4.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Cherry,8/4,"S3S, random widths (grade not stated)",6.59,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Hard Maple,4/4,"S3S, random widths (grade not stated)",6.49,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Hard Maple,8/4,"S3S, random widths (grade not stated)",8.49,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Hickory,4/4,"S3S, random widths (grade not stated)",4.59,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Hickory,8/4,"S3S, random widths (grade not stated)",7.69,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Poplar,4/4,"S3S, random widths (grade not stated)",2.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Poplar,8/4,"S3S, random widths (grade not stated)",3.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Red Oak,4/4,"S3S, random widths (grade not stated)",4.59,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Red Oak,8/4,"S3S, random widths (grade not stated)",5.49,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Sapele,4/4,"S3S, random widths (grade not stated)",8.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Sapele,8/4,"S3S, random widths (grade not stated)",10.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+White Oak,4/4,"S3S, random widths (grade not stated)",9.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+White Oak,8/4,"S3S, random widths (grade not stated)",12.99,M2 Lumber,Laurens,SC,https://m2lumber.com/collections/stocked-lumber,2026-10-28
+Ash,4/4,grade FAS; surfacing not stated,5.14,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Cherry,4/4,grade FAS; surfacing not stated,6.25,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Cherry,5/4,grade FAS; surfacing not stated,6.50,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Cherry,8/4,grade FAS; surfacing not stated,8.05,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Mahogany,4/4,grade FAS; surfacing not stated; mahogany type not stated,8.70,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Mahogany,8/4,grade FAS; surfacing not stated; mahogany type not stated,9.05,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Hickory,4/4,grade FAS; surfacing not stated,5.00,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Hard Maple,4/4,grade FAS; surfacing not stated,7.00,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Hard Maple,8/4,grade FAS; surfacing not stated,8.85,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Soft Maple,4/4,grade FAS; surfacing not stated,6.65,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Red Oak,4/4,grade FAS; surfacing not stated,5.52,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Red Oak,5/4,grade FAS; surfacing not stated,5.77,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Red Oak,6/4,grade FAS; surfacing not stated,5.82,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Red Oak,8/4,grade FAS; surfacing not stated,6.00,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+White Oak,4/4,grade FAS; surfacing not stated,9.00,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Poplar,4/4,grade FAS; surfacing not stated,5.17,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Poplar,5/4,grade FAS; surfacing not stated,5.31,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Poplar,6/4,grade FAS; surfacing not stated,5.51,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Poplar,8/4,grade FAS; surfacing not stated,5.76,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Walnut,4/4,grade FAS; surfacing not stated,11.72,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Walnut,5/4,grade FAS; surfacing not stated,14.25,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Walnut,8/4,grade FAS; surfacing not stated,15.50,Dunham Hardwoods,Dunlap,IA,https://www.dunham-hardwoods.com/retailprices.asp,2026-10-28
+Ash,4/4,grade and surfacing not stated,6.35,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,5/4,grade and surfacing not stated,6.65,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,6/4,grade and surfacing not stated,6.90,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,8/4,grade and surfacing not stated,8.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,10/4,grade and surfacing not stated,9.30,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,12/4,grade and surfacing not stated,10.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Cherry,4/4,grade and surfacing not stated,4.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Cherry,5/4,grade and surfacing not stated,5.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Cherry,6/4,grade and surfacing not stated,5.75,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Cherry,8/4,grade and surfacing not stated,6.30,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Cherry,12/4,grade and surfacing not stated,11.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hickory,4/4,grade and surfacing not stated,5.15,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hickory,5/4,grade and surfacing not stated,6.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hickory,8/4,grade and surfacing not stated,7.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Mahogany,4/4,grade and surfacing not stated; African mahogany,8.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Mahogany,5/4,grade and surfacing not stated; African mahogany,9.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Mahogany,6/4,grade and surfacing not stated; African mahogany,9.25,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Mahogany,8/4,grade and surfacing not stated; African mahogany,9.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Mahogany,12/4,grade and surfacing not stated; African mahogany,12.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,4/4,grade and surfacing not stated,9.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,5/4,grade and surfacing not stated,9.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,6/4,grade and surfacing not stated,9.25,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,8/4,grade and surfacing not stated,9.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,12/4,grade and surfacing not stated,12.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Sapele,16/4,grade and surfacing not stated,14.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hard Maple,4/4,grade and surfacing not stated,6.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hard Maple,5/4,grade and surfacing not stated,7.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hard Maple,6/4,grade and surfacing not stated,7.70,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hard Maple,8/4,grade and surfacing not stated,7.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Hard Maple,12/4,grade and surfacing not stated,12.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Soft Maple,4/4,grade and surfacing not stated,6.35,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Soft Maple,5/4,grade and surfacing not stated,7.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Soft Maple,6/4,grade and surfacing not stated,7.40,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Soft Maple,8/4,grade and surfacing not stated,7.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Red Oak,4/4,grade and surfacing not stated,4.55,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Red Oak,5/4,grade and surfacing not stated,4.75,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Red Oak,6/4,grade and surfacing not stated,5.40,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Red Oak,8/4,grade and surfacing not stated,6.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+White Oak,4/4,grade and surfacing not stated,9.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+White Oak,5/4,grade and surfacing not stated,10.70,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+White Oak,6/4,grade and surfacing not stated,11.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+White Oak,8/4,grade and surfacing not stated,13.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+White Oak,12/4,grade and surfacing not stated,23.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,4/4,grade and surfacing not stated,3.60,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,5/4,grade and surfacing not stated,3.70,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,6/4,grade and surfacing not stated,3.80,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,8/4,grade and surfacing not stated,3.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,12/4,grade and surfacing not stated,5.10,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Poplar,16/4,grade and surfacing not stated,7.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,4/4,grade and surfacing not stated,11.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,5/4,grade and surfacing not stated,12.30,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,6/4,grade and surfacing not stated,12.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,8/4,grade and surfacing not stated,13.95,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,10/4,grade and surfacing not stated,18.00,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,12/4,grade and surfacing not stated,23.75,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Walnut,16/4,grade and surfacing not stated,24.50,Frederick Lumber Company,Frederick,MD,https://fredericklumber.com/price-list/,2026-10-28
+Ash,4/4,hit/miss planed (grade not stated),4.85,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Ash,5/4,hit/miss planed (grade not stated),5.30,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Ash,8/4,hit/miss planed (grade not stated),5.70,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,4/4,hit/miss planed (grade not stated),4.50,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,5/4,hit/miss planed (grade not stated),4.85,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,6/4,hit/miss planed (grade not stated),4.90,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,8/4,hit/miss planed (grade not stated),5.40,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,12/4,hit/miss planed (grade not stated),7.25,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Cherry,16/4,hit/miss planed (grade not stated),9.25,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hard Maple,4/4,hit/miss planed (white; grade not stated),5.25,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hard Maple,5/4,hit/miss planed (white; grade not stated),5.45,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hard Maple,8/4,hit/miss planed (white; grade not stated),6.20,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Soft Maple,4/4,hit/miss planed (white; grade not stated),5.20,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Soft Maple,5/4,hit/miss planed (white; grade not stated),5.20,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Soft Maple,8/4,hit/miss planed (white; grade not stated),5.95,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Soft Maple,12/4,hit/miss planed (white; grade not stated),6.95,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hickory,4/4,hit/miss planed (grade not stated),3.60,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hickory,8/4,hit/miss planed (grade not stated),5.95,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,4/4,hit/miss planed (grade not stated),2.95,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,5/4,hit/miss planed (grade not stated),3.15,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,6/4,hit/miss planed (grade not stated),3.15,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,8/4,hit/miss planed (grade not stated),3.55,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,12/4,hit/miss planed (grade not stated),3.60,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Poplar,4/4,S3S (grade not stated),3.15,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Red Oak,4/4,hit/miss planed (grade not stated),3.45,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Red Oak,5/4,hit/miss planed (grade not stated),3.80,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Red Oak,8/4,hit/miss planed (grade not stated),4.75,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,4/4,hit/miss planed (Regular grade),9.45,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,8/4,hit/miss planed (Regular grade),10.50,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,12/4,hit/miss planed (Regular grade),13.50,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,4/4,hit/miss planed (Prime grade),11.45,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,5/4,hit/miss planed (Prime grade),12.35,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,6/4,hit/miss planed (Prime grade),12.90,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Walnut,8/4,hit/miss planed (Prime grade),12.90,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+White Oak,4/4,hit/miss planed (grade not stated),8.65,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+White Oak,5/4,hit/miss planed (grade not stated),10.40,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+White Oak,8/4,hit/miss planed (grade not stated),13.95,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Mahogany,4/4,hit/miss planed (FAS; African mahogany),7.10,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Mahogany,8/4,hit/miss planed (FAS; African mahogany),7.45,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Mahogany,12/4,hit/miss planed (FAS; African mahogany),8.35,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Sapele,4/4,hit/miss planed (FAS),8.00,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Sapele,8/4,hit/miss planed (FAS),8.00,CR Muterspaw Lumber,Xenia,OH,https://crlumber.com/price-list/,2026-10-28
+Hard Maple,4/4,rough (White Select & Better),4.62,Kettle Moraine Hardwoods,Hartford,WI,https://www.kmhardwoods.com/lumber-prices,2026-10-21
