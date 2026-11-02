@@ -498,6 +498,8 @@ def tel(n):
   return f'<a href="tel:+1{dg}">{e(n)}</a>'
 pcount={}
 for r in rows:pcount[r['dealer']]=pcount.get(r['dealer'],0)+1
+dspecies={}
+for r in rows:dspecies.setdefault(r['dealer'],set()).add(r['species'])
 DC.sort(key=lambda d:(place_name(d['state']),dname(d['dealer']).lower().removeprefix('the ')))
 def dcard(d):
   nm=dname(d['dealer']); st=d['state']; pl=place_name(st)
@@ -513,9 +515,12 @@ def dcard(d):
   links=[f'<a href="https://www.google.com/maps/search/?api=1&amp;query={quote_plus(q)}" target="_blank" rel="noopener">Map</a>']
   if st in pub_states:links.append(f'<a href="../{sslug(st)}/">{e(pl)} prices</a>')
   links.append(f'<a href="../find-wood/?state={st}">Find wood near {e(d["city"])}</a>')
-  return (f'<div class="dcard" data-s="{st}"><h3><a href="{e(d["website"])}" rel="noopener">{e(nm)}</a>{aff_badge("../") if is_aff(d["dealer"]) else ""}</h3>'
+  sp=sorted(dspecies.get(d['dealer'],()))
+  dq=' '.join([nm,d['city'],st,pl]+sp).lower()
+  return (f'<div class="dcard" data-s="{st}" data-q="{e(dq)}"><h3><a href="{e(d["website"])}" rel="noopener">{e(nm)}</a>{aff_badge("../") if is_aff(d["dealer"]) else ""}</h3>'
           f'<p class="d-loc">{e(d["city"])}, {e(pl)} · <b>{n} price{"s" if n!=1 else ""}</b> tracked</p>'
-          f'<p class="d-addr">{addr}</p>'
+          +(f'<p class="d-sp"><b>Species:</b> {e(", ".join(sp))}</p>' if sp else '')
+          +f'<p class="d-addr">{addr}</p>'
           +(f'<p class="d-ct">{"<br>".join(ct)}</p>' if ct else '')
           +(f'<p class="d-hr"><b>Hours:</b> {e(d["hours"])}</p>' if d['hours'] else '')
           +(f'<p class="d-note">{e(d["note"])}</p>' if d['note'] else '')
@@ -525,16 +530,20 @@ dsts=[]
 for d in DC:
   if d['state'] not in dsts:dsts.append(d['state'])
 dopts=''.join(f'<option value="{st}">{e(place_name(st))} ({sum(1 for d in DC if d["state"]==st)})</option>' for st in dsts)
-DCSS='''<style>.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}.dcard{background:#faf6f0;border:1px solid #e5d8c7;border-radius:8px;padding:.8rem .9rem;font-size:.9rem;overflow-wrap:anywhere}.dcard[hidden]{display:none}.dcard h3{margin:0 0 .3rem;font-size:1.05rem}.dcard h3 a{color:#7a4a1e}.dcard p{margin:.35rem 0}.d-loc{color:#5b4a3a}.d-note{font-size:.82rem;color:#5b4a3a}.d-links a{font-weight:600}.d-src{color:#6b5a4a}#dfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}#dfilter select{margin:0}#dcount{font-weight:600}@media (max-width:900px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:600px){.dgrid{grid-template-columns:1fr}}</style>'''
-DJS='''(function(){var sel=document.getElementById('dstate'),cards=document.querySelectorAll('.dcard'),cnt=document.getElementById('dcount');
-function apply(){var v=sel.value,n=0;cards.forEach(function(c){var on=!v||c.getAttribute('data-s')===v;c.hidden=!on;if(on)n++;});
-cnt.textContent=n+(n===1?' dealer':' dealers')+(v?' in '+sel.options[sel.selectedIndex].text.replace(/ \\(\\d+\\)$/,''):'');
-var u=new URL(location.href);if(v)u.searchParams.set('state',v);else u.searchParams.delete('state');history.replaceState(null,'',u);}
-var q=new URLSearchParams(location.search).get('state');if(q&&sel.querySelector('option[value="'+q.toUpperCase()+'"]'))sel.value=q.toUpperCase();
-sel.addEventListener('change',apply);apply();})();'''
+DCSS='''<style>.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}.dcard{background:#faf6f0;border:1px solid #e5d8c7;border-radius:8px;padding:.8rem .9rem;font-size:.9rem;overflow-wrap:anywhere}.dcard[hidden]{display:none}.dcard h3{margin:0 0 .3rem;font-size:1.05rem}.dcard h3 a{color:#7a4a1e}.dcard p{margin:.35rem 0}.d-loc{color:#5b4a3a}.d-note{font-size:.82rem;color:#5b4a3a}.d-links a{font-weight:600}.d-src{color:#6b5a4a}#dfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}#dfilter select{margin:0}#dsearch{flex:1 1 16rem;min-width:0;max-width:26rem;margin:0;padding:.45rem .6rem;font:inherit;font-size:1rem;border:1px solid #c9b59c;border-radius:6px;background:#fff}#dsearch:focus{outline:2px solid #7a4a1e;outline-offset:1px}#dcount{font-weight:600}#dnone{background:#faf6f0;border:1px dashed #c9b59c;border-radius:8px;padding:.8rem .9rem;color:#5b4a3a}#dnone[hidden]{display:none}.d-sp{color:#5b4a3a}@media (max-width:600px){#dsearch{flex-basis:100%;max-width:none}#dstate{max-width:100%}}@media (max-width:900px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:600px){.dgrid{grid-template-columns:1fr}}</style>'''
+DJS='''(function(){var sel=document.getElementById('dstate'),inp=document.getElementById('dsearch'),cards=document.querySelectorAll('.dcard'),cnt=document.getElementById('dcount'),none=document.getElementById('dnone'),tot=cards.length;
+function apply(){var v=sel.value,t=inp.value.trim().toLowerCase(),w=t?t.split(/\\s+/):[],n=0;
+cards.forEach(function(c){var q=' '+(c.getAttribute('data-q')||''),on=(!v||c.getAttribute('data-s')===v)&&w.every(function(x){return q.indexOf(' '+x)>-1});c.hidden=!on;if(on)n++;});
+cnt.textContent=(n===tot?'Showing all '+tot+' dealers':'Showing '+n+' of '+tot+' dealers')+(v?' in '+sel.options[sel.selectedIndex].text.replace(/ \\(\\d+\\)$/,''):'');
+none.hidden=n>0;
+var u=new URL(location.href);if(v)u.searchParams.set('state',v);else u.searchParams.delete('state');if(t)u.searchParams.set('q',inp.value.trim());else u.searchParams.delete('q');history.replaceState(null,'',u);}
+var p=new URLSearchParams(location.search),q=p.get('state');if(q&&sel.querySelector('option[value="'+q.toUpperCase()+'"]'))sel.value=q.toUpperCase();
+if(p.get('q'))inp.value=p.get('q');
+sel.addEventListener('change',apply);inp.addEventListener('input',apply);inp.addEventListener('search',apply);apply();})();'''
 dbody=f'''{DCSS}<h1>Dealer Directory</h1>
 <p>Every lumber dealer whose prices we track: {len(DC)} dealers in {len(dsts)} states and provinces, sorted by state. Addresses, phone numbers, emails and hours are copied only from each dealer&rsquo;s own website; anything a dealer doesn&rsquo;t publish is left out. Hours change, so call ahead before you drive.</p>
-<div class="box" id="dfilter"><label for="dstate"><b>State:</b></label> <select id="dstate"><option value="">All states and provinces</option>{dopts}</select> <span id="dcount" aria-live="polite">{len(DC)} dealers</span></div>
+<div class="box" id="dfilter"><input type="search" id="dsearch" placeholder="Search dealers by name, city, or species" autocomplete="off" aria-label="Search dealers by name, city, state, or species"> <label for="dstate"><b>State:</b></label> <select id="dstate"><option value="">All states and provinces</option>{dopts}</select> <span id="dcount" aria-live="polite">Showing all {len(DC)} dealers</span></div>
+<p id="dnone" hidden>No dealers match. Try a different spelling, a species like &ldquo;walnut&rdquo;, or set State to &ldquo;All states and provinces&rdquo;.</p>
 <div class="dgrid">{"".join(dcard(d) for d in DC)}</div>
 <p>Looking for a species in a certain thickness? <a href="../find-wood/">Find which dealers carry it near you</a>. Spot a wrong address or phone number? Contact us: {contact_html()}.</p>
 <script>{DJS}</script>'''
