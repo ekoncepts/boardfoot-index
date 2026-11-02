@@ -4,6 +4,8 @@ Blank field = not published on the dealer's site. Re-run after editing the DATA 
 import csv
 COLS=['dealer','website','street','city','state','zip','phone','toll_free','fax','email','hours','contact_source_url','date_checked','note']
 D='2026-10-28'
+D3='2026-11-02'  # batch 3 dealers, checked 2026-11-02
+B3={'Almendinger Sawmill','Zeyer Lumber','K&J Lumber Products','Parkerville Wood Products','Baker Lumber','Camp Creek Hardwoods'}
 DATA=[
 # dealer, website, street, city, st, zip, phone, toll_free, fax, email, hours, source, note
 ('Woodworkers Source','https://www.woodworkerssource.com/','18115 N. Black Canyon Hwy','Phoenix','AZ','85023','602-504-1931','800-423-2450','','nphx@woodworkerssource.com','Stores: Mon–Sat 8:00 am–5:00 pm','https://www.woodworkerssource.com/','Also has stores in Tempe (645 W. Elliot Rd, 480-355-5090) and Tucson (3441 S. Palo Verde, 520-745-8301). Toll-free line is online order help.'),
@@ -37,11 +39,17 @@ DATA=[
 ('Cygnus Lumber','https://cygnuslumber.com/','','Virginia Beach','VA','','757-695-8887','','','horvathgs123@gmail.com','Mon–Fri 10 am–5 pm (contractors 8 am–5 pm); Sat 9 am–4 pm','https://cygnuslumber.com/contact-us/','No street address is published on the site; the map link searches by name.'),
 ('Wood Vendors (100-249 BF tier)','https://woodvendors.com/','','Vancouver','WA','','','877-983-6367','','','Mon–Fri 8:00 am–4:00 pm','https://woodvendors.com/contact-us/','No street address or general email is published; the contact page lists individual sales staff.'),
 ('Kettle Moraine Hardwoods','https://www.kmhardwoods.com/','5261 Aurora Road','Hartford','WI','53027','262-644-8119','','','info@kmhardwoods.com','Mon & Wed 8 am–7 pm; Tue, Thu, Fri 8 am–5 pm; Sat 8 am–3 pm','https://www.kmhardwoods.com/contact',''),
+('Almendinger Sawmill','https://almendingersawmill.com/','5501 Caswell Rd NW','Johnstown','OH','43031','740-967-2222','1-888-829-2288','740-967-2217','info@asawmill.com','Mon–Fri 7:30 am–4:30 pm; Sat 7:30 am–noon','https://almendingersawmill.com/','Kiln-dried lumber is pickup only at the sawmill.'),
+('Zeyer Lumber','https://www.zeyerlumber.com/','','Baltimore','OH','','(855) 804-6788','','','zeyerlumber@gmail.com','Mon–Sat 9:00–11:30 am; afternoons by appointment','https://www.zeyerlumber.com/contact','No street address is published; alternate phone (614) 848-6230. Call or text; appointments encouraged.'),
+('K&J Lumber Products','https://www.kandjlumber.com/','1381 King Rd','Mora','MN','55051','320-674-4917','','','kyle@kandjlumber.com','Mon–Fri 9–5','https://www.kandjlumber.com/','On Hwy 65, 5 miles south of Mora.'),
+('Parkerville Wood Products','https://parkervillewoodproducts.com/','580 Parker Street','Manchester','CT','06042','860-649-9663','','860-432-1211','info@parkervillewp.com','Mon–Wed & Fri 8–4:30; Thu 8–7; Sat 8–2','https://parkervillewoodproducts.com/contact-us/',''),
+('Baker Lumber','https://www.bakerlumber.net/','1113 VA Cutoff Rd','White River Junction','VT','05001','(802) 291-9102','','(802) 291-9103','info@bakerlumber.net','Mon–Fri 8–4:30','https://www.bakerlumber.net/',''),
+('Camp Creek Hardwoods','https://www.campcreekhardwoods.com/','','Hawk Point','MO','63349','618-363-1073','','','campcreekhardwoods@usa.com','','https://www.campcreekhardwoods.com/','Small sawmill; owner Brad McCarty. No street address or hours published; the site says text is best.'),
 ]
 assert all(len(r)==13 for r in DATA)
 with open('dealers_contact.csv','w',newline='') as f:
   w=csv.writer(f);w.writerow(COLS)
-  for r in DATA:w.writerow(list(r[:11])+[r[11],D,r[12]])
+  for r in DATA:w.writerow(list(r[:11])+[r[11],D3 if r[0] in B3 else D,r[12]])
 seed={r['dealer'] for r in csv.DictReader(open('seed.csv'))}
 names={r[0] for r in DATA}
 print('missing from contact data:',sorted(seed-names-{d for d in seed if not d}),'| extra:',sorted(names-seed))
