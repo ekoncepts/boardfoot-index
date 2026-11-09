@@ -495,6 +495,18 @@ write('about',info_page('About BoardFoot Index | Who runs it and where the price
 write('privacy',info_page('Privacy Policy | BoardFoot Index','What BoardFoot Index collects: price reports and newsletter signups, who handles them, and how to ask for removal.','privacy/',priv_body))
 write('affiliate-disclosure',info_page('Affiliate Disclosure | BoardFoot Index','Some links on BoardFoot Index may be affiliate links. Commissions never change prices, medians or sort order, and paid placements are labeled Sponsored.','affiliate-disclosure/',disc_body))
 
+
+def added_on(dn):
+  return (dealers.get(dn,{}) or {}).get('date_added','').strip()
+def new_badge(dn):
+  from datetime import date, timedelta
+  a=added_on(dn)
+  if not a: return ''
+  try: dt=date.fromisoformat(a)
+  except ValueError: return ''
+  if date.today()-dt>=timedelta(days=7): return ''
+  label=f"New · {dt.strftime('%b')} {dt.day}"
+  return f' <span class="d-new" data-added="{e(a)}">{e(label)}</span>'
 # ---- Dealer Directory (/dealers/): public contact info from dealers_contact.csv (built by build_dealers_contact.py) ----
 from urllib.parse import quote_plus
 DC=list(csv.DictReader(open('dealers_contact.csv')))
@@ -526,7 +538,7 @@ def dcard(d):
   links.append(f'<a href="../find-wood/?state={st}">Find wood near {e(d["city"])}</a>')
   sp=sorted(dspecies.get(d['dealer'],()))
   dq=' '.join([nm,d['city'],st,pl]+sp).lower()
-  return (f'<div class="dcard" data-s="{st}" data-q="{e(dq)}"><h3><a href="{e(d["website"])}" rel="noopener">{e(nm)}</a>{aff_badge("../") if is_aff(d["dealer"]) else ""}</h3>'
+  return (f'<div class="dcard" data-s="{st}" data-q="{e(dq)}"><h3><a href="{e(d["website"])}" rel="noopener">{e(nm)}</a>{new_badge(d["dealer"])}{aff_badge("../") if is_aff(d["dealer"]) else ""}</h3>'
           f'<p class="d-loc">{e(d["city"])}, {e(pl)} · <b>{n} price{"s" if n!=1 else ""}</b> tracked</p>'
           +(f'<p class="d-sp"><b>Species:</b> {e(", ".join(sp))}</p>' if sp else '')
           +f'<p class="d-addr">{addr}</p>'
@@ -539,8 +551,9 @@ dsts=[]
 for d in DC:
   if d['state'] not in dsts:dsts.append(d['state'])
 dopts=''.join(f'<option value="{st}">{e(place_name(st))} ({sum(1 for d in DC if d["state"]==st)})</option>' for st in dsts)
-DCSS='''<style>.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}.dcard{background:#faf6f0;border:1px solid #e5d8c7;border-radius:8px;padding:.8rem .9rem;font-size:.9rem;overflow-wrap:anywhere}.dcard[hidden]{display:none}.dcard h3{margin:0 0 .3rem;font-size:1.05rem}.dcard h3 a{color:#7a4a1e}.dcard p{margin:.35rem 0}.d-loc{color:#5b4a3a}.d-note{font-size:.82rem;color:#5b4a3a}.d-links a{font-weight:600}.d-src{color:#6b5a4a}#dfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}#dfilter select{margin:0}#dsearch{flex:1 1 16rem;min-width:0;max-width:26rem;margin:0;padding:.45rem .6rem;font:inherit;font-size:1rem;border:1px solid #c9b59c;border-radius:6px;background:#fff}#dsearch:focus{outline:2px solid #7a4a1e;outline-offset:1px}#dcount{font-weight:600}#dnone{background:#faf6f0;border:1px dashed #c9b59c;border-radius:8px;padding:.8rem .9rem;color:#5b4a3a}#dnone[hidden]{display:none}.d-sp{color:#5b4a3a}@media (max-width:600px){#dsearch{flex-basis:100%;max-width:none}#dstate{max-width:100%}}@media (max-width:900px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:600px){.dgrid{grid-template-columns:1fr}}</style>'''
-DJS='''(function(){var sel=document.getElementById('dstate'),inp=document.getElementById('dsearch'),cards=document.querySelectorAll('.dcard'),cnt=document.getElementById('dcount'),none=document.getElementById('dnone'),tot=cards.length;
+DCSS='''<style>.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;margin:1rem 0}.dcard{background:#faf6f0;border:1px solid #e5d8c7;border-radius:8px;padding:.8rem .9rem;font-size:.9rem;overflow-wrap:anywhere}.dcard[hidden]{display:none}.dcard h3{margin:0 0 .3rem;font-size:1.05rem}.dcard h3 a{color:#7a4a1e}.dcard p{margin:.35rem 0}.d-loc{color:#5b4a3a}.d-note{font-size:.82rem;color:#5b4a3a}.d-links a{font-weight:600}.d-src{color:#6b5a4a}#dfilter{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem}#dfilter select{margin:0}#dsearch{flex:1 1 16rem;min-width:0;max-width:26rem;margin:0;padding:.45rem .6rem;font:inherit;font-size:1rem;border:1px solid #c9b59c;border-radius:6px;background:#fff}#dsearch:focus{outline:2px solid #7a4a1e;outline-offset:1px}#dcount{font-weight:600}#dnone{background:#faf6f0;border:1px dashed #c9b59c;border-radius:8px;padding:.8rem .9rem;color:#5b4a3a}#dnone[hidden]{display:none}.d-sp{color:#5b4a3a}.d-new{display:inline-block;font-size:.85rem;font-weight:800;letter-spacing:.04em;background:#e8a017;border:1px solid #c78a10;border-radius:4px;padding:.18em .55em;margin-left:.4em;white-space:nowrap;color:#2b2118;vertical-align:middle;text-transform:uppercase}.dcard:has(.d-new){border-color:#e8a017;box-shadow:inset 5px 0 0 #e8a017}@media (max-width:600px){#dsearch{flex-basis:100%;max-width:none}#dstate{max-width:100%}}@media (max-width:900px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:600px){.dgrid{grid-template-columns:1fr}}</style>'''
+DJS='''(function(){document.querySelectorAll('.d-new[data-added]').forEach(function(el){var t=Date.parse(el.getAttribute('data-added')+'T00:00:00');if(!isNaN(t)&&(Date.now()-t)/86400000>=7)el.remove();});
+var sel=document.getElementById('dstate'),inp=document.getElementById('dsearch'),cards=document.querySelectorAll('.dcard'),cnt=document.getElementById('dcount'),none=document.getElementById('dnone'),tot=cards.length;
 function apply(){var v=sel.value,t=inp.value.trim().toLowerCase(),w=t?t.split(/\\s+/):[],n=0;
 cards.forEach(function(c){var q=' '+(c.getAttribute('data-q')||''),on=(!v||c.getAttribute('data-s')===v)&&w.every(function(x){return q.indexOf(' '+x)>-1});c.hidden=!on;if(on)n++;});
 cnt.textContent=(n===tot?'Showing all '+tot+' dealers':'Showing '+n+' of '+tot+' dealers')+(v?' in '+sel.options[sel.selectedIndex].text.replace(/ \\(\\d+\\)$/,''):'');
