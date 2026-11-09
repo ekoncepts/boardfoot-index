@@ -148,6 +148,15 @@ def places_text(codes):
   parts=[f"{len(us)} state{'' if len(us)==1 else 's'}"] if us else []
   if ca: parts.append((' and '.join(ca) if len(ca)<=2 else f"{len(ca)} Canadian provinces"))
   return ' plus '.join(parts)
+def checked_when(rs):
+  """'in November 2026' or 'between October and November 2026', from the rows' date_checked values"""
+  import datetime as _dt
+  ms=sorted({r['date_checked'][:7] for r in rs})
+  nm=lambda m:_dt.date(int(m[:4]),int(m[5:7]),1).strftime('%B %Y')
+  if len(ms)==1: return 'in '+nm(ms[0])
+  a,b=nm(ms[0]),nm(ms[-1])
+  if a[-4:]==b[-4:]: a=a[:-5]
+  return f'between {a} and {b}'
 def stat(ps):return money(S.median(ps)),f"{money(min(ps))}–{money(max(ps))}",len(ps)
 urls=[BASE]
 for sp in species:
@@ -182,7 +191,7 @@ for sp in species:
   out=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}{HX}</head><body>
 <p>{logo_html("../")}</p>{site_nav("../")}<h1>{sp} price per board foot</h1>
-<p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked in October 2026, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
+<p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked {checked_when(a)}, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 {kit_box('species','Watching '+sp.lower()+' prices? Get the monthly Lumber Price Report.')}
@@ -237,7 +246,7 @@ for st in pub_states:
   title=f"Hardwood Lumber Prices in {nm} (2026): Dealer Price per Board Foot | BoardFoot Index"
   desc=f"Real posted hardwood prices in {nm}: {n} dealer prices across {len(sps)} species from {len(dealers_list)} dealer{'s' if len(dealers_list)!=1 else ''}, ranging {rng} per board foot. Medians by species, sources and dates."
   body=f"""<h1>Hardwood lumber prices in {nm}</h1>
-<p>We found {n} publicly posted hardwood prices from {len(dealers_list)} {nm} dealer{'s' if len(dealers_list)!=1 else ''}, covering {len(sps)} species. Across all species and thicknesses the median is <b>{med}</b> per board foot, ranging {rng}. Every figure below comes from a dealer's own price list or product page, checked in October 2026 — nothing is estimated.</p>
+<p>We found {n} publicly posted hardwood prices from {len(dealers_list)} {nm} dealer{'s' if len(dealers_list)!=1 else ''}, covering {len(sps)} species. Across all species and thicknesses the median is <b>{med}</b> per board foot, ranging {rng}. Every figure below comes from a dealer's own price list or product page, checked {checked_when(a)} — nothing is estimated.</p>
 <p>In this data, {cheap} has the lowest species median in {nm} ({money(meds[cheap])}/bf) and {dear} the highest ({money(meds[dear])}/bf). The single lowest posted price is ${lo['p']:.2f}/bf ({lo['species']} {lo['thickness']}, {e(lo['dealer'])}); the highest is ${hi['p']:.2f}/bf ({hi['species']} {hi['thickness']}, {e(hi['dealer'])}).</p>
 <h2>Median and range by species in {nm}</h2>
 <table><thead><tr><th>Species</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>

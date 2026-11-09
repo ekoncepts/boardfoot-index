@@ -6,6 +6,8 @@ COLS=['dealer','website','street','city','state','zip','phone','toll_free','fax'
 D='2026-10-28'
 D3='2026-11-02'  # batch 3 dealers, checked 2026-11-02
 B3={'Almendinger Sawmill','Zeyer Lumber','K&J Lumber Products','Parkerville Wood Products','Baker Lumber','Camp Creek Hardwoods'}
+D4='2026-11-09'  # batch 4 dealers, checked 2026-11-09
+B4={'Badger Hardwoods of Wisconsin','Bell Forest Products','L.L. Johnson Lumber','Logs to Lumber Co.','Hobby Hardwood Alabama','Groff & Groff Lumber','Irion Lumber Company','Hoosier Hardwood Supply'}
 DATA=[
 # dealer, website, street, city, st, zip, phone, toll_free, fax, email, hours, source, note
 ('Woodworkers Source','https://www.woodworkerssource.com/','18115 N. Black Canyon Hwy','Phoenix','AZ','85023','602-504-1931','800-423-2450','','nphx@woodworkerssource.com','Stores: Mon–Sat 8:00 am–5:00 pm','https://www.woodworkerssource.com/','Also has stores in Tempe (645 W. Elliot Rd, 480-355-5090) and Tucson (3441 S. Palo Verde, 520-745-8301). Toll-free line is online order help.'),
@@ -45,11 +47,19 @@ DATA=[
 ('Parkerville Wood Products','https://parkervillewoodproducts.com/','580 Parker Street','Manchester','CT','06042','860-649-9663','','860-432-1211','info@parkervillewp.com','Mon–Wed & Fri 8–4:30; Thu 8–7; Sat 8–2','https://parkervillewoodproducts.com/contact-us/',''),
 ('Baker Lumber','https://www.bakerlumber.net/','1113 VA Cutoff Rd','White River Junction','VT','05001','(802) 291-9102','','(802) 291-9103','info@bakerlumber.net','Mon–Fri 8–4:30','https://www.bakerlumber.net/',''),
 ('Camp Creek Hardwoods','https://www.campcreekhardwoods.com/','','Hawk Point','MO','63349','618-363-1073','','','campcreekhardwoods@usa.com','','https://www.campcreekhardwoods.com/','Small sawmill; owner Brad McCarty. No street address or hours published; the site says text is best.'),
+('Badger Hardwoods of Wisconsin','https://www.badgerwood.com/','N1517 Hwy 14','Walworth','WI','53184','(262) 275-1162','','(262) 275-9855','badgerwood@badgerwood.com','Mon–Fri 8 am–4 pm','https://www.badgerwood.com/location.html','Address, phone, fax and email are shown as an image on the location page. Mail-order and retail.'),
+('Bell Forest Products','https://www.bellforestproducts.com/','200 E. Hematite Dr.','Ishpeming','MI','49849','','877-770-9663','','boone@bellforestproducts.com','','https://www.bellforestproducts.com/exotic-lumber/prices/','Email is for lumber quotes (Boone), from the price-list page. Online store ships.'),
+('L.L. Johnson Lumber','https://lljlumber.com/','563 N Cochran Ave','Charlotte','MI','48813','(517) 543-1660','800-292-5937','(517) 543-7180','adam@theworkbench.com','Showroom (Johnson\'s Workbench): Mon–Fri 8:30 am–5:30 pm; Sat 8:30 am–4 pm','https://lljlumber.com/contact-us/','Contact page lists five sales staff emails (adam@, bob@, justin@, phil@, tom.hahn@theworkbench.com); text or call 800-292-5937. Second Johnson\'s Workbench store: 51315 Indiana 933 North, South Bend, IN 46637 (Tue–Fri 9:30–5:30, Sat 9:30–3).'),
+('Logs to Lumber Co.','https://logs-to-lumber.com/','2347 Commerce Drive','Hastings','MN','55033','651-387-5647','','','mail@logs-to-lumber.com','','https://logs-to-lumber.com/contact-us/','No hours published; the contact page says to call to set up a time to stop by.'),
+('Hobby Hardwood Alabama','https://www.hobbyhardwoodalabama.com/','237 Shady Trail','New Market','AL','35761','(256) 783-0415','','','HobbyHardwoodAlabama@gmail.com','Fri & Sat 9 am–4 pm; weekdays by appointment','https://www.hobbyhardwoodalabama.com/contact-us.html','Run by Robert and Martha Milton. Email, call or text.'),
+('Groff & Groff Lumber','https://www.groffslumber.com/','858 Scotland Road','Quarryville','PA','17566','717-284-0001','(800) 342-0001','(717) 284-2400','sales@groffslumber.com','Mon–Fri 7 am–5 pm; Sat 7 am–noon','https://www.groffslumber.com/contact-us','Toll-free and fax numbers are from the printable price list.'),
+('Irion Lumber Company','https://irionlumber.com/','980 Calkins Rd (P.O. Box 954)','Wellsboro','PA','16901','(570) 724-1895','','','','Mon–Thu 8 am–5 pm; Fri 8 am–2 pm or by appointment','https://irionlumber.com/contact/','The site masks its email address; use the contact form on the contact page.'),
+('Hoosier Hardwood Supply','https://www.hoosierhardwoodsupply.com/','3911 Mobile Ave','Fort Wayne','IN','46805','(260) 241-6376','','','kevin@hoosierhardwoodsupply.com','Mon–Fri 8 am–4:30 pm; Sat 8 am–12 pm','https://www.hoosierhardwoodsupply.com/location-information',''),
 ]
 assert all(len(r)==13 for r in DATA)
 with open('dealers_contact.csv','w',newline='') as f:
   w=csv.writer(f);w.writerow(COLS)
-  for r in DATA:w.writerow(list(r[:11])+[r[11],D3 if r[0] in B3 else D,r[12]])
+  for r in DATA:w.writerow(list(r[:11])+[r[11],D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
 seed={r['dealer'] for r in csv.DictReader(open('seed.csv'))}
 names={r[0] for r in DATA}
 print('missing from contact data:',sorted(seed-names-{d for d in seed if not d}),'| extra:',sorted(names-seed))
