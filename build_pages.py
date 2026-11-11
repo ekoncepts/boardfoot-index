@@ -572,8 +572,11 @@ dbody=f'''{DCSS}<h1>Dealer Directory</h1>
 write('dealers',shell("Dealer Directory: Hardwood Lumber Dealers by State | BoardFoot Index",f"Addresses, phone numbers, hours and map links for the {len(DC)} hardwood lumber dealers BoardFoot Index tracks, by state, with how many prices we list for each.",'dealers/',dbody))
 HOME_DD=f'<p><b>Dealer Directory:</b> addresses, phone numbers, hours and map links for all {len(DC)} dealers we track, by state. <a href="dealers/">See all dealers</a></p>'
 
-open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>2026-10-16</lastmod></url>\n' for u in urls)+'</urlset>\n')
-open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n')
+import datetime as _dt
+_today=_dt.date.today().isoformat()
+open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>{_today}</lastmod></url>\n' for u in urls)+'</urlset>\n')
+open('sitemap.txt','w').write(''.join(f'{u}\n' for u in urls))
+open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\nSitemap: {BASE}sitemap.txt\n')
 nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p>'+HOME_DD+'<!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
 pd=sorted({r['dealer'] for r in rows}); 
