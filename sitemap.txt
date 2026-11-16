@@ -14,6 +14,7 @@ https://ekoncepts.github.io/boardfoot-index/walnut-price-per-board-foot/
 https://ekoncepts.github.io/boardfoot-index/white-oak-price-per-board-foot/
 https://ekoncepts.github.io/boardfoot-index/alabama-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/arizona-hardwood-lumber-prices/
+https://ekoncepts.github.io/boardfoot-index/arkansas-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/california-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/colorado-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/connecticut-hardwood-lumber-prices/
@@ -22,6 +23,7 @@ https://ekoncepts.github.io/boardfoot-index/georgia-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/illinois-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/indiana-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/iowa-hardwood-lumber-prices/
+https://ekoncepts.github.io/boardfoot-index/kansas-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/maryland-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/massachusetts-hardwood-lumber-prices/
 https://ekoncepts.github.io/boardfoot-index/michigan-hardwood-lumber-prices/

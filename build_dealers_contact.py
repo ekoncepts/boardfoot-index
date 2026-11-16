@@ -7,6 +7,8 @@ D='2026-10-28'
 D3='2026-11-02'  # batch 3 dealers, checked 2026-11-02
 B3={'Almendinger Sawmill','Zeyer Lumber','K&J Lumber Products','Parkerville Wood Products','Baker Lumber','Camp Creek Hardwoods'}
 D4='2026-11-09'  # batch 4 dealers, checked 2026-11-09
+D5='2026-11-16'  # batch 5 dealers, checked 2026-11-16
+B5={'Frank Thomas Sawmill','West Penn Hardwoods','Les Steen Hardwoods','Mark Frieden Hardwoods','Caird Lumber Ltd','White Oak Orchard'}
 B4={'Badger Hardwoods of Wisconsin','Bell Forest Products','L.L. Johnson Lumber','Logs to Lumber Co.','Hobby Hardwood Alabama','Groff & Groff Lumber','Irion Lumber Company','Hoosier Hardwood Supply'}
 DATA=[
 # dealer, website, street, city, st, zip, phone, toll_free, fax, email, hours, source, note
@@ -55,11 +57,17 @@ DATA=[
 ('Groff & Groff Lumber','https://www.groffslumber.com/','858 Scotland Road','Quarryville','PA','17566','717-284-0001','(800) 342-0001','(717) 284-2400','sales@groffslumber.com','Mon–Fri 7 am–5 pm; Sat 7 am–noon','https://www.groffslumber.com/contact-us','Toll-free and fax numbers are from the printable price list.'),
 ('Irion Lumber Company','https://irionlumber.com/','980 Calkins Rd (P.O. Box 954)','Wellsboro','PA','16901','(570) 724-1895','','','','Mon–Thu 8 am–5 pm; Fri 8 am–2 pm or by appointment','https://irionlumber.com/contact/','The site masks its email address; use the contact form on the contact page.'),
 ('Hoosier Hardwood Supply','https://www.hoosierhardwoodsupply.com/','3911 Mobile Ave','Fort Wayne','IN','46805','(260) 241-6376','','','kevin@hoosierhardwoodsupply.com','Mon–Fri 8 am–4:30 pm; Sat 8 am–12 pm','https://www.hoosierhardwoodsupply.com/location-information',''),
+('Frank Thomas Sawmill','https://thomassawmill.com/','2019 Fallston Road','Fallston','MD','21047','410-879-9688','','410-877-7645','','Mon–Fri 8 am–4:30 pm; Sat 8 am–noon','https://thomassawmill.com/','No email is published on the site. Closed noon–1 pm daily.'),
+('West Penn Hardwoods','https://wphardwoods.com/','1405 Deborah Herman Rd','Conover','NC','28613','(828) 322-9663','','(828) 322-2369','support@westpennhardwoods.com','Mon–Fri 9 am–5 pm; Sat 9 am–1 pm','https://wphardwoods.com/contact',''),
+('Les Steen Hardwoods','https://www.steenhardwoods.com/','116 E. E Avenue','North Little Rock','AR','72116','(501) 753-4344','','','lshardwoods@gmail.com','Wed & Sat 9 am–noon, or by appointment','https://www.steenhardwoods.com/contact','Cash or check only. Warehouse for large quantities is in Maumelle (by appointment).'),
+('Mark Frieden Hardwoods','https://www.friedenlumber.com/','3462 Delaware Rd.','Pomona','KS','66076','785-418-5746','','','','','https://www.friedenlumber.com/contact.html','Phone is a cell; he prefers a call (no email published).'),
+('Caird Lumber Ltd','https://cairdlumberltd.ca/','35 Terry Fox Dr, Unit 202','Kingston','ON','','(613) 384-4783','','','shane@cairdlumberltd.ca','Kingston outlet: Mon–Fri 8 am–5 pm','https://cairdlumberltd.ca/contact-us','Main office and mill: 4261 Desert Lake Rd, Verona, ON K0H 2W0, by appointment (Shane, 613-561-5937).'),
+('White Oak Orchard','https://www.whiteoakorchard.com/pages/lumber','62 Razor Ridge','Trenton','SC','','Art 803-295-8239; Neil 706-831-7595','','','whiteoakorchard25@gmail.com','Usually Fri–Sun, by appointment only','https://www.whiteoakorchard.com/pages/lumber','Call or text before visiting. Local delivery within 50 miles for a fee; no shipping.'),
 ]
 assert all(len(r)==13 for r in DATA)
 with open('dealers_contact.csv','w',newline='') as f:
   w=csv.writer(f);w.writerow(COLS)
-  for r in DATA:w.writerow(list(r[:11])+[r[11],D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
+  for r in DATA:w.writerow(list(r[:11])+[r[11],D5 if r[0] in B5 else D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
 seed={r['dealer'] for r in csv.DictReader(open('seed.csv'))}
 names={r[0] for r in DATA}
 print('missing from contact data:',sorted(seed-names-{d for d in seed if not d}),'| extra:',sorted(names-seed))
