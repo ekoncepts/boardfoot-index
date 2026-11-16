@@ -21,7 +21,7 @@ body{padding:.6rem}
 .cards td.c-sh{order:7;color:#5b4a3a}
 .cards td.c-sh::before{content:"Ships: ";font-weight:600}
 .cards td.c-ck{order:8;margin-left:auto;font-size:.8rem;color:#5b4a3a}
-.cards td.c-ck::before{content:"Checked "}
+.cards td.c-ck::before{content:"Last checked "}
 .cards.lab tr{display:block}
 .cards.lab td{margin:.15rem 0}
 .cards.lab td::before{content:attr(data-label);display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:#7a4a1e}
@@ -44,7 +44,7 @@ body{padding:.6rem}
 </fieldset>
 <p id="fw-sum" class="stat" aria-live="polite"></p>
 </form>
-<p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
+<p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Last checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
 <div id="fw-res" aria-live="polite"></div>
 <div class="nl" id="nl-findwood" hidden><p class="nl-t"><b>Get the monthly Lumber Price Report.</b> <span class="nl-p">Real prices, new dealers, price drops. Free, unsubscribe anytime.</span></p><form action="https://app.kit.com/forms/10055349/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="10055349" data-uid="158bbdf2d4" data-format="inline" data-version="5"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" class="seva-fields formkit-fields nl-f"><input class="formkit-input" name="email_address" type="email" aria-label="Email address" placeholder="you@example.com" required> <button data-element="submit" class="formkit-submit bf-btn" data-goatcounter-click="nl-findwood" data-goatcounter-title="Newsletter signup: findwood"><span>Subscribe</span></button></div></form></div>
 <p class="box"><b>Can't find it?</b> <a id="fw-ask" href="mailto:boardfootindex@gmail.com">Tell us what you need</a> (species, size, where you are) and we'll look for dealers to add. Already bought some? Use the price report form below.</p>
@@ -74,7 +74,7 @@ function row(o,st,showT){var d=D.dealers[o.d],bf=bfFor(tq(o.th)),pr='$'+o.p;
  var link='<a href="'+esc(o.u)+'" rel="nofollow noopener">'+esc(d.n)+'</a>'+(d.aff&&aff?affHTML(o):'');
  var est=bf>0?'$'+(bf*+o.p).toFixed(2)+' <small>('+bf.toFixed(2)+' bf)</small>':'&mdash;';
  return '<tr><td class="c-th">'+o.th+(showT?' <span class="fw-thk">thicker</span>':'')+'</td><td class="c-pr">'+pr+multi+'</td><td class="c-de">'+link+'</td><td class="c-lo">'+loc+'</td><td class="c-sh" title="'+esc(d.sn)+'">'+esc(d.sh)+'</td><td class="c-su">'+esc(o.su)+'</td><td class="c-es">'+est+'</td><td class="c-ck">'+o.dt+'</td></tr>'}
-function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
+function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Last checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
 var GH=[['In your state','Closest option: you can likely pick up. Call ahead to confirm stock.'],['Dealers that ship','Their site says they ship (area in the Ships? column). Get a shipping quote; freight can add a lot on small orders.'],['Other dealers','Pickup only, local delivery only, or no shipping policy found. Worth a call if you are nearby.']];
 function groups(list,st,showT){var out='',only=$('fw-ship').checked;
  for(var g=0;g<3;g++){if(only&&g==2)continue;var L=list.filter(function(o){return grp(D.dealers[o.d],st)==g});if(!L.length)continue;

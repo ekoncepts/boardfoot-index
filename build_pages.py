@@ -263,7 +263,7 @@ for sp in species:
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 {kit_box('species','Watching '+sp.lower()+' prices? Get the monthly Lumber Price Report.')}
 {faq_html}
-<h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl" class="cards"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl" class="cards"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Last checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
 {cust}<h2>Buying tips from the data</h2><ul>{''.join(f"<li>{e(t)}</li>" for t in tips)}</ul>
@@ -305,7 +305,7 @@ for st in pub_states:
     for sp in sorted({r['species'] for r in da}):
       u=collections.Counter(r['source_url'] for r in da if r['species']==sp).most_common(1)[0][0]
       spl.append(f'<a href="{e(u)}" rel="nofollow noopener">{sp}</a>')
-    drows+=f'<tr><td{L("Dealer")}><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td{L("Location")}>{e(ct)}, {st}</td>{ship_td(dn,L("Ships?"))}<td{L("Prices")}>{len(da)}</td><td{L("Species (links go to the source)")}>{", ".join(spl)}</td><td{L("Checked")}>{max(r["date_checked"] for r in da)}</td></tr>'
+    drows+=f'<tr><td{L("Dealer")}><a href="{e(main)}" rel="nofollow noopener">{e(dn)}</a></td><td{L("Location")}>{e(ct)}, {st}</td>{ship_td(dn,L("Ships?"))}<td{L("Prices")}>{len(da)}</td><td{L("Species (links go to the source)")}>{", ".join(spl)}</td><td{L("Last checked")}>{max(r["date_checked"] for r in da)}</td></tr>'
   allp=[r['p'] for r in a]; med,rng,n=stat(allp)
   meds={sp:S.median([r['p'] for r in a if r['species']==sp]) for sp in sps}
   lo=min(a,key=lambda r:r['p']); hi=max(a,key=lambda r:r['p'])
@@ -321,7 +321,7 @@ for st in pub_states:
 <p><small>Each row mixes thicknesses, grades and rough vs surfaced stock from that state's dealers, so use the <a href="../">searchable table</a> or the species pages for like-for-like comparisons.</small></p>
 {kit_box('state','Buying lumber in '+nm+'? Get the monthly Lumber Price Report.')}
 <h2>{nm} dealers with posted prices</h2>
-<table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
+<table class="cards lab"><thead><tr><th>Dealer</th><th>Location</th><th>Ships?</th><th>Prices</th><th>Species (links go to the source)</th><th>Last checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do {nm} dealers ship?</h3>{ship_info_table([d for d,_ in dealers_list])}{SHIPNOTE}
 <p>Prices change without notice and may differ by grade, width, length and quantity — call the dealer before you drive. Paid something different? Report it below.</p>
 <h2>Estimate a project</h2><p>Use the <a href="../board-foot-calculator/">board foot calculator</a> to convert board dimensions to board feet and a rough cost, or <a href="../find-wood/?state={st}">find which dealers carry a species near you</a>.</p>
@@ -421,7 +421,7 @@ function row(o,st,showT){var d=D.dealers[o.d],bf=bfFor(tq(o.th)),pr='$'+o.p;
  var link='<a href="'+esc(o.u)+'" rel="nofollow noopener">'+esc(d.n)+'</a>'+(d.aff&&aff?affHTML(o):'');
  var est=bf>0?'$'+(bf*+o.p).toFixed(2)+' <small>('+bf.toFixed(2)+' bf)</small>':'&mdash;';
  return '<tr><td class="c-th">'+o.th+(showT?' <span class="fw-thk">thicker</span>':'')+'</td><td class="c-pr">'+pr+multi+'</td><td class="c-de">'+link+'</td><td class="c-lo">'+loc+'</td><td class="c-sh" title="'+esc(d.sn)+'">'+esc(d.sh)+'</td><td class="c-su">'+esc(o.su)+'</td><td class="c-es">'+est+'</td><td class="c-ck">'+o.dt+'</td></tr>'}
-function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
+function table(list,st,showT){return '<table class="cards"><thead><tr><th>Thick</th><th>$/BF</th><th>Dealer (links to the price source)</th><th>Location</th><th>Ships?</th><th>Surfacing / grade</th><th>Est. cost</th><th>Last checked</th></tr></thead><tbody>'+list.map(function(o){return row(o,st,showT)}).join('')+'</tbody></table>'}
 var GH=[['In your state','Closest option: you can likely pick up. Call ahead to confirm stock.'],['Dealers that ship','Their site says they ship (area in the Ships? column). Get a shipping quote; freight can add a lot on small orders.'],['Other dealers','Pickup only, local delivery only, or no shipping policy found. Worth a call if you are nearby.']];
 function groups(list,st,showT){var out='',only=$('fw-ship').checked;
  for(var g=0;g<3;g++){if(only&&g==2)continue;var L=list.filter(function(o){return grp(D.dealers[o.d],st)==g});if(!L.length)continue;
@@ -475,7 +475,7 @@ fbody=f"""{FWCSS}<h1>Find this wood</h1>
 </fieldset>
 <p id="fw-sum" class="stat" aria-live="polite"></p>
 </form>
-<p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
+<p style="font-size:.85rem;color:#5b4a3a"><b>Availability isn't live.</b> Prices and products come from each dealer's own site as of the &ldquo;Last checked&rdquo; date. They're not a stock check or a quote, so confirm stock and price with the dealer before you buy or drive. Shipping info only reflects what the dealer's site says. Customer-reported prices are not included. Partner dealers are marked &ldquo;Affiliate partner&rdquo; and never change prices or sort order (<a href="../affiliate-disclosure/">disclosure</a>).</p>
 <div id="fw-res" aria-live="polite"></div>
 {kit_box('findwood','Get the monthly Lumber Price Report.',attrs=' hidden')}
 <p class="box"><b>Can't find it?</b> <a id="fw-ask" href="mailto:{CONTACT_EMAIL}">Tell us what you need</a> (species, size, where you are) and we'll look for dealers to add. Already bought some? Use the price report form below.</p>
