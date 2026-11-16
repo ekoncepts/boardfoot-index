@@ -158,6 +158,25 @@ def checked_when(rs):
   if a[-4:]==b[-4:]: a=a[:-5]
   return f'between {a} and {b}'
 def stat(ps):return money(S.median(ps)),f"{money(min(ps))}–{money(max(ps))}",len(ps)
+def latest_month(rs, fmt='%b %Y'):
+  """Month of the newest date_checked, e.g. 'Nov 2026' or 'November 2026'."""
+  import datetime as _dt
+  return _dt.date.fromisoformat(max(r['date_checked'] for r in rs)).strftime(fmt)
+def thk_stat(rs, th):
+  """(min, max, median, n_prices, n_dealers) as money-strings / ints, or None."""
+  b=[r for r in rs if r['thickness']==th]
+  if not b: return None
+  ps=[r['p'] for r in b]
+  return money(min(ps)), money(max(ps)), money(S.median(ps)), len(b), len({r['dealer'] for r in b})
+def faq_block(heading, items):
+  """Visible FAQ markup plus FAQPage JSON-LD. items is a list of (question, answer) plain-text pairs."""
+  parts=[f'<h2>{e(heading)}</h2>']
+  for q,a in items:
+    parts.append(f'<h3>{e(q)}</h3><p>{e(a)}</p>')
+  ld={"@context":"https://schema.org","@type":"FAQPage",
+      "mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in items]}
+  script='<script type="application/ld+json">'+json.dumps(ld,ensure_ascii=False)+'</script>'
+  return ''.join(parts), script
 urls=[BASE]
 for sp in species:
   a=sorted([r for r in rows if r['species']==sp],key=lambda r:r['p'])
@@ -188,13 +207,62 @@ for sp in species:
   others=' · '.join(f'<a href="../{slug(o)}-price-per-board-foot/">{o}</a>' for o in species if o!=sp)
   title=f"{sp} Price per Board Foot (2026): Real Dealer Prices | BoardFoot Index"
   desc=f"{sp} lumber costs a median {med}/bf across {n} posted dealer prices ({rng}) in {', '.join(states)}. See prices by thickness, rough vs surfaced, and sources."
+  h1=f"{sp} price per board foot"
+  answer=''
+  faq_html=''
+  faq_ld=''
+  st4,st8=thk_stat(a,'4/4'),thk_stat(a,'8/4')
+  # SEO tune-ups for the species pages Google already shows (walnut, red oak). Other species keep the default title/H1/intro.
+  if sp in ('Walnut','Red Oak') and st4:
+    mo,asof=latest_month(a),latest_month(a,'%B %Y')
+    lo,hi,md4,np4,nd4=st4
+    if sp=='Walnut':
+      title=f"Walnut Price per Board Foot ({mo}): Black Walnut $/BF by Thickness | BoardFoot Index"
+      h1=f"Walnut Price per Board Foot ({mo})"
+      who,who_l='Black walnut','black walnut'
+      desc=f"Black walnut costs about {lo}–{hi} per board foot for 4/4 (median {md4}) across {nd4} dealers, as of {asof}. See 8/4 and all thicknesses."
+    else:
+      title=f"Red Oak Price per Board Foot ({mo}) | BoardFoot Index"
+      h1=f"Red Oak Price per Board Foot ({mo})"
+      who,who_l='Red oak','red oak'
+      desc=f"Red oak costs about {lo}–{hi} per board foot for 4/4 (median {md4}) across {nd4} dealers, as of {asof}. See 8/4 and all thicknesses."
+    if st8:
+      lo8,hi8,md8,np8,nd8=st8
+    answer=(f'<p>{who} costs about <b>{lo}–{hi}</b> per board foot for 4/4 (median <b>{md4}</b>), across {nd4} dealers, as of {asof}.'
+            +(f' 8/4 costs about <b>{lo8}–{hi8}</b> per board foot (median <b>{md8}</b>), across {nd8} dealers.' if st8 else '')
+            +'</p>\n')
+    how_much=(f"How much is {who_l} per board foot?",
+       f"{who} costs about {lo}–{hi} per board foot for 4/4 (median {md4}), across {nd4} dealers, as of {asof}. Across all thicknesses, the median of {n} posted dealer prices is {med} per board foot, ranging {rng}.")
+    cost_of=(f"What is the cost of {who_l} per board foot?",
+       f"The cost of {who_l} per board foot in our posted dealer prices is a median of {md4} for 4/4"
+       + (f" and {md8} for 8/4" if st8 else "")
+       + f", as of {asof}. 4/4 prices range {lo}–{hi} across {nd4} dealers.")
+    if sp=='Walnut':
+      faqs=[how_much, cost_of, ("What is the black walnut board foot price?",
+        "The prices on this page are dealer-posted walnut prices; in US hardwood retail that usually means black walnut. "
+        + f"The black walnut board foot price for 4/4 is about {lo}–{hi} (median {md4}) across {nd4} dealers, as of {asof}."
+        + (f" 8/4 is about {lo8}–{hi8} (median {md8}) across {nd8} dealers." if st8 else ""))]
+    else:
+      # Top Search Console query for this page is "price of red oak per board foot"
+      faqs=[(f"What is the price of {who_l} per board foot?",
+        f"The price of red oak per board foot is about {lo}–{hi} for 4/4 (median {md4}), across {nd4} dealers, as of {asof}."
+        + (f" 8/4 is about {lo8}–{hi8} (median {md8}) across {nd8} dealers." if st8 else "")
+        + f" Across all thicknesses, {n} posted dealer prices have a median of {med} per board foot, ranging {rng}."),
+        how_much, cost_of]
+    if st8:
+      more='more' if float(md8[1:])>float(md4[1:]) else 'about the same or less'
+      faqs.append((f"Why does 8/4 {who_l} cost more per board foot?",
+        f"In our data, 8/4 costs {more} per board foot than 4/4: the 8/4 median is {md8}, versus {md4} for 4/4. "
+        + f"The 8/4 range is {lo8}–{hi8} across {nd8} dealers. Thicker stock is usually less common, but grade and surfacing also affect price, so compare like with like and confirm with the dealer."))
+    faq_html,faq_ld=faq_block(f"{sp} price FAQ", faqs)
   out=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}{HX}</head><body>
-<p>{logo_html("../")}</p>{site_nav("../")}<h1>{sp} price per board foot</h1>
-<p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked {checked_when(a)}, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
+<title>{e(title)}</title><meta name="description" content="{e(desc)}"><link rel="canonical" href="{BASE}{slug(sp)}-price-per-board-foot/">{style}{HX}{faq_ld}</head><body>
+<p>{logo_html("../")}</p>{site_nav("../")}<h1>{e(h1)}</h1>
+{answer}<p>How much does {sp.lower()} lumber cost? Across {n} publicly posted dealer prices checked {checked_when(a)}, {sp.lower()} has a median of <b>{med}</b> per board foot, ranging {rng}. Data comes from dealer price sheets in {', '.join(states)}; every price links to its source.</p>
 <h2>By thickness</h2><table><thead><tr><th>Thickness</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{trows}</tbody></table>
 <h2>Rough vs surfaced</h2><table><thead><tr><th>Surfacing</th><th>Median</th><th>Range</th><th>Prices</th></tr></thead><tbody>{srows}</tbody></table>
 {kit_box('species','Watching '+sp.lower()+' prices? Get the monthly Lumber Price Report.')}
+{faq_html}
 <h2>All {sp.lower()} prices</h2>{aff_note('../') if any(is_aff(r['dealer']) for r in a) else ''}<p><label>Sort by <select id="sortby"><option value="price">Price (cheapest first)</option><option value="dealer">Dealer (A to Z)</option><option value="state">State (A to Z, then dealer)</option></select></label></p><table id="alltbl" class="cards"><thead><tr><th>Thick</th><th>Surfacing</th><th>$/BF</th><th>Dealer</th><th>Location</th><th>Ships?</th><th>Checked</th></tr></thead><tbody>{drows}</tbody></table>
 <h3>Do these dealers ship?</h3>{ship_info_table([r['dealer'] for r in a])}{SHIPNOTE}
 <script>{SORTJS}</script>
