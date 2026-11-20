@@ -37,6 +37,11 @@ def nd_card(d):
   qparts=[d['name'],d['city'],st,pl,d['country'],cat]
   if d['trade_only']=='yes': qparts.append('trade wholesale only')
   hit=nd_index(d['name'],st,d['city'])
+  aff=bool(hit and is_aff(hit[2]))
+  site=d.get('website') or ''
+  site_rel='noopener'
+  if aff and AFF and AFF.get('url'):
+    site=AFF['url']; site_rel='sponsored noopener'
   ct=[]
   if d['phone']: ct.append('Phone: '+tel(d['phone']))
   if d['toll_free']: ct.append('Toll-free: '+tel(d['toll_free']))
@@ -44,12 +49,14 @@ def nd_card(d):
   for em in [x.strip() for x in (d['email'] or '').split(';') if x.strip()]:
     ct.append(f'Email: <a href="mailto:{e(em)}">{e(em)}</a>')
   links=[]
-  if d['website']: links.append(f'<a href="{e(d["website"])}" rel="noopener">Website</a>')
+  if site: links.append(f'<a href="{e(site)}" rel="{site_rel}">Website</a>')
   if d['contact_form']: links.append(f'<a href="{e(d["contact_form"])}" rel="noopener">Contact form</a>')
   if d['address'] or d['city']:
     mq=d['name']+', '+(d['address']+', ' if d['address'] else '')+d['city']+', '+st+(' '+d['postal'] if d['postal'] else '')
     links.append(f'<a href="https://www.google.com/maps/search/?api=1&amp;query={quote_plus(mq)}" target="_blank" rel="noopener">Map</a>')
   badges=''
+  if aff:
+    badges+=aff_badge('../')
   if hit:
     q=quote_plus(hit[1])
     badges+=f' <a class="d-prices" href="../dealers/?q={e(q)}" title="Posted board-foot prices on BoardFoot Index">See prices</a>'
@@ -60,7 +67,7 @@ def nd_card(d):
             else f'From the dealer&rsquo;s website, checked {e(d["checked_date"])}.')
   other=(f'<p class="d-note">{e(d["other"])}</p>' if d.get('other') else '')
   return (f'<div class="dcard" data-c="{cc}" data-s="{e(st)}" data-cat="{slug}" data-q="{e(" ".join(qparts).lower())}">'
-          f'<h3>'+(f'<a href="{e(d["website"])}" rel="noopener">{e(d["name"])}</a>' if d['website'] else e(d['name']))+badges+'</h3>'
+          f'<h3>'+(f'<a href="{e(site)}" rel="{site_rel}">{e(d["name"])}</a>' if site else e(d['name']))+badges+'</h3>'
           f'<p class="d-loc">{e(d["city"])}, {e(pl)} · {e(cat)}</p>'
           f'<p class="d-addr">{addr}</p>'
           +(f'<p class="d-ct">{"<br>".join(ct)}</p>' if ct else '')
