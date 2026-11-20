@@ -46,3 +46,4 @@ https://ekoncepts.github.io/boardfoot-index/about/
 https://ekoncepts.github.io/boardfoot-index/privacy/
 https://ekoncepts.github.io/boardfoot-index/affiliate-disclosure/
 https://ekoncepts.github.io/boardfoot-index/dealers/
+https://ekoncepts.github.io/boardfoot-index/directory/

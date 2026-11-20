@@ -2,3 +2,4 @@ raw/
 __pycache__/
 apps-script/
 monetization/
+directory-review-queue.csv

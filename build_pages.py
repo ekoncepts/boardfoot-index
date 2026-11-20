@@ -103,7 +103,7 @@ def head_extra(pre):
           f'<meta property="og:site_name" content="BoardFoot Index"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}assets/og-image.png"><!--/LOGOHEAD-->')
 def site_nav(pre):
   return (f'<nav class="sitenav" aria-label="Site" style="font-size:.9rem;margin:-.4rem 0 .6rem"><a href="{pre or "./"}">Home</a> · <a href="{pre}find-wood/">Find this wood</a> · '
-          f'<a href="{pre}board-foot-calculator/">Board foot calculator</a> · <a href="{pre}dealers/">Dealer Directory</a></nav>')
+          f'<a href="{pre}board-foot-calculator/">Board foot calculator</a> · <a href="{pre}dealers/">Board-Foot Prices</a> · <a href="{pre}directory/">Dealer Directory</a></nav>')
 def logo_html(pre):
   return f'<a href="{pre or "./"}" class="sitelogo" style="display:inline-block;line-height:0"><img src="{pre}assets/logo.png" alt="BoardFoot Index" width="198" height="40" style="height:40px;width:auto;max-width:100%"></a>'
 HX=head_extra('../')
@@ -142,7 +142,7 @@ species=sorted({r['species'] for r in rows})
 def fmt2(x):return f"{x:.2f}"
 def money(x):return '$'+fmt2(x)
 # ---- place counting: US states and Canadian provinces are counted separately ("15 states plus Ontario") ----
-PROV_NAMES={'AB':'Alberta','BC':'British Columbia','MB':'Manitoba','NB':'New Brunswick','NL':'Newfoundland and Labrador','NS':'Nova Scotia','ON':'Ontario','PE':'Prince Edward Island','QC':'Quebec','SK':'Saskatchewan'}
+PROV_NAMES={'AB':'Alberta','BC':'British Columbia','MB':'Manitoba','NB':'New Brunswick','NL':'Newfoundland and Labrador','NS':'Nova Scotia','ON':'Ontario','PE':'Prince Edward Island','QC':'Quebec','SK':'Saskatchewan','YT':'Yukon'}
 def places_text(codes):
   codes=set(codes); us=[c for c in codes if c not in PROV_NAMES]; ca=sorted(PROV_NAMES[c] for c in codes if c in PROV_NAMES)
   parts=[f"{len(us)} state{'' if len(us)==1 else 's'}"] if us else []
@@ -575,7 +575,7 @@ def new_badge(dn):
   if date.today()-dt>=timedelta(days=7): return ''
   label=f"New · {dt.strftime('%b')} {dt.day}"
   return f' <span class="d-new" data-added="{e(a)}">{e(label)}</span>'
-# ---- Dealer Directory (/dealers/): public contact info from dealers_contact.csv (built by build_dealers_contact.py) ----
+# ---- Board-Foot Prices (/dealers/): public contact info from dealers_contact.csv (built by build_dealers_contact.py) ----
 from urllib.parse import quote_plus
 DC=list(csv.DictReader(open('dealers_contact.csv')))
 _seen={r['dealer'] for r in rows}
@@ -630,22 +630,23 @@ var u=new URL(location.href);if(v)u.searchParams.set('state',v);else u.searchPar
 var p=new URLSearchParams(location.search),q=p.get('state');if(q&&sel.querySelector('option[value="'+q.toUpperCase()+'"]'))sel.value=q.toUpperCase();
 if(p.get('q'))inp.value=p.get('q');
 sel.addEventListener('change',apply);inp.addEventListener('input',apply);inp.addEventListener('search',apply);apply();})();'''
-dbody=f'''{DCSS}<h1>Dealer Directory</h1>
+dbody=f'''{DCSS}<h1>Board-Foot Prices</h1>
 <p>Every lumber dealer whose prices we track: {len(DC)} dealers in {len(dsts)} states and provinces, sorted by state. Addresses, phone numbers, emails and hours are copied only from each dealer&rsquo;s own website; anything a dealer doesn&rsquo;t publish is left out. Hours change, so call ahead before you drive.</p>
 <div class="box" id="dfilter"><input type="search" id="dsearch" placeholder="Search dealers by name, city, or species" autocomplete="off" aria-label="Search dealers by name, city, state, or species"> <label for="dstate"><b>State:</b></label> <select id="dstate"><option value="">All states and provinces</option>{dopts}</select> <span id="dcount" aria-live="polite">Showing all {len(DC)} dealers</span></div>
 <p id="dnone" hidden>No dealers match. Try a different spelling, a species like &ldquo;walnut&rdquo;, or set State to &ldquo;All states and provinces&rdquo;.</p>
 <div class="dgrid">{"".join(dcard(d) for d in DC)}</div>
 <p>Looking for a species in a certain thickness? <a href="../find-wood/">Find which dealers carry it near you</a>. Spot a wrong address or phone number? Contact us: {contact_html()}.</p>
 <script>{DJS}</script>'''
-write('dealers',shell("Dealer Directory: Hardwood Lumber Dealers by State | BoardFoot Index",f"Addresses, phone numbers, hours and map links for the {len(DC)} hardwood lumber dealers BoardFoot Index tracks, by state, with how many prices we list for each.",'dealers/',dbody))
-HOME_DD=f'<p><b>Dealer Directory:</b> addresses, phone numbers, hours and map links for all {len(DC)} dealers we track, by state. <a href="dealers/">See all dealers</a></p>'
+write('dealers',shell("Board-Foot Prices: Hardwood Lumber Dealers by State | BoardFoot Index",f"Addresses, phone numbers, hours and map links for the {len(DC)} hardwood lumber dealers BoardFoot Index tracks, by state, with how many prices we list for each.",'dealers/',dbody))
+HOME_DD=f'<p><b>Board-Foot Prices:</b> addresses, phone numbers, hours and map links for all {len(DC)} dealers we track, by state. <a href="dealers/">See all dealers</a></p>'
+exec(open("build_directory_page.py", encoding="utf-8").read())
 
 import datetime as _dt
 _today=_dt.date.today().isoformat()
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>{_today}</lastmod></url>\n' for u in urls)+'</urlset>\n')
 open('sitemap.txt','w').write(''.join(f'{u}\n' for u in urls))
 open('robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\nSitemap: {BASE}sitemap.txt\n')
-nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p>'+HOME_DD+'<!--/SPECIES-->'
+nav='<!--SPECIES-->'+'<p><b>Prices by species:</b> '+' · '.join(f'<a href="{slug(s)}-price-per-board-foot/">{s}</a>' for s in species)+'</p><p><b>Prices by state:</b> '+state_links('')+'</p><p><b>Free tools:</b> <a href="board-foot-calculator/">Board foot calculator</a> · <a href="find-wood/">Find this wood (which dealers carry it near you)</a></p>'+HOME_DD+HOME_NA+'<!--/SPECIES-->'
 idx=re.sub(r'<!--SPECIES-->.*?<!--/SPECIES-->','',idx,flags=re.S).replace('<p id="summary"',nav+'<p id="summary"',1)
 pd=sorted({r['dealer'] for r in rows}); 
 blk='<!--DEALERS--><h2>Do these dealers ship?</h2>'+ship_info_table(pd,'')+SHIPNOTE+'<!--/DEALERS-->'
