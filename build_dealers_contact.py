@@ -9,6 +9,8 @@ B3={'Almendinger Sawmill','Zeyer Lumber','K&J Lumber Products','Parkerville Wood
 D4='2026-11-09'  # batch 4 dealers, checked 2026-11-09
 D5='2026-11-16'  # batch 5 dealers, checked 2026-11-16
 B5={'Frank Thomas Sawmill','West Penn Hardwoods','Les Steen Hardwoods','Mark Frieden Hardwoods','Caird Lumber Ltd','White Oak Orchard'}
+D6='2026-11-23'  # batch 6 dealers, checked 2026-11-23
+B6={'Hardwood Heaven','Capital Hardwood and Supply','Enndure','Mount Vernon Hardwood','Advantage Lumber','Northshore Woods','Jubilee Specialty Woods'}
 B4={'Badger Hardwoods of Wisconsin','Bell Forest Products','L.L. Johnson Lumber','Logs to Lumber Co.','Hobby Hardwood Alabama','Groff & Groff Lumber','Irion Lumber Company','Hoosier Hardwood Supply'}
 DATA=[
 # dealer, website, street, city, st, zip, phone, toll_free, fax, email, hours, source, note
@@ -63,11 +65,18 @@ DATA=[
 ('Mark Frieden Hardwoods','https://www.friedenlumber.com/','3462 Delaware Rd.','Pomona','KS','66076','785-418-5746','','','','','https://www.friedenlumber.com/contact.html','Phone is a cell; he prefers a call (no email published).'),
 ('Caird Lumber Ltd','https://cairdlumberltd.ca/','35 Terry Fox Dr, Unit 202','Kingston','ON','','(613) 384-4783','','','shane@cairdlumberltd.ca','Kingston outlet: Mon–Fri 8 am–5 pm','https://cairdlumberltd.ca/contact-us','Main office and mill: 4261 Desert Lake Rd, Verona, ON K0H 2W0, by appointment (Shane, 613-561-5937).'),
 ('White Oak Orchard','https://www.whiteoakorchard.com/pages/lumber','62 Razor Ridge','Trenton','SC','','Art 803-295-8239; Neil 706-831-7595','','','whiteoakorchard25@gmail.com','Usually Fri–Sun, by appointment only','https://www.whiteoakorchard.com/pages/lumber','Call or text before visiting. Local delivery within 50 miles for a fee; no shipping.'),
+('Hardwood Heaven','https://hardwoodheaven.net/','645 N 66th St','Lincoln','NE','68505','402-858-6125','800-596-7815','888-519-3693','info@hardwoodheaven.net','','https://hardwoodheaven.net/','Price list PDF also lists bob@hardwoodheaven.net.'),
+('Capital Hardwood and Supply','https://capitalhardwood.com/','2027 South Stoughton Rd.','Madison','WI','53716','(608) 616-5590','','','hello@capitalhardwood.com','Mon–Fri 10 am–6 pm, Sat 10 am–2 pm, Sun closed','https://capitalhardwood.com/',''),
+('Enndure','https://enndure.com/','1291 US Hwy 1, Suite 3','Ormond Beach','FL','32174','(407) 408-1972','','','sales@enndure.com','Mon, Wed, Fri 9:30 am–5:00 pm; Saturday by appointment; Tue, Thu, Sun closed','https://enndure.com/','Call or text before visiting to confirm stock.'),
+('Mount Vernon Hardwood','https://mountvernonhardwood.com/','','Mount Vernon','OH','','Text (740) 390-4526','','','MountVernonHardwood@gmail.com','By appointment (most mornings, evenings and weekends)','https://mountvernonhardwood.com/inventory-pricing/','About 1 mile from downtown Mount Vernon; no street address posted. Local pickup only.'),
+('Advantage Lumber','https://www.advantagelumber.com/','601 Ohio St.','Buffalo','NY','14203','(716) 827-3915','1-877-232-3915','(941) 388-0936','info@advantagelumber.com','Phone: Mon–Fri 8:30 am–8 pm, Sat 8 am–3 pm ET','https://www.advantagelumber.com/contact','Also has mills/showrooms in Sarasota FL (7524 Commerce Pl.), Grover NC (2520 Blacksburg Rd.) and Santa Fe Springs CA (11517 Los Nietos Rd.). Online catalog ships nationwide.'),
+('Northshore Woods','https://www.woodsnorthshore.com/','1750 South Lane','Mandeville','LA','70471','985-789-6333 (phone/text)','','','geoff@dihold.com','By appointment','https://www.woodsnorthshore.com/contact','Cash or Venmo. Closed for Thanksgiving until Nov 30, 2026.'),
+('Jubilee Specialty Woods','https://jubileespecialtywoods.com/','19845 Baldwin Beach Express','Summerdale','AL','36580','251-298-4009','','','sales@jubileespecialtywoods.com','Mon–Sat 9 am–5 pm, Sun closed','https://jubileespecialtywoods.com/contact_us/','Closed Thanksgiving Day, Christmas Eve, Christmas Day, New Year’s Eve and New Year’s Day.'),
 ]
 assert all(len(r)==13 for r in DATA)
 with open('dealers_contact.csv','w',newline='') as f:
   w=csv.writer(f);w.writerow(COLS)
-  for r in DATA:w.writerow(list(r[:11])+[r[11],D5 if r[0] in B5 else D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
+  for r in DATA:w.writerow(list(r[:11])+[r[11],D6 if r[0] in B6 else D5 if r[0] in B5 else D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
 seed={r['dealer'] for r in csv.DictReader(open('seed.csv'))}
 names={r[0] for r in DATA}
 print('missing from contact data:',sorted(seed-names-{d for d in seed if not d}),'| extra:',sorted(names-seed))
