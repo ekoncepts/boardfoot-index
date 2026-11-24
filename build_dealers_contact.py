@@ -11,6 +11,8 @@ D5='2026-11-16'  # batch 5 dealers, checked 2026-11-16
 B5={'Frank Thomas Sawmill','West Penn Hardwoods','Les Steen Hardwoods','Mark Frieden Hardwoods','Caird Lumber Ltd','White Oak Orchard'}
 D6='2026-11-23'  # batch 6 dealers, checked 2026-11-23
 B6={'Hardwood Heaven','Capital Hardwood and Supply','Enndure','Mount Vernon Hardwood','Advantage Lumber','Northshore Woods','Jubilee Specialty Woods'}
+D7='2026-11-24'  # Rare Woods USA, confirmed 2026-11-24
+B7={'Rare Woods USA'}
 B4={'Badger Hardwoods of Wisconsin','Bell Forest Products','L.L. Johnson Lumber','Logs to Lumber Co.','Hobby Hardwood Alabama','Groff & Groff Lumber','Irion Lumber Company','Hoosier Hardwood Supply'}
 DATA=[
 # dealer, website, street, city, st, zip, phone, toll_free, fax, email, hours, source, note
@@ -72,11 +74,12 @@ DATA=[
 ('Advantage Lumber','https://www.advantagelumber.com/','601 Ohio St.','Buffalo','NY','14203','(716) 827-3915','1-877-232-3915','(941) 388-0936','info@advantagelumber.com','Phone: Mon–Fri 8:30 am–8 pm, Sat 8 am–3 pm ET','https://www.advantagelumber.com/contact','Also has mills/showrooms in Sarasota FL (7524 Commerce Pl.), Grover NC (2520 Blacksburg Rd.) and Santa Fe Springs CA (11517 Los Nietos Rd.). Online catalog ships nationwide.'),
 ('Northshore Woods','https://www.woodsnorthshore.com/','1750 South Lane','Mandeville','LA','70471','985-789-6333 (phone/text)','','','geoff@dihold.com','By appointment','https://www.woodsnorthshore.com/contact','Cash or Venmo. Closed for Thanksgiving until Nov 30, 2026.'),
 ('Jubilee Specialty Woods','https://jubileespecialtywoods.com/','19845 Baldwin Beach Express','Summerdale','AL','36580','251-298-4009','','','sales@jubileespecialtywoods.com','Mon–Sat 9 am–5 pm, Sun closed','https://jubileespecialtywoods.com/contact_us/','Closed Thanksgiving Day, Christmas Eve, Christmas Day, New Year’s Eve and New Year’s Day.'),
+('Rare Woods USA','https://www.rarewoodsusa.com/','120 Swift River Road','Mexico','ME','04257','207-364-1520','','','info@rarewoodsusa.com','Tue–Fri 8 am–4 pm, Sat 9 am–1 pm, Sun & Mon closed','https://www.rarewoodsusa.com/contact-us/','Also lists a mailing address: PO Box 84, Rumford, ME 04276.'),
 ]
 assert all(len(r)==13 for r in DATA)
 with open('dealers_contact.csv','w',newline='') as f:
   w=csv.writer(f);w.writerow(COLS)
-  for r in DATA:w.writerow(list(r[:11])+[r[11],D6 if r[0] in B6 else D5 if r[0] in B5 else D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
+  for r in DATA:w.writerow(list(r[:11])+[r[11],D7 if r[0] in B7 else D6 if r[0] in B6 else D5 if r[0] in B5 else D4 if r[0] in B4 else D3 if r[0] in B3 else D,r[12]])
 seed={r['dealer'] for r in csv.DictReader(open('seed.csv'))}
 names={r[0] for r in DATA}
 print('missing from contact data:',sorted(seed-names-{d for d in seed if not d}),'| extra:',sorted(names-seed))
