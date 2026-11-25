@@ -63,7 +63,7 @@ for c in trs[1:]:
     elif c[0]=='SAPELE': kmadd('Sapele',c,'rough (grade not stated)'); seen.add('SAPELE')
 assert seen==set(KM)|{'AFRICAN MAHOGANY','SAPELE'},seen
 # ---- 4. Kunz Carpentry Warehouse, Trenton IL: "Last Updated 10/10/2026" (raw/newdealers/kunz_webfetch.txt); KD, planed hit-or-miss, SLR
-KU='http://www.kunzcarpentry.com/hardwood_lumber.html'
+KU='https://www.kunzcarpentry.com/hardwood_lumber.html'
 for sp,gr,vals in [('Red Oak','FAS',{'4/4':'4.95','5/4':'5.50','6/4':'5.95','8/4':'5.95'}),('White Oak','FAS',{'4/4':'10.95','8/4':'13.95'}),
     ('Hickory','FAS',{'4/4':'5.95','8/4':'7.95'}),('Poplar','FAS',{'4/4':'4.10','5/4':'4.25','6/4':'4.25','8/4':'4.95'}),
     ('Hard Maple','Select & Better',{'4/4':'6.25','5/4':'6.95','8/4':'7.95'}),('Soft Maple','Select',{'4/4':'5.50'}),
@@ -107,7 +107,7 @@ dl+= [
  dict(dealer='Willard Brothers Woodcutters',city='Trenton',state='NJ',ships='Not stated',shipping_note="No lumber shipping policy found; price page says S2S lumber is sold by the board foot at random widths and lengths, offers one free cut per board 'to fit in your vehicle', and lists showroom hours",shipping_source_url='https://www.willardbrothers.net/hardwood-prices-1',date_checked=TODAY,affiliate=''),
  dict(dealer='Exotic Lumber',city='Annapolis',state='MD',ships='Yes (area not stated)',shipping_note='Online store orders are processed within three business days and shipped by standard shipping; large, multi-package or over-50 lb orders are charged actual shipping. Carrier and shipping area not stated; the $/bf retail list is for under 100 BF (separate wholesale list)',shipping_source_url='https://exoticlumber.com/policies/shipping-policy',date_checked=TODAY,affiliate=''),
  dict(dealer='Kettle Moraine Hardwoods',city='Hartford',state='WI',ships='Not stated',shipping_note='No shipping policy found; price page says prices are per board foot on rough thickness, a 25% wide-board premium applies, and planing, ripping and sanding are available for lumber bought at the store',shipping_source_url='https://www.kmhardwoods.com/lumber-prices',date_checked=TODAY,affiliate=''),
- dict(dealer='Kunz Carpentry Warehouse',city='Trenton',state='IL',ships='Not stated',shipping_note="No shipping policy found; price list says 'In Stock Prices ONLY', 10% off 100 bd. ft. or more, and to call 618-224-9636 for bundle discounts",shipping_source_url='http://www.kunzcarpentry.com/hardwood_lumber.html',date_checked=TODAY,affiliate=''),
+ dict(dealer='Kunz Carpentry Warehouse',city='Trenton',state='IL',ships='Not stated',shipping_note="No shipping policy found; price list says 'In Stock Prices ONLY', 10% off 100 bd. ft. or more, and to call 618-224-9636 for bundle discounts",shipping_source_url='https://www.kunzcarpentry.com/hardwood_lumber.html',date_checked=TODAY,affiliate=''),
  dict(dealer='Peacock Lumber',city='Oshawa',state='ON',ships='Local delivery (area not stated)',shipping_note="Product pages show 'In-store pick up' and 'Delivery Available'; no delivery area or long-distance shipping stated. Prices are posted in Canadian dollars; shown here converted to USD at 1.4057 CAD/USD (Bank of Canada, 2026-10-21). Volume discounts: 7% at 100 BF, 12% at 250 BF; premiums for 12 ft+ lengths and 8 in.+ widths",shipping_source_url='https://peacocklumber.ca/product/walnut-2/',date_checked=TODAY,affiliate='')]
 with open('dealers.csv','w',newline='') as f:
     w=csv.DictWriter(f,fieldnames=dcols,lineterminator='\n'); w.writeheader(); w.writerows(dl)
